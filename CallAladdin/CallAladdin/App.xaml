@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin;assembly=CallAladdin"
+             x:Class="CallAladdin.App">
+	<Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="yellow">#EDEF00</Color>
+            <Color x:Key="white">#FFFFFF</Color>
+            <Color x:Key="orange">#E67721</Color>
+            <Style x:Key="defaultBackground" TargetType="ContentPage" >
+                <Setter Property="BackgroundColor" Value="{StaticResource yellow}" />
+            </Style>
+            <Style x:Key="secondaryBackground" TargetType="ContentPage" >
+                <Setter Property="BackgroundColor" Value="{StaticResource white}" />
+            </Style>
+            <Style TargetType="Button" x:Key="defaultButton">
+                <Setter Property="BackgroundColor" Value="{StaticResource orange}" />
+                <Setter Property="TextColor" Value="{StaticResource white}" />
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="WidthRequest" Value="100" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="BorderRadius" Value="10" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

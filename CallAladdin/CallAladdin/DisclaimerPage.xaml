@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:local="clr-namespace:CallAladdin"
+             x:Class="CallAladdin.DisclaimerPage"  FormattedTitle="DISCLAIMER" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <WebView Grid.Row="0">
+                <WebView.Source>
+                    <HtmlWebViewSource Html="{Binding DisclaimerText}" />
+                </WebView.Source>
+            </WebView>
+            <Button Grid.Row="1" x:Name="ProceedToRegistrationButton" Style="{StaticResource defaultButton}" Text="AGREE" Margin="100,20" Command="{Binding GoToVerificationCmd}" CommandParameter="{Binding UserRegistration}"/>
+        </Grid>
+    </ScrollView>
+</local:CustomPage>

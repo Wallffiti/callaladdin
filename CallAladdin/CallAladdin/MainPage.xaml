@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+             x:Class="CallAladdin.MainPage" Style="{StaticResource defaultBackground}" NavigationPage.HasNavigationBar="False">
+
+    <Grid CompressedLayout.IsHeadless="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackLayout VerticalOptions="Center" CompressedLayout.IsHeadless="True" >
+            <Image x:Name="LogoImage" HeightRequest="100" WidthRequest="100" />
+            <Button x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,0" Command="{Binding GoToRegisterCmd}"/>
+            <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN"  Margin="100,0" Command="{Binding GoToLoginCmd}"/>
+        </StackLayout>
+        <StackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" CompressedLayout.IsHeadless="True">
+            <Label Text="©2017 Call Aladdin Group" TextColor="Black" FontSize="Small" HorizontalOptions="Center"/>
+            <Image x:Name="BottomImage" />
+        </StackLayout>
+    </Grid>
+</local:CustomPage>

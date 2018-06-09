@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\aladdin-logo-new-2017.png" />
+    <None Remove="Assets\Images\air_conditioner.png" />
+    <None Remove="Assets\Images\alarm_cctv.png" />
+    <None Remove="Assets\Images\aluminium_glass_works.png" />
+    <None Remove="Assets\Images\blackbars.png" />
+    <None Remove="Assets\Images\ceiling.png" />
+    <None Remove="Assets\Images\cleaning_services.png" />
+    <None Remove="Assets\Images\construction.png" />
+    <None Remove="Assets\Images\curtain.png" />
+    <None Remove="Assets\Images\default_avatar_image.jpeg" />
+    <None Remove="Assets\Images\flooring.png" />
+    <None Remove="Assets\Images\gates_metal_works.png" />
+    <None Remove="Assets\Images\general_workers.png" />
+    <None Remove="Assets\Images\general_workers_2.png" />
+    <None Remove="Assets\Images\house_movers.png" />
+    <None Remove="Assets\Images\house_movers_2.png" />
+    <None Remove="Assets\Images\interior_design_carpenter.png" />
+    <None Remove="Assets\Images\landscaping.png" />
+    <None Remove="Assets\Images\pest_control.png" />
+    <None Remove="Assets\Images\plumber.png" />
+    <None Remove="Assets\Images\signboard.png" />
+    <None Remove="Assets\Images\wallpaper.png" />
+    <None Remove="Assets\Images\wiring_lighting.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Images\air_conditioner.png" />
+    <EmbeddedResource Include="Assets\Images\aladdin-logo-new-2017.png" />
+    <EmbeddedResource Include="Assets\Images\alarm_cctv.png" />
+    <EmbeddedResource Include="Assets\Images\aluminium_glass_works.png" />
+    <EmbeddedResource Include="Assets\Images\blackbars.png" />
+    <EmbeddedResource Include="Assets\Images\ceiling.png" />
+    <EmbeddedResource Include="Assets\Images\cleaning_services.png" />
+    <EmbeddedResource Include="Assets\Images\construction.png" />
+    <EmbeddedResource Include="Assets\Images\curtain.png" />
+    <EmbeddedResource Include="Assets\Images\default_avatar_image.jpeg" />
+    <EmbeddedResource Include="Assets\Images\flooring.png" />
+    <EmbeddedResource Include="Assets\Images\gates_metal_works.png" />
+    <EmbeddedResource Include="Assets\Images\general_workers.png" />
+    <EmbeddedResource Include="Assets\Images\general_workers_2.png" />
+    <EmbeddedResource Include="Assets\Images\house_movers.png" />
+    <EmbeddedResource Include="Assets\Images\house_movers_2.png" />
+    <EmbeddedResource Include="Assets\Images\interior_design_carpenter.png" />
+    <EmbeddedResource Include="Assets\Images\landscaping.png" />
+    <EmbeddedResource Include="Assets\Images\pest_control.png" />
+    <EmbeddedResource Include="Assets\Images\plumber.png" />
+    <EmbeddedResource Include="Assets\Images\signboard.png" />
+    <EmbeddedResource Include="Assets\Images\wallpaper.png" />
+    <EmbeddedResource Include="Assets\Images\wiring_lighting.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="3.0.0.482510" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="CustomPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DisclaimerPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserLoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserRegistrationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
