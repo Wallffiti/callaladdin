@@ -56,6 +56,7 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToHome(/*UserRegistration userRegistration*/)
         {
+            //TODO: verify sms code before navigate to home
             await Navigator.Instance.NavigateTo(PageType.HOME, userRegistration);
         }
     }

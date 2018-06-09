@@ -8,6 +8,9 @@
             <Color x:Key="yellow">#EDEF00</Color>
             <Color x:Key="white">#FFFFFF</Color>
             <Color x:Key="orange">#E67721</Color>
+            <Color x:Key="lightgrey">#DEE0E8</Color>
+            <Color x:Key="mediumgrey">#BDBEC2</Color>
+            <Color x:Key="darkgrey">#9F9FA1</Color>
             <Style x:Key="defaultBackground" TargetType="ContentPage" >
                 <Setter Property="BackgroundColor" Value="{StaticResource yellow}" />
             </Style>
