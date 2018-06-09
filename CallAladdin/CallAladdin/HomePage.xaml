@@ -2,7 +2,7 @@
 <xf:BottomBarPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xf="clr-namespace:BottomBar.XamarinForms;assembly=BottomBar.XamarinForms"
-             x:Class="CallAladdin.HomePage" Title="HOME" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False" BackgroundColor="{StaticResource orange}" >
+             x:Class="CallAladdin.HomePage" Title="HOME" NavigationPage.HasNavigationBar="False" BackgroundColor="Transparent" >
     <ContentPage Title="Favorites" Icon="ic_favorites.png" />
     <ContentPage Title="Friends" Icon="ic_friends.png" xf:BottomBarPageExtensions.TabColor="DarkGray">
         <ContentPage.Content>
@@ -11,8 +11,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label BackgroundColor="{StaticResource orange}" HeightRequest="50" Text="HOME" FontAttributes="Bold" FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="0" />
-                <Frame OutlineColor="Transparent" BackgroundColor="Silver" Grid.Row="1">
+                <Label BackgroundColor="{StaticResource yellow}" TextColor="Black" HeightRequest="50" Text="HOME" FontAttributes="Bold" FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="0" />
+                <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
                     <StackLayout Orientation="Vertical">
                         <Label x:Name="lbl_friends" Text="This is a Xamarin Forms page Friends defined in Xamarin Forms project" />
                         <Button Text="Move to dummy page" Style="{StaticResource defaultButton}" Margin="100,20" Command="{Binding dummyCmd}" />

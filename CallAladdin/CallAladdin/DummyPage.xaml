@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CallAladdin"
              xmlns:uc="clr-namespace:CallAladdin.UserControls"
-             x:Class="CallAladdin.DummyPage" FormattedTitle="DISCLAIMER" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
+             x:Class="CallAladdin.DummyPage" FormattedTitle="DUMMY" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False" >
     <!--<Grid>
         <Frame Margin="20" OutlineColor="Red" BackgroundColor="Silver">
             <Label Text="This is just a dummy page" />

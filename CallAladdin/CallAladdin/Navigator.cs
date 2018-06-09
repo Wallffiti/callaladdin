@@ -70,9 +70,10 @@ namespace CallAladdin
         {
             if (pageType == PageType.HOME)
             {
-                await App.Current.MainPage.Navigation.PushModalAsync(new HomePage());
+                await App.Current.MainPage.Navigation.PushAsync(new HomePage());
                 return;
             }
+
             var view = GetPage(pageType, parameter);
             await App.Current.MainPage.Navigation.PushAsync(view);
         }
