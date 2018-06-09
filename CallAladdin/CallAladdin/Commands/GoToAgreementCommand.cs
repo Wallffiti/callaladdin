@@ -24,19 +24,6 @@ namespace CallAladdin.Commands
             
             if (userRegistration != null)
             {
-                //return !string.IsNullOrEmpty(userRegistration.Name) 
-                //    && !string.IsNullOrEmpty(userRegistration.Email) 
-                //    && !string.IsNullOrEmpty(userRegistration.Mobile) 
-                //    && !string.IsNullOrEmpty(userRegistration.City) 
-                //    && !string.IsNullOrEmpty(userRegistration.Country);
-
-                //return (!string.IsNullOrEmpty(userRegistration.Name)
-                //    && !string.IsNullOrEmpty(userRegistration.Email)
-                //    && !string.IsNullOrEmpty(userRegistration.Mobile)
-                //    && !string.IsNullOrEmpty(userRegistration.City)
-                //    && !string.IsNullOrEmpty(userRegistration.Country))
-                //    && (!userRegistration.IsRegisteredAsContractor || (userRegistration.IsRegisteredAsContractor && !string.IsNullOrEmpty(userRegistration.Category) && !string.IsNullOrEmpty(userRegistration.CompanyName) && !string.IsNullOrEmpty(userRegistration.CompanyAddress));
-
                 bool hasMandatoryInfo = !string.IsNullOrEmpty(userRegistration.Name)
                     && !string.IsNullOrEmpty(userRegistration.Email)
                     && Validators.ValidateEmail(userRegistration.Email)
@@ -58,7 +45,7 @@ namespace CallAladdin.Commands
                 }
             }
 
-            return false;
+            return true; //return false;    //DEBUG!!!
         }
 
         public void Execute(object parameter)

@@ -47,6 +47,12 @@ namespace CallAladdin
                 case PageType.SMS_VERIFICATION:
                     view = new SmsVerificationPage(parameter as UserRegistration);
                     break;
+                case PageType.DUMMY:
+                    view = new DummyPage();
+                    break;
+                //case PageType.HOME:
+                //    view = new HomePage();
+                //    break;
             }
 
             if (view != null)
@@ -62,6 +68,11 @@ namespace CallAladdin
 
         public async Task NavigateTo(PageType pageType, object parameter = null)
         {
+            if (pageType == PageType.HOME)
+            {
+                await App.Current.MainPage.Navigation.PushModalAsync(new HomePage());
+                return;
+            }
             var view = GetPage(pageType, parameter);
             await App.Current.MainPage.Navigation.PushAsync(view);
         }
@@ -72,6 +83,8 @@ namespace CallAladdin
         USER_REGISTRATION = 0,
         USER_LOGIN = 1,
         DISCLAIMER = 2,
-        SMS_VERIFICATION = 3
+        SMS_VERIFICATION = 3,
+        HOME = 4,
+        DUMMY = 99
     }
 }

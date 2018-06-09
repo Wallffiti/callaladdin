@@ -1,4 +1,5 @@
-﻿using CallAladdin.ViewModel;
+﻿using CallAladdin.Model;
+using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +31,8 @@ namespace CallAladdin.Commands
 
         public void Execute(object parameter)
         {
-            //TODO
+            //var userRegistration = (UserRegistration)parameter;
+            smsVerificationViewModel.NavigateToHome(/*userRegistration*/);
         }
     }
 }
