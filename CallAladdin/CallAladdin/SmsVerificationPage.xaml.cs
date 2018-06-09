@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using CallAladdin.ViewModel;
 
 namespace CallAladdin
 {
@@ -16,6 +17,7 @@ namespace CallAladdin
 		public SmsVerificationPage (UserRegistration userRegistration)
 		{
 			InitializeComponent ();
-		}
+            BindingContext = new SmsVerificationViewModel(userRegistration);
+        }
 	}
 }
