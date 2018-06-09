@@ -24,17 +24,9 @@ namespace CallAladdin.ViewModel
         private string selectedCategory;
         private string companyAddress;
         private bool emailIsNotValid;
-        //private bool showContractorOptions;
-
-        //public bool ShowContractorOptions
-        //{
-        //    get { return showContractorOptions; }
-        //    set
-        //    {
-        //        showContractorOptions = value;
-        //        OnPropertyChanged("ShowContractorOptions");
-        //    }
-        //}
+        private bool isRegisteredAsContractor;
+        private UserRegistration userRegistration;
+        private ILocationService locationService;
 
         public bool EmailIsNotValid
         {
@@ -124,10 +116,6 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        private bool isRegisteredAsContractor;
-        private UserRegistration userRegistration;
-        private ILocationService locationService;
-
         public UserRegistration UserRegistration
         {
             get { return userRegistration; }
@@ -146,7 +134,6 @@ namespace CallAladdin.ViewModel
             {
                 isRegisteredAsContractor = value;
                 UpdateUserRegistration();
-                //this.ShowContractorOptions = isRegisteredAsContractor;
                 OnPropertyChanged("IsRegisteredAsContractor");
             }
         }

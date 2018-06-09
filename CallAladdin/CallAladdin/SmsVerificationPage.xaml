@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+             x:Class="CallAladdin.SmsVerificationPage" FormattedTitle="VERIFICATION" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackLayout Grid.Row="0" VerticalOptions="FillAndExpand" HorizontalOptions="Center" CompressedLayout.IsHeadless="True" Margin="20,0" >
+            <Label Text="ENTER SMS CODE" FontSize="Medium" Margin="20" HorizontalOptions="Center" />
+            <Entry Text="{Binding smsCode}" Margin="20" HorizontalTextAlignment="Center" HorizontalOptions="Center" WidthRequest="200" Keyboard="Numeric" FontSize="Large" Placeholder="123456"/>
+            <Label Text="An SMS code has been sent to your mobile number: " FontSize="Small" HorizontalOptions="Center" />
+            <Label Text="{Binding mobileNumber}" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="Have not received it?" FontSize="Small" HorizontalOptions="Center"/>
+            <Label Text="Tap here to resend" FontSize="Small" HorizontalOptions="Center"/>
+            <Label Text="or" FontSize="Small" HorizontalOptions="Center"/>
+            <Label Text="tap here to change number" FontSize="Small" HorizontalOptions="Center" />
+        </StackLayout>
+        <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Text="SUBMIT" Margin="100,20" Command="{Binding GoToHomeCmd}"/>
+    </Grid>
+</local:CustomPage>

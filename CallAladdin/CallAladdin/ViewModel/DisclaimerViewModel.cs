@@ -118,5 +118,10 @@ namespace CallAladdin.ViewModel
 
             this.DisclaimerText = strBuilder.ToString();
         }
+
+        public async void NavigateToSmsVerification(UserRegistration userRegistration)
+        {
+            await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, userRegistration);
+        }
     }
 }

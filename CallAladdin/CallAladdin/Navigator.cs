@@ -44,6 +44,9 @@ namespace CallAladdin
                 case PageType.DISCLAIMER:
                     view = new DisclaimerPage(parameter as UserRegistration);
                     break;
+                case PageType.SMS_VERIFICATION:
+                    view = new SmsVerificationPage(parameter as UserRegistration);
+                    break;
             }
 
             if (view != null)
@@ -68,6 +71,7 @@ namespace CallAladdin
     {
         USER_REGISTRATION = 0,
         USER_LOGIN = 1,
-        DISCLAIMER = 2
+        DISCLAIMER = 2,
+        SMS_VERIFICATION = 3
     }
 }
