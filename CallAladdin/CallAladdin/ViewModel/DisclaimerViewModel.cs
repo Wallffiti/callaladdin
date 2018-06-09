@@ -11,6 +11,7 @@ namespace CallAladdin.ViewModel
     {
         private UserRegistration userRegistration;
         private string disclaimerText;
+        public event EventHandler ConfirmDisclaimerAcceptanceEvent;
 
         public string DisclaimerText
         {
@@ -51,7 +52,7 @@ namespace CallAladdin.ViewModel
             .Append("<title>©2017 Call Aladdin Disclaimer</title>")
             .Append("</head>")
             .Append("<body>")
-            .Append("<div>")
+            .Append("<div style=\"background-color: lightgray; padding: 10px\">")
 
             .Append("<h3><u>TERMS AND CONDITIONS</u></h3>")
             .Append(" <p>Call Aladdin is a marketplace platform for services performed by its users. The following terms and conditions govern your access to and use of the Call Aladdin website or mobile app, including any content, functionality and services offered on or through [website URL(“thewebsite”) or mobile app name]. Please read the terms and conditions carefully before you start to use the website or mobile app. By using the website or mobile app, you agree to follow and be bound by these terms and conditions in full. If you disagree with these terms and conditions or any part of these terms and conditions, you should not use this website or mobile app.")
@@ -117,6 +118,14 @@ namespace CallAladdin.ViewModel
             .Append("</html>");
 
             this.DisclaimerText = strBuilder.ToString();
+        }
+
+        public void NotifyViewOnConfirmation()
+        {
+            if (this.ConfirmDisclaimerAcceptanceEvent != null)
+            {
+                this.ConfirmDisclaimerAcceptanceEvent(this, null);
+            }
         }
 
         public async void NavigateToSmsVerification(UserRegistration userRegistration)

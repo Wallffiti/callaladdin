@@ -25,6 +25,7 @@ namespace CallAladdin.Commands
         public void Execute(object parameter)
         {
             var userRegistration = (UserRegistration)parameter;
+            disclaimerViewModel.NotifyViewOnConfirmation();
             disclaimerViewModel.NavigateToSmsVerification(userRegistration);
         }
     }
