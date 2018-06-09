@@ -16,10 +16,7 @@ namespace CallAladdin.ViewModel
             GoToLoginCmd = new GoToLoginCommand(this);
             GoToRegisterCmd = new GoToRegisterCommand(this);
         }
-        public async void NavigateToRegister()
-        {
-            await Navigator.Instance.NavigateTo(PageType.USER_REGISTRATION);
-        }
+        public async void NavigateToRegister() => await Navigator.Instance.NavigateTo(PageType.USER_REGISTRATION);
 
         public async void NavigateToLogin()
         {

@@ -18,7 +18,9 @@ namespace CallAladdin.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (parameter != null)
+            var val = parameter?.ToString();
+
+            if (!string.IsNullOrEmpty(val))
             {
                 return true;
             }

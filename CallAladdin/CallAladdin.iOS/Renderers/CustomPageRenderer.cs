@@ -11,9 +11,14 @@ using UIKit;
 using CoreGraphics;
 using CoreAnimation;
 using CallAladdin.Renderers;
+using CallAladdin.iOS.Renderers;
 
+[assembly: ExportRenderer(typeof(ContentPage), typeof(CustomPageRenderer))]
 namespace CallAladdin.iOS.Renderers
 {
+    /// <summary>
+    /// Refer http://www.xamboy.com/2017/12/06/navigation-bar-customization-in-xamarin-forms/
+    /// </summary>
     public class CustomPageRenderer : PageRenderer
     {
         UILabel titleLabel;

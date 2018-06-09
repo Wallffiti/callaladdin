@@ -31,6 +31,9 @@ using Xamarin.Forms;
 [assembly: ExportRenderer(typeof(CustomNavigationPage), typeof(CustomNavigationPageRenderer))]
 namespace CallAladdin.Droid.Renderers
 {
+    /// <summary>
+    /// Refer http://www.xamboy.com/2017/12/06/navigation-bar-customization-in-xamarin-forms/
+    /// </summary>
     public class CustomNavigationPageRenderer : NavigationPageRenderer
     {
         Android.Support.V7.Widget.Toolbar _toolbar;
