@@ -15,9 +15,15 @@
                 <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
                     <StackLayout Orientation="Vertical">
                         <Label Text="This is home page." />
+                        <!--<Button Image="CallAladdin.Assets.Images.air_conditioner.png" BackgroundColor="Transparent" BorderColor="Transparent" WidthRequest="100" HeightRequest="100"/>-->
+                        <Image Source="{ext:ImageResource CallAladdin.Assets.Images.flooring.png}" WidthRequest="100" HeightRequest="100">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding tapped}"  />
+                            </Image.GestureRecognizers>
+                        </Image>
                         <AbsoluteLayout>
-                            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.air_conditioner.png}" AbsoluteLayout.LayoutBounds="0.2,0.2,35,35" AbsoluteLayout.LayoutFlags="PositionProportional"/>
-                            <Button AbsoluteLayout.LayoutBounds="0.2,0.2,35,35" AbsoluteLayout.LayoutFlags="PositionProportional" BorderColor="Transparent" BackgroundColor="Transparent" Command="{Binding AlertMeCommand}"/>
+                            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.air_conditioner.png}" AbsoluteLayout.LayoutBounds="0.2,0.2,100,100" AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                            <Button AbsoluteLayout.LayoutBounds="0.2,0.2,100,100" AbsoluteLayout.LayoutFlags="PositionProportional" BorderColor="Transparent" BackgroundColor="Transparent" Command="{Binding AlertMeCommand}"/>
                         </AbsoluteLayout>
                     </StackLayout>
                 </Frame>
@@ -52,6 +58,7 @@
                 <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
                     <StackLayout Orientation="Vertical">
                         <Label Text="This is contractor page." />
+                        <Button Text="Move to dummy modal" Style="{StaticResource defaultButton}" Margin="100,20" Command="{Binding dummy2Cmd}" />
                     </StackLayout>
                 </Frame>
             </Grid>

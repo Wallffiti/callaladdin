@@ -17,12 +17,16 @@ namespace CallAladdin
 		{
 			InitializeComponent ();
             BindingContext = new HomeViewModel();
-		}
+		} 
 
         protected override bool OnBackButtonPressed()
         {
-            //return base.OnBackButtonPressed();
-            return true;
+            if (Device.OS == TargetPlatform.Android)
+            {
+                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            }
+            
+            return base.OnBackButtonPressed();
         }
     }
 }
