@@ -29,9 +29,9 @@ namespace CallAladdin
 
         }
 
-        public CustomPage GetPage(PageType pageType, object parameter)
+        public Page GetPage(PageType pageType, object parameter)
         {
-            CustomPage view = null;
+            Page view = null;
 
             switch (pageType)
             {
@@ -47,6 +47,12 @@ namespace CallAladdin
                 case PageType.SMS_VERIFICATION:
                     view = new SmsVerificationPage(parameter as UserRegistration);
                     break;
+                case PageType.HOME:
+                    view = new HomePage();
+                    break;
+                case PageType.DUMMY:
+                    view = new DummyPage();
+                    break;
             }
 
             if (view != null)
@@ -54,16 +60,32 @@ namespace CallAladdin
                 CustomNavigationPage.SetTitlePosition(view, CustomNavigationPage.TitleAlignment.Center);
                 CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(NamedSize.Large));
                 CustomNavigationPage.SetTitleColor(view, Color.Black);
-                CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(20, FontAttributes.Bold));
+                CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(20, FontAttributes.Bold)); 
             }
 
             return view;
         }
 
-        public async Task NavigateTo(PageType pageType, object parameter = null)
+        public async Task NavigateTo(PageType pageType, object parameter = null, bool appendFromRoot = false, UIPageType uIPageType = UIPageType.PAGE)
         {
             var view = GetPage(pageType, parameter);
-            await App.Current.MainPage.Navigation.PushAsync(view);
+
+            if (uIPageType == UIPageType.PAGE)
+            {
+                if (appendFromRoot)
+                {
+                    await App.Current.MainPage.Navigation.PopToRootAsync();
+                    await App.Current.MainPage.Navigation.PushAsync(view);
+                }
+                else
+                {
+                    await App.Current.MainPage.Navigation.PushAsync(view);
+                }
+            }
+            else if (uIPageType == UIPageType.MODAL)
+            {
+                await App.Current.MainPage.Navigation.PushModalAsync(view);
+            }
         }
     }
 
@@ -72,6 +94,14 @@ namespace CallAladdin
         USER_REGISTRATION = 0,
         USER_LOGIN = 1,
         DISCLAIMER = 2,
-        SMS_VERIFICATION = 3
+        SMS_VERIFICATION = 3,
+        HOME = 4,
+        DUMMY = 99
+    }
+
+    public enum UIPageType
+    {
+        PAGE = 0,
+        MODAL = 1
     }
 }

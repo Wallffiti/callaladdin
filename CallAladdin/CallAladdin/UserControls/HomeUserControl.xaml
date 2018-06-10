@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
+             x:Class="CallAladdin.UserControls.HomeUserControl">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <!--<Label x:Name="HeaderLabel" BackgroundColor="{StaticResource yellow}" TextColor="Black" HeightRequest="55" Text="HOME" FontAttributes="Bold" FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="0" />-->
+    <Label Style="{StaticResource defaultHeader}" Text="HOME" Grid.Row="0" />
+    <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <!--row 1-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.construction.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="construction" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.wiring_lighting.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="wiring_lighting" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.interior_design_carpenter.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="2">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="interior_design_carpenter" />
+                </Image.GestureRecognizers>
+            </Image>
+
+            <!--row 2-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.flooring.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="flooring" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.curtain.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="curtain" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.signboard.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="2">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="signboard" />
+                </Image.GestureRecognizers>
+            </Image>
+            
+            <!--row 3-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.air_conditioner.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="air_conditioner" />
+                </Image.GestureRecognizers>
+            </Image>
+            <!--TODO: plaster ceiling missing-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.aluminium_glass_works.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="2">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="aluminium_glass_works" />
+                </Image.GestureRecognizers>
+            </Image>
+
+            <!--row 4-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.alarm_cctv.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="alarm_cctv" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.cleaning_services.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="1">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="cleaning_services" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.landscaping.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="2">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="landscaping" />
+                </Image.GestureRecognizers>
+            </Image>
+            
+            <!--row 5-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.gates_metal_works.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="4" Grid.Column="0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="gates_metal_works" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.plumber.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="4" Grid.Column="1">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="plumber" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.pest_control.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="4" Grid.Column="2">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="pest_control" />
+                </Image.GestureRecognizers>
+            </Image>
+            
+            <!--row 6-->
+            <!--TODO: fengshui consultation missing-->
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.general_workers.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="5" Grid.Column="1">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="general_workers" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="{ext:ImageResource CallAladdin.Assets.Images.house_movers.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="5" Grid.Column="2">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="house_movers" />
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+    </Frame>
+</Grid>

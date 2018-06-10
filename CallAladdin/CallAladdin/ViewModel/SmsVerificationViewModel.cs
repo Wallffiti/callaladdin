@@ -15,6 +15,7 @@ namespace CallAladdin.ViewModel
     {
         public ICommand GoToHomeCmd { get; set; }
         private string smsCode;
+        private UserRegistration userRegistration;
 
         public string SmsCode
         {
@@ -51,6 +52,12 @@ namespace CallAladdin.ViewModel
                     this.MobileNumber = string.IsNullOrEmpty(mgr.Line1Number) ? "Unknown" : mgr.Line1Number;
                 }
             }
+        }
+
+        public async void NavigateToHome(/*UserRegistration userRegistration*/)
+        {
+            //TODO: verify sms code before navigate to home
+            await Navigator.Instance.NavigateTo(PageType.HOME, userRegistration, appendFromRoot: true);
         }
     }
 }
