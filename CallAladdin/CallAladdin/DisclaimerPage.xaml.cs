@@ -19,12 +19,6 @@ namespace CallAladdin
 			InitializeComponent ();
             var viewModel = new DisclaimerViewModel(userRegistration);
             BindingContext = viewModel;
-            viewModel.ConfirmDisclaimerAcceptanceEvent += ConfirmDisclaimerAcceptance;
 		}
-
-        public void ConfirmDisclaimerAcceptance(object sender, EventArgs eventArgs)
-        {
-            DisplayAlert("Attention", "You have now agreed to ©2017 CallAladdin Disclaimer.", "OK");
-        }
 	}
 }

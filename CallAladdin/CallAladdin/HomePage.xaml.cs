@@ -21,12 +21,21 @@ namespace CallAladdin
 
         protected override bool OnBackButtonPressed()
         {
-            if (Device.OS == TargetPlatform.Android)
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-            }
-            
-            return base.OnBackButtonPressed();
+                var result = await DisplayAlert("Confirmation", "Are you sure to exit this application?", "Ok", "Cancel");
+                if (result)
+                {
+                    if (Device.OS == TargetPlatform.Android)
+                    {
+                        //Do clean up if necessary
+                        Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+                    }
+                }
+            });
+
+            return true;
+            //return base.OnBackButtonPressed();
         }
     }
 }

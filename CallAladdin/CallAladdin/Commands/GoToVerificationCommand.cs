@@ -9,12 +9,12 @@ namespace CallAladdin.Commands
 {
     public class GoToVerificationCommand : ICommand
     {
-        private DisclaimerViewModel disclaimerViewModel;
+        private PersonalDataProtectionViewModel personalDataProtectionViewModel;
         public event EventHandler CanExecuteChanged;
 
-        public GoToVerificationCommand(DisclaimerViewModel viewModel)
+        public GoToVerificationCommand(PersonalDataProtectionViewModel viewModel)
         {
-            this.disclaimerViewModel = viewModel;
+            this.personalDataProtectionViewModel = viewModel;
         }
 
         public bool CanExecute(object parameter)
@@ -25,8 +25,16 @@ namespace CallAladdin.Commands
         public void Execute(object parameter)
         {
             var userRegistration = (UserRegistration)parameter;
-            disclaimerViewModel.NotifyViewOnConfirmation();
-            disclaimerViewModel.NavigateToSmsVerification(userRegistration);
+            personalDataProtectionViewModel.NotifyViewOnConfirmation();
+
+            if (GlobalConfig.Instance.UsePasswordless)
+            {
+                personalDataProtectionViewModel.NavigateToSmsVerification(userRegistration);
+            }
+            else
+            {
+                personalDataProtectionViewModel.NavigateToHome(userRegistration);
+            }
         }
     }
 }

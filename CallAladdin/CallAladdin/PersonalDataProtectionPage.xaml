@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               xmlns:local="clr-namespace:CallAladdin"
-             x:Class="CallAladdin.DisclaimerPage"  FormattedTitle="DISCLAIMER" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
+             x:Class="CallAladdin.PersonalDataProtectionPage" FormattedTitle="PERSONAL DATA PROTECTION" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
     <ScrollView>
         <Grid>
             <Grid.RowDefinitions>
@@ -12,11 +12,11 @@
             </Grid.RowDefinitions>
             <WebView Grid.Row="0">
                 <WebView.Source>
-                    <HtmlWebViewSource Html="{Binding DisclaimerText}" />
+                    <HtmlWebViewSource Html="{Binding PersonalDataProtectionText}" />
                 </WebView.Source>
             </WebView>
             <Label Text="Note: Please scroll down to read through the entire text." FontSize="Micro" FontAttributes="Italic" Grid.Row="1" Margin="10" />
-            <Button Grid.Row="2" x:Name="ProceedToRegistrationButton" Style="{StaticResource defaultButton}" Text="AGREE" Margin="100,20" Command="{Binding GoToPersonalDataProtectionCmd}" CommandParameter="{Binding UserRegistration}"/>
+            <Button Grid.Row="2" x:Name="ProceedToRegistrationButton" Style="{StaticResource defaultButton}" Text="AGREE" Margin="100,20" Command="{Binding GoToVerificationCmd}" CommandParameter="{Binding UserRegistration}"/>
         </Grid>
     </ScrollView>
 </local:CustomPage>

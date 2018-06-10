@@ -21,15 +21,23 @@ namespace CallAladdin.Commands
         public bool CanExecute(object parameter)
         {
             var userRegistration = (UserRegistration)parameter;
-            
+
             if (userRegistration != null)
             {
+                bool requiredVerificationFulfilled = true;
+
+                if (!GlobalConfig.Instance.UsePasswordless)
+                {
+                    requiredVerificationFulfilled = string.IsNullOrEmpty(userRegistration.Password) ? false : Validators.ValidatePassword(userRegistration.Password);
+                }
+
                 bool hasMandatoryInfo = !string.IsNullOrEmpty(userRegistration.Name)
                     && !string.IsNullOrEmpty(userRegistration.Email)
                     && Validators.ValidateEmail(userRegistration.Email)
                     && !string.IsNullOrEmpty(userRegistration.Mobile)
                     && !string.IsNullOrEmpty(userRegistration.City)
-                    && !string.IsNullOrEmpty(userRegistration.Country);
+                    && !string.IsNullOrEmpty(userRegistration.Country)
+                    && requiredVerificationFulfilled;
 
                 bool hasContractorInfo = !string.IsNullOrEmpty(userRegistration.Category)
                     && !string.IsNullOrEmpty(userRegistration.CompanyName)

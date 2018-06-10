@@ -11,7 +11,6 @@ namespace CallAladdin.ViewModel
     {
         private UserRegistration userRegistration;
         private string disclaimerText;
-        public event EventHandler ConfirmDisclaimerAcceptanceEvent;
 
         public string DisclaimerText
         {
@@ -36,12 +35,12 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public ICommand GoToVerificationCmd { get; set; }
+        public ICommand GoToPersonalDataProtectionCmd { get; set; }
 
         public DisclaimerViewModel(UserRegistration userRegistration)
         {
             this.UserRegistration = userRegistration;
-            this.GoToVerificationCmd = new GoToVerificationCommand(this);
+            this.GoToPersonalDataProtectionCmd = new GoToPersonalDataProtectionCommand(this);
 
             var strBuilder = new StringBuilder();
             strBuilder.Append("<!DOCTYPE html>")
@@ -120,17 +119,9 @@ namespace CallAladdin.ViewModel
             this.DisclaimerText = strBuilder.ToString();
         }
 
-        public void NotifyViewOnConfirmation()
+        public async void NavigateToPersonalDataProtection(UserRegistration userRegistration)
         {
-            if (this.ConfirmDisclaimerAcceptanceEvent != null)
-            {
-                this.ConfirmDisclaimerAcceptanceEvent(this, null);
-            }
-        }
-
-        public async void NavigateToSmsVerification(UserRegistration userRegistration)
-        {
-            await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, userRegistration);
+            await Navigator.Instance.NavigateTo(PageType.PERSONAL_DATA_PROTECTION, userRegistration);
         }
     }
 }

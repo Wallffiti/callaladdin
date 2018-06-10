@@ -15,5 +15,6 @@ namespace CallAladdin.Model
         public string Category { get; set; }
         public string CompanyName { get; set; }
         public string CompanyAddress { get; set; }
+        public string Password { get; set; }
     }
 }

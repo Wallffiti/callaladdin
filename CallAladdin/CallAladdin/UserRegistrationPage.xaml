@@ -11,14 +11,15 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <StackLayout CompressedLayout.IsHeadless="True" Margin="20,0" Grid.Row="0">
+            <StackLayout Margin="20,0" Grid.Row="0">
                 <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}" /> <!--TODO pick image -->
-                <Grid CompressedLayout.IsHeadless="True" x:Name="PersonalFieldsGrid">
+                <Grid x:Name="PersonalFieldsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -35,8 +36,15 @@
                             <validator:EmailValidatorBehavior />
                         </Entry.Behaviors>
                     </Entry>
+
+                    <Label IsVisible="{Binding ShowPasswordField}" Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry IsVisible="{Binding ShowPasswordField}" IsPassword="True" x:Name="PasswordEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="1" VerticalOptions="Center" Text="{Binding Password}" FontSize="Small">
+                        <Entry.Behaviors>
+                            <validator:PasswordValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
                 </Grid>
-                <Grid CompressedLayout.IsHeadless="True" x:Name="LocationFieldsGrid">
+                <Grid x:Name="LocationFieldsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="3*" />
@@ -57,11 +65,11 @@
                 </Grid>
                 <FlexLayout Direction="Row" x:Name="IsContractorTogglerFlex"
                     AlignItems="Center"
-                    JustifyContent="SpaceBetween" CompressedLayout.IsHeadless="True">
+                    JustifyContent="SpaceBetween">
                     <Label Text="Also Register As Contractor" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Switch IsToggled="{Binding IsRegisteredAsContractor}" VerticalOptions="Center" />
                 </FlexLayout>
-                <Grid CompressedLayout.IsHeadless="True">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="3*" />
@@ -78,7 +86,7 @@
                     <Label Text="Company" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
                     <Entry Placeholder="ABC Contractor Sdn Bhd" x:Name="CompanyEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Company}" FontSize="Small" IsVisible="{Binding IsRegisteredAsContractor}"/>
                 </Grid>
-                <Grid CompressedLayout.IsHeadless="True">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -87,16 +95,18 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Text="Company Registered Address" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
-                    <Editor HeightRequest="60" Text="{Binding CompanyAddress}" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsRegisteredAsContractor}"/>
+                    <Editor HeightRequest="60" Text="{Binding CompanyAddress}" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsRegisteredAsContractor}" FontSize="Small"/>
                 </Grid>
             </StackLayout>
             <Grid Grid.Row="1" HorizontalOptions="FillAndExpand" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="0" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
-                <Button Grid.Row="1" x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,20" Command="{Binding GoToAgreementCmd}" CommandParameter="{Binding UserRegistration}"/>
+                <Label FontSize="Small" Text="Password is not valid (min 8 characters combination of number, alphabet and at least 1 special character)" Grid.Row="1" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding PasswordIsNotValid}"/>
+                <Button Grid.Row="2" x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,20" Command="{Binding GoToAgreementCmd}" CommandParameter="{Binding UserRegistration}"/>
             </Grid>
         </Grid>
     </ScrollView>

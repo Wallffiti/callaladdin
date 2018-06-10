@@ -24,9 +24,53 @@ namespace CallAladdin.ViewModel
         private string selectedCategory;
         private string companyAddress;
         private bool emailIsNotValid;
+        private bool passwordIsNotValid;
         private bool isRegisteredAsContractor;
+        private bool showPasswordField;
+        private string password;
         private UserRegistration userRegistration;
         private ILocationService locationService;
+
+        public bool PasswordIsNotValid
+        {
+            get
+            {
+                return passwordIsNotValid;
+            }
+            set
+            {
+                passwordIsNotValid = value;
+                OnPropertyChanged("PasswordIsNotValid");
+            }
+        }
+
+        public string Password
+        {
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+                UpdateUserRegistration();
+                ValidateForm();
+                OnPropertyChanged("Password");
+            }
+        }
+
+        public bool ShowPasswordField
+        {
+            get
+            {
+                return showPasswordField;
+            }
+            set
+            {
+                showPasswordField = value;
+                OnPropertyChanged("ShowPasswordField");
+            }
+        }
 
         public bool EmailIsNotValid
         {
@@ -181,6 +225,7 @@ namespace CallAladdin.ViewModel
             locationService = new MockLocationService();    //TODO switch this
             Cities = locationService.GetCities("Malaysia");
             Countries = locationService.GetCountries();
+            ShowPasswordField = !GlobalConfig.Instance.UsePasswordless;
         }
 
         public void UpdateUserRegistration()
@@ -195,13 +240,22 @@ namespace CallAladdin.ViewModel
                 IsRegisteredAsContractor = this.isRegisteredAsContractor,
                 Category = this.selectedCategory,
                 CompanyName = this.company,
-                CompanyAddress = this.companyAddress
+                CompanyAddress = this.companyAddress,
+                Password = this.password
             };
         }
 
         public void ValidateForm()
         {
             this.EmailIsNotValid = string.IsNullOrEmpty(this.email) ? false : !Validators.ValidateEmail(this.email);
+            if (GlobalConfig.Instance.UsePasswordless)
+            {
+                this.PasswordIsNotValid = false;
+            }
+            else
+            {
+                this.PasswordIsNotValid = string.IsNullOrEmpty(this.password) ? false : !Validators.ValidatePassword(this.password);
+            }
         }
 
         public async void NavigateToAgreement(UserRegistration userRegistration)
