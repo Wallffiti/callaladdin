@@ -23,6 +23,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Text="Name" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
                     <Entry Placeholder="John Doe" x:Name="NameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="{Binding Name}" FontSize="Small"/>
@@ -43,6 +44,9 @@
                             <validator:PasswordValidationBehavior />
                         </Entry.Behaviors>
                     </Entry>
+
+                    <Label IsVisible="{Binding ShowPasswordField}" Text="Re-type Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry IsVisible="{Binding ShowPasswordField}" IsPassword="True" x:Name="ReTypePasswordEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="4" Grid.Column="1" VerticalOptions="Center" Text="{Binding ReTypePassword}" FontSize="Small"/>
                 </Grid>
                 <Grid x:Name="LocationFieldsGrid">
                     <Grid.ColumnDefinitions>
@@ -106,7 +110,8 @@
                 </Grid.RowDefinitions>
                 <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="0" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
                 <Label FontSize="Small" Text="Password is not valid (min 8 characters combination of number, alphabet and at least 1 special character)" Grid.Row="1" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding PasswordIsNotValid}"/>
-                <Button Grid.Row="2" x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,20" Command="{Binding GoToAgreementCmd}" CommandParameter="{Binding UserRegistration}"/>
+                <Label FontSize="Small" Text="Password and Re-type Password fields must match" Grid.Row="2" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding PasswordMismatch}"/>
+                <Button Grid.Row="3" x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,20" Command="{Binding GoToAgreementCmd}" CommandParameter="{Binding UserRegistration}"/>
             </Grid>
         </Grid>
     </ScrollView>

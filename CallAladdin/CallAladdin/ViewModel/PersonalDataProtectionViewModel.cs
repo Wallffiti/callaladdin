@@ -23,6 +23,24 @@ namespace CallAladdin.ViewModel
         public PersonalDataProtectionViewModel(UserRegistration userRegistration)
         {
             GoToVerificationCmd = new GoToVerificationCommand(this);
+            var strBuilder = new StringBuilder();
+            strBuilder.Append("<!DOCTYPE html>")
+            .Append("<html>")
+            .Append("<head>")
+            .Append("<meta charset=utf-8 />")
+            .Append("<meta name=\"viewport\" content=\"width = device - width, initial - scale = 1.0\">")
+            .Append("<title>©2017 Call Aladdin Disclaimer</title>")
+            .Append("</head>")
+            .Append("<body style=\"background-color: #EAECF5\">")
+            .Append("<div style=\"background-color: lightgray; padding: 10px\">")
+
+            //TODO for body
+
+            .Append("</div>")
+            .Append("</body>")
+            .Append("</html>");
+
+            this.PersonalDataProtectionText = strBuilder.ToString();
         }
 
         public async void NavigateToSmsVerification(UserRegistration userRegistration)

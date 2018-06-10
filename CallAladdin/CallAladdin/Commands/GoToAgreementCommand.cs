@@ -28,7 +28,8 @@ namespace CallAladdin.Commands
 
                 if (!GlobalConfig.Instance.UsePasswordless)
                 {
-                    requiredVerificationFulfilled = string.IsNullOrEmpty(userRegistration.Password) ? false : Validators.ValidatePassword(userRegistration.Password);
+                    bool passwordMatched = string.Compare(userRegistration.Password, userRegistration.ReTypePassword) == 0;
+                    requiredVerificationFulfilled = passwordMatched && string.IsNullOrEmpty(userRegistration.Password) ? false : Validators.ValidatePassword(userRegistration.Password);
                 }
 
                 bool hasMandatoryInfo = !string.IsNullOrEmpty(userRegistration.Name)

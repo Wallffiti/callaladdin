@@ -27,7 +27,9 @@ namespace CallAladdin.ViewModel
         private bool passwordIsNotValid;
         private bool isRegisteredAsContractor;
         private bool showPasswordField;
+        private bool passwordMismatch;
         private string password;
+        private string reTypePassword;
         private UserRegistration userRegistration;
         private ILocationService locationService;
 
@@ -59,6 +61,21 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public string ReTypePassword
+        {
+            get
+            {
+                return reTypePassword;
+            }
+            set
+            {
+                reTypePassword = value;
+                UpdateUserRegistration();
+                ValidateForm();
+                OnPropertyChanged("ReTypePassword");
+            }
+        }
+
         public bool ShowPasswordField
         {
             get
@@ -68,7 +85,19 @@ namespace CallAladdin.ViewModel
             set
             {
                 showPasswordField = value;
+                UpdateUserRegistration();
+                ValidateForm();
                 OnPropertyChanged("ShowPasswordField");
+            }
+        }
+
+        public bool PasswordMismatch
+        {
+            get { return passwordMismatch; }
+            set
+            {
+                passwordMismatch = value;
+                OnPropertyChanged("PasswordMismatch");
             }
         }
 
@@ -241,7 +270,8 @@ namespace CallAladdin.ViewModel
                 Category = this.selectedCategory,
                 CompanyName = this.company,
                 CompanyAddress = this.companyAddress,
-                Password = this.password
+                Password = this.password,
+                ReTypePassword = this.reTypePassword
             };
         }
 
@@ -255,6 +285,15 @@ namespace CallAladdin.ViewModel
             else
             {
                 this.PasswordIsNotValid = string.IsNullOrEmpty(this.password) ? false : !Validators.ValidatePassword(this.password);
+
+                if (!string.IsNullOrEmpty(userRegistration.Password) && !string.IsNullOrEmpty(userRegistration.ReTypePassword))
+                {
+                    this.PasswordMismatch = string.Compare(userRegistration.Password, userRegistration.ReTypePassword) != 0;
+                }
+                else
+                {
+                    this.PasswordMismatch = false;
+                }
             }
         }
 

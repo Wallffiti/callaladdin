@@ -30,7 +30,7 @@ namespace CallAladdin
         //Define call global configs here
         private GlobalConfig()
         {
-            usePasswordless = false;
+            usePasswordless = true;
         }
 
     }
