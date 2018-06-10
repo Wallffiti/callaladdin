@@ -8,14 +8,14 @@
             <Color x:Key="yellow">#EDEF00</Color>
             <Color x:Key="white">#FFFFFF</Color>
             <Color x:Key="orange">#E67721</Color>
-            <Color x:Key="lightgrey">#DEE0E8</Color>
+            <Color x:Key="lightgrey">#EAECF5</Color>
             <Color x:Key="mediumgrey">#BDBEC2</Color>
             <Color x:Key="darkgrey">#9F9FA1</Color>
             <Style x:Key="defaultBackground" TargetType="ContentPage" >
                 <Setter Property="BackgroundColor" Value="{StaticResource yellow}" />
             </Style>
             <Style x:Key="secondaryBackground" TargetType="ContentPage" >
-                <Setter Property="BackgroundColor" Value="{StaticResource white}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource lightgrey}" />
             </Style>
             <Style TargetType="Button" x:Key="defaultButton">
                 <Setter Property="BackgroundColor" Value="{StaticResource orange}" />
@@ -24,6 +24,15 @@
                 <Setter Property="WidthRequest" Value="100" />
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="BorderRadius" Value="10" />
+            </Style>
+            <Style TargetType="Label" x:Key="defaultHeader">
+                <Setter Property="BackgroundColor" Value="{StaticResource yellow}" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="HeightRequest" Value="55"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

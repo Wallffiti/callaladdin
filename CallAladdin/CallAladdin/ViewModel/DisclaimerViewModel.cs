@@ -51,7 +51,7 @@ namespace CallAladdin.ViewModel
             .Append("<meta name=\"viewport\" content=\"width = device - width, initial - scale = 1.0\">")
             .Append("<title>©2017 Call Aladdin Disclaimer</title>")
             .Append("</head>")
-            .Append("<body>")
+            .Append("<body style=\"background-color: #EAECF5\">")
             .Append("<div style=\"background-color: lightgray; padding: 10px\">")
 
             .Append("<h3><u>TERMS AND CONDITIONS</u></h3>")

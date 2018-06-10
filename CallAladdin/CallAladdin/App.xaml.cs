@@ -11,8 +11,7 @@ namespace CallAladdin
 		public App ()
 		{
 			InitializeComponent();
-            MainPage = new CustomNavigationPage(new MainPage()) { BarBackgroundColor = Color.FromHex("#EDEF00"), BarTextColor = Color.Black };    //DEBUG
-            //MainPage = new CustomNavigationPage(new HomePage());  //DEBUG
+            MainPage = new CustomNavigationPage(new MainPage()) { BarBackgroundColor = Color.FromHex("#EDEF00"), BarTextColor = Color.Black };
         }
 
 		protected override void OnStart ()

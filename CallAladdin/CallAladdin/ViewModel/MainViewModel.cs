@@ -20,7 +20,8 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToLogin()
         {
-            await Navigator.Instance.NavigateTo(PageType.USER_LOGIN);
+            //await Navigator.Instance.NavigateTo(PageType.USER_LOGIN); //DEBUG
+            await Navigator.Instance.NavigateTo(PageType.HOME); //DEBUG
         }
     }
 }
