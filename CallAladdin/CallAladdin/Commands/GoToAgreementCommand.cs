@@ -45,7 +45,7 @@ namespace CallAladdin.Commands
                 }
             }
 
-            return true; //return false;    //DEBUG!!!
+            return false;
         }
 
         public void Execute(object parameter)

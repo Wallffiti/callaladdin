@@ -60,7 +60,7 @@ namespace CallAladdin
                 CustomNavigationPage.SetTitlePosition(view, CustomNavigationPage.TitleAlignment.Center);
                 CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(NamedSize.Large));
                 CustomNavigationPage.SetTitleColor(view, Color.Black);
-                CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(20, FontAttributes.Bold));
+                CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(20, FontAttributes.Bold)); 
             }
 
             return view;
