@@ -3,6 +3,7 @@
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="27" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<application android:label="CallAladdin.Android">
-    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB0wsOeY21sValnqQ42kasRxBySfANB6KI" />
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCjRvL9C-pSgwgal3rF1EG-uvSb9l4oei0" />
+    <meta-data android:name="com.google.android.firebase.API_KEY" android:value="AIzaSyAyHKUI3hev9GhCYIGzpurI4g2HMKzozts" />  <!--key may not be correct-->
   </application>
 </manifest>

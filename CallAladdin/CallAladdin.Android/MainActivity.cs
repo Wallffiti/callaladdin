@@ -30,6 +30,10 @@ namespace CallAladdin.Droid
             var googleAndroidGeoApiKey = b.GetString("com.google.android.geo.API_KEY", "");
             dict.Add("com.google.android.geo.API_KEY", googleAndroidGeoApiKey);
 
+            //Firebase API
+            var firebaseAndroidApiKey = b.GetString("com.google.android.firebase.API_KEY", "");
+            dict.Add("com.google.android.firebase.API_KEY", firebaseAndroidApiKey);
+
             //SQL lite
             string dbname = "call_aladdin.sqlite";
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
