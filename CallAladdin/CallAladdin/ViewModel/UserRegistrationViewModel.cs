@@ -254,7 +254,7 @@ namespace CallAladdin.ViewModel
             locationService = new MockLocationService();    //TODO switch this
             Cities = locationService.GetCities("Malaysia");
             Countries = locationService.GetCountries();
-            ShowPasswordField = !GlobalConfig.Instance.UsePasswordless;
+            ShowPasswordField = !Auth.UsePasswordless();
         }
 
         public void UpdateUserRegistration()
@@ -278,7 +278,7 @@ namespace CallAladdin.ViewModel
         public void ValidateForm()
         {
             this.EmailIsNotValid = string.IsNullOrEmpty(this.email) ? false : !Validators.ValidateEmail(this.email);
-            if (GlobalConfig.Instance.UsePasswordless)
+            if (Auth.UsePasswordless())
             {
                 this.PasswordIsNotValid = false;
             }

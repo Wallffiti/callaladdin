@@ -1,4 +1,5 @@
-﻿using CallAladdin.Model;
+﻿using CallAladdin.Helper;
+using CallAladdin.Model;
 using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace CallAladdin.Commands
             var userRegistration = (UserRegistration)parameter;
             personalDataProtectionViewModel.NotifyViewOnConfirmation();
 
-            if (GlobalConfig.Instance.UsePasswordless)
+            if (Auth.UsePasswordless())
             {
                 personalDataProtectionViewModel.NavigateToSmsVerification(userRegistration);
             }

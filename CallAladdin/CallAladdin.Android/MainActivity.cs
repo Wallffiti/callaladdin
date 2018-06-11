@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using System.Collections.Generic;
+using System.IO;
 
 namespace CallAladdin.Droid
 {
@@ -20,7 +22,21 @@ namespace CallAladdin.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            LoadApplication(new App());
+
+            var dict = new Dictionary<string, object>();
+            var b = PackageManager.GetApplicationInfo(PackageName, Android.Content.PM.PackageInfoFlags.MetaData).MetaData;
+
+            //Google map API
+            var googleAndroidGeoApiKey = b.GetString("com.google.android.geo.API_KEY", "");
+            dict.Add("com.google.android.geo.API_KEY", googleAndroidGeoApiKey);
+
+            //SQL lite
+            string dbname = "call_aladdin.sqlite";
+            string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string fullPath = Path.Combine(folderPath, dbname);
+            dict.Add("call_aladdin.sqlite_path", fullPath);
+
+            LoadApplication(new App(dict));
         }
     }
 }

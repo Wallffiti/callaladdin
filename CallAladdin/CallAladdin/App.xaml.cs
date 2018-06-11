@@ -1,5 +1,6 @@
 using CallAladdin.Renderers;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,7 +15,25 @@ namespace CallAladdin
             MainPage = new CustomNavigationPage(new MainPage()) { BarBackgroundColor = Color.FromHex("#EDEF00"), BarTextColor = Color.Black };
         }
 
-		protected override void OnStart ()
+        public App(Dictionary<string, object> dict) : this()
+        {
+            SetUpConfig(dict);
+        }
+
+        private void SetUpConfig(Dictionary<string, object> dict)
+        {
+            if (dict != null)
+            {
+                foreach (var item in dict)
+                {
+                    GlobalConfig.Instance.SetValueByKey(item.Key, item.Value);
+                }
+            }
+
+            GlobalConfig.Instance.SetValueByKey("use_passwordless", false);  //set passwordless option here
+        }
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}
