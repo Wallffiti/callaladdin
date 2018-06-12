@@ -11,21 +11,44 @@ using Xamarin.Forms.Xaml;
 
 namespace CallAladdin
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UserRegistrationPage : CustomPage //ContentPage
-	{
-		public UserRegistrationPage ()
-		{
-			InitializeComponent ();
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class UserRegistrationPage : CustomPage //ContentPage
+    {
+        public UserRegistrationPage()
+        {
+            InitializeComponent();
             //CustomNavigationPage.SetTitlePosition(this, CustomNavigationPage.TitleAlignment.Center);
-            BindingContext = new UserRegistrationViewModel(); 
+            BindingContext = new UserRegistrationViewModel();
             //var assembly = typeof(UserRegistrationPage);
-            //this.AvatarImage.Source = ImageSource.FromResource("CallAladdin.Assets.Images.default_avatar_image.jpeg", assembly);
+            //this.AvatarImage.Source = ImageSource.FromResource("CallAladdin.Assets.Images.flooring.png", assembly);
         }
 
-        //protected override bool OnBackButtonPressed()
-        //{
-        //    return true;
-        //}
+        protected override bool OnBackButtonPressed()
+        {
+            //Device.BeginInvokeOnMainThread(async () =>
+            //{
+            //    var result = await DisplayAlert("Confirmation", "Are you sure to cancel your registration? All data entered will be lost.", "Ok", "Cancel");
+            //    if (result)
+            //    {
+            //        if (Device.OS == TargetPlatform.Android)
+            //        {
+            //            await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+            //        }
+            //    }
+            //});
+
+            Navigator.Instance.Alert("Confirmation", "Are you sure to cancel your registration? All data entered will be lost.", "Ok", "Cancel", async () =>
+            {
+                //For android
+                await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+            },
+           () =>
+           {
+               //For IOS
+           });
+
+            return true;
+            //return base.OnBackButtonPressed();
+        }
     }
 }

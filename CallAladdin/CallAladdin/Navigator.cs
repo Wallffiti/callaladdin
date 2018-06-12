@@ -69,6 +69,37 @@ namespace CallAladdin
             return view;
         }
 
+        public async Task ReturnPrevious(UIPageType currentPageType)
+        {
+            if (currentPageType == UIPageType.PAGE)
+            {
+                await App.Current.MainPage.Navigation.PopAsync();
+            }
+            else if (currentPageType == UIPageType.MODAL)
+            {
+                await App.Current.MainPage.Navigation.PopModalAsync();
+            }
+        }
+
+        public void Alert(string title, string message, string okMessage, string cancelMessage, Action androidAction, Action iosAction)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var result = await App.Current.MainPage.DisplayAlert(title, message, okMessage, cancelMessage);
+                if (result)
+                {
+                    if (Device.OS == TargetPlatform.Android)
+                    {
+                        androidAction();
+                    }
+                    else if (Device.OS == TargetPlatform.iOS)
+                    {
+                        iosAction();
+                    }
+                }
+            });
+        }
+
         public async Task NavigateTo(PageType pageType, object parameter = null, bool appendFromRoot = false, UIPageType uIPageType = UIPageType.PAGE)
         {
             var view = GetPage(pageType, parameter);
