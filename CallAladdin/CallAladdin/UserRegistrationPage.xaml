@@ -29,7 +29,7 @@
                     <Entry Placeholder="John Doe" x:Name="NameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="{Binding Name}" FontSize="Small"/>
 
                     <Label Text="Mobile" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
-                    <Entry Placeholder="012345678" Keyboard="Telephone" x:Name="MobileEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Mobile}" FontSize="Small"/>
+                    <Entry Placeholder="6012345678" Keyboard="Telephone" x:Name="MobileEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Mobile}" FontSize="Small"/>
 
                     <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
                     <Entry Placeholder="john.doe@email.com" Keyboard="Email" x:Name="EmailEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" Text="{Binding Email}" FontSize="Small">

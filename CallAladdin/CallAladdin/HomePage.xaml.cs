@@ -34,7 +34,7 @@ namespace CallAladdin
             //    }
             //});
 
-            Navigator.Instance.Alert("Confirmation", "Are you sure to exit this application?", "Ok", "Cancel", () =>
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure to exit this application?", "Ok", "Cancel", () =>
             {
                 //For android
                 Android.OS.Process.KillProcess(Android.OS.Process.MyPid());

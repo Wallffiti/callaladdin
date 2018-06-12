@@ -53,6 +53,9 @@ namespace CallAladdin
                 case PageType.HOME:
                     view = new HomePage();
                     break;
+                case PageType.CHANGE_PHONE_NUMBER:
+                    view = new ChangePhoneNumberPage(parameter);
+                    break;
                 case PageType.DUMMY:
                     view = new DummyPage();
                     break;
@@ -81,7 +84,7 @@ namespace CallAladdin
             }
         }
 
-        public void Alert(string title, string message, string okMessage, string cancelMessage, Action androidAction, Action iosAction)
+        public void ConfirmationAlert(string title, string message, string okMessage, string cancelMessage, Action androidAction, Action iosAction)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -131,6 +134,7 @@ namespace CallAladdin
         PERSONAL_DATA_PROTECTION = 3,
         SMS_VERIFICATION = 4,
         HOME = 5,
+        CHANGE_PHONE_NUMBER = 6,
         DUMMY = 99
     }
 

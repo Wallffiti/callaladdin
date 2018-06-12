@@ -37,7 +37,7 @@ namespace CallAladdin
             //    }
             //});
 
-            Navigator.Instance.Alert("Confirmation", "Are you sure to cancel your registration? All data entered will be lost.", "Ok", "Cancel", async () =>
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure to cancel your registration? All data entered will be lost.", "Ok", "Cancel", async () =>
             {
                 //For android
                 await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
