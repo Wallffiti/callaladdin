@@ -11,6 +11,9 @@
         </Grid.RowDefinitions>
         <Label Text="Please enter phone number:" FontSize="Small" TextColor="Black" Grid.Row="0" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
         <Entry Placeholder="6012345678" Text="{Binding PhoneNumber}" Keyboard="Telephone" HorizontalOptions="FillAndExpand" VerticalOptions="Center" HorizontalTextAlignment="Center" FontSize="Large" Grid.Row="1" />
-        <Button x:Name="SubmitPhoneNumberButton" Text="Submit" Style="{StaticResource defaultButton}" Grid.Row="2" Command="{Binding SubmitPhoneNumberCmd}" Margin="100,20" CommandParameter="{Binding PhoneNumber}" />
+        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Grid.Row="2">
+            <Button x:Name="CancelPhoneNumberSubmissionButton" Text="Cancel" Style="{StaticResource defaultButton}" Command="{Binding CancelPhoneNumberSubmissionCmd}" Margin="10" />
+            <Button x:Name="SubmitPhoneNumberButton" Text="Submit" Style="{StaticResource defaultButton}"  Command="{Binding SubmitPhoneNumberCmd}" Margin="10" CommandParameter="{Binding PhoneNumber}" />
+        </StackLayout>
     </Grid>
 </ContentPage>

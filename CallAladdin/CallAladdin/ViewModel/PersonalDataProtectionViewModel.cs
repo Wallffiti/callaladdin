@@ -9,6 +9,7 @@ namespace CallAladdin.ViewModel
 {
     public class PersonalDataProtectionViewModel : BaseViewModel
     {
+        private UserRegistration userRegistration;
         public ICommand GoToVerificationCmd { get; set; }
         public event EventHandler AcceptAgreementEvent;
         private string personalDataProtectionText;
@@ -22,6 +23,7 @@ namespace CallAladdin.ViewModel
 
         public PersonalDataProtectionViewModel(UserRegistration userRegistration)
         {
+            this.userRegistration = userRegistration;
             GoToVerificationCmd = new GoToVerificationCommand(this);
             var strBuilder = new StringBuilder();
             strBuilder.Append("<!DOCTYPE html>")
@@ -75,14 +77,14 @@ namespace CallAladdin.ViewModel
             this.PersonalDataProtectionText = strBuilder.ToString();
         }
 
-        public async void NavigateToSmsVerification(UserRegistration userRegistration)
+        public async void NavigateToSmsVerification(/*UserRegistration userRegistration*/)
         {
-            await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, userRegistration);
+            await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, this.userRegistration);
         }
 
-        public async void NavigateToHome(UserRegistration userRegistration)
+        public async void NavigateToHome(/*UserRegistration userRegistration*/)
         {
-            await Navigator.Instance.NavigateTo(PageType.HOME, userRegistration);
+            await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
         }
 
         public void NotifyViewOnConfirmation()

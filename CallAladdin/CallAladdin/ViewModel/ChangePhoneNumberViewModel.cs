@@ -11,6 +11,7 @@ namespace CallAladdin.ViewModel
         private SmsVerificationViewModel parentViewModel;
         private string phoneNumber;
         public ICommand SubmitPhoneNumberCmd { get; set; }
+        public ICommand CancelPhoneNumberSubmissionCmd { get; set; }
 
         public string PhoneNumber
         {
@@ -21,14 +22,15 @@ namespace CallAladdin.ViewModel
         public ChangePhoneNumberViewModel(SmsVerificationViewModel viewModel)
         {
             this.parentViewModel = viewModel;
-            this.PhoneNumber = viewModel.MobileNumber;
+            this.PhoneNumber = viewModel?.MobileNumber;
             this.SubmitPhoneNumberCmd = new SubmitPhoneNumberCommand(this);
+            this.CancelPhoneNumberSubmissionCmd = new CancelPhoneNumberSubmissionCommand(this);
         }
 
         public void SubmitPhoneNumber()
         {
             parentViewModel.MobileNumber = phoneNumber;
-            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to change it to " + phoneNumber + " ?", "Yes", "No", async () =>
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to change it to " + phoneNumber + "?", "Yes", "No", async () =>
             {
                 //For android
                 await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
@@ -38,6 +40,11 @@ namespace CallAladdin.ViewModel
                 //For IOS
                 await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
             });
+        }
+
+        public async void CancelPhoneNumberChange()
+        {
+            await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
         }
     }
 }

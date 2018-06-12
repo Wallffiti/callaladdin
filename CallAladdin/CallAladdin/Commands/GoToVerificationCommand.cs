@@ -25,16 +25,16 @@ namespace CallAladdin.Commands
 
         public void Execute(object parameter)
         {
-            var userRegistration = (UserRegistration)parameter;
+            //var userRegistration = (UserRegistration)parameter;
             personalDataProtectionViewModel.NotifyViewOnConfirmation();
 
             if (Auth.UsePasswordless())
             {
-                personalDataProtectionViewModel.NavigateToSmsVerification(userRegistration);
+                personalDataProtectionViewModel.NavigateToSmsVerification(/*userRegistration*/);
             }
             else
             {
-                personalDataProtectionViewModel.NavigateToHome(userRegistration);
+                personalDataProtectionViewModel.NavigateToHome(/*userRegistration*/);
             }
         }
     }

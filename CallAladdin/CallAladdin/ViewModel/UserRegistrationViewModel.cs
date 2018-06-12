@@ -255,6 +255,7 @@ namespace CallAladdin.ViewModel
             Cities = locationService.GetCities("Malaysia");
             Countries = locationService.GetCountries();
             ShowPasswordField = !Auth.UsePasswordless();
+            Mobile = Helper.Utilities.GetPhoneNumber();
         }
 
         public void UpdateUserRegistration()

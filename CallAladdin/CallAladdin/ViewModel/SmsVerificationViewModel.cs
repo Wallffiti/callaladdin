@@ -40,30 +40,31 @@ namespace CallAladdin.ViewModel
             this.SmsCodeResendCmd = new SmsCodeResendCommand(this);
             this.ChangePhoneNumberCmd = new ChangePhoneNumberCommand(this);
             this.userRegistration = userRegistration;
+            this.mobileNumber = userRegistration?.Mobile;
 
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                //For android
+            //if (Device.RuntimePlatform == Device.Android)
+            //{
+            //    //For android
 
-                Android.Telephony.TelephonyManager mgr = null;
+            //    Android.Telephony.TelephonyManager mgr = null;
 
-                try
-                {
-                    mgr = Android.App.Application.Context.GetSystemService(Android.Content.Context.TelephonyService) as Android.Telephony.TelephonyManager;
-                }
-                catch (Exception ex)
-                {
+            //    try
+            //    {
+            //        mgr = Android.App.Application.Context.GetSystemService(Android.Content.Context.TelephonyService) as Android.Telephony.TelephonyManager;
+            //    }
+            //    catch (Exception ex)
+            //    {
 
-                }
-                if (mgr != null)
-                {
-                    this.MobileNumber = string.IsNullOrEmpty(mgr.Line1Number) ? "Unknown" : mgr.Line1Number;
-                }
-            }
-            else if (Device.RuntimePlatform == Device.iOS)
-            {
-                //For IOS
-            }
+            //    }
+            //    if (mgr != null)
+            //    {
+            //        this.MobileNumber = string.IsNullOrEmpty(mgr.Line1Number) ? "Unknown" : mgr.Line1Number;
+            //    }
+            //}
+            //else if (Device.RuntimePlatform == Device.iOS)
+            //{
+            //    //For IOS
+            //}
         }
 
         public async void NavigateToHome(/*UserRegistration userRegistration*/)
