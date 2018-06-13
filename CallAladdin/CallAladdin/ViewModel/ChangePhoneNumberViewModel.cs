@@ -29,22 +29,31 @@ namespace CallAladdin.ViewModel
 
         public void SubmitPhoneNumber()
         {
-            parentViewModel.MobileNumber = phoneNumber;
             Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to change it to " + phoneNumber + "?", "Yes", "No", async () =>
             {
                 //For android
+                parentViewModel.MobileNumber = phoneNumber;
                 await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
             },
             async ()=>
             {
                 //For IOS
+                parentViewModel.MobileNumber = phoneNumber;
                 await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
             });
         }
 
-        public async void CancelPhoneNumberChange()
+        public void CancelPhoneNumberChange()
         {
-            await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to return to previous screen? All changes will be lost.", "Yes", "No", async () =>
+            {
+                //For android
+                await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
+            }, async () =>
+            {
+                //For IOS
+                await Navigator.Instance.ReturnPrevious(UIPageType.MODAL);
+            });
         }
     }
 }
