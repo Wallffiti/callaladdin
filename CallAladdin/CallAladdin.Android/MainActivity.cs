@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using System.Collections.Generic;
 using System.IO;
+using Plugin.CurrentActivity;
 
 namespace CallAladdin.Droid
 {
@@ -39,6 +40,8 @@ namespace CallAladdin.Droid
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string fullPath = Path.Combine(folderPath, dbname);
             dict.Add("call_aladdin.sqlite_path", fullPath);
+
+            CrossCurrentActivity.Current.Init(this, bundle);
 
             LoadApplication(new App(dict));
         }

@@ -29,7 +29,7 @@ namespace CallAladdin
         private void ProfilePictureChangedEventHandler(object sender, System.EventArgs e)
         {
             var eventArgs = (ProfilePhotoChangedEventArgs)e;
-            if (eventArgs != null)
+            if (eventArgs != null && !string.IsNullOrEmpty(eventArgs.FilePath))
             {
                 this.AvatarImage.Source = ImageSource.FromFile(eventArgs.FilePath);
             }

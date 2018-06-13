@@ -310,7 +310,23 @@ namespace CallAladdin.ViewModel
 
         public async void ChangeProfileImageAsync()
         {
-            var filePath = await Utilities.PickPhoto();
+            string filePath = "";
+
+            try
+            {
+                filePath = await Utilities.TakePhoto(userRegistration.Guid);
+            }
+            catch (Exception takePhotoEx)
+            {
+                try
+                {
+                    filePath = await Utilities.PickPhoto();
+                }
+                catch (Exception pickPhotoEx)
+                {
+
+                }
+            }
             //TODO: need to think of how to enable photo pick and take photo
             OnProfilePictureChanged?.Invoke(this, new ProfilePhotoChangedEventArgs(filePath));
         }

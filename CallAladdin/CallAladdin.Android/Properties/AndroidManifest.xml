@@ -5,5 +5,13 @@
 	<application android:label="CallAladdin.Android">
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCjRvL9C-pSgwgal3rF1EG-uvSb9l4oei0" />
     <meta-data android:name="com.google.android.firebase.API_KEY" android:value="AIzaSyAyHKUI3hev9GhCYIGzpurI4g2HMKzozts" />  <!--key may not be correct-->
+    <provider android:name="android.support.v4.content.FileProvider"
+          android:authorities="${applicationId}.fileprovider"
+          android:exported="false"
+          android:grantUriPermissions="true">
+
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                       android:resource="@xml/file_paths"></meta-data>
+    </provider>
   </application>
 </manifest>

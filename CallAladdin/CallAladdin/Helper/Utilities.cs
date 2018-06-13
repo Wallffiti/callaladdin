@@ -77,7 +77,7 @@ namespace CallAladdin.Helper
 
             var mediaFile = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
-                Directory = "UserProfile",
+                //Directory = "UserProfile",
                 Name = fileIdentifier + ".jpg"
             });
 
