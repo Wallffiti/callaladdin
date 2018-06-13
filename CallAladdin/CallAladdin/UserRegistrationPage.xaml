@@ -12,7 +12,12 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackLayout Margin="20,0" Grid.Row="0">
-                <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}" /> <!--TODO pick image -->
+                <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Margin="0,0,0,20" Text="Tap the above image to change profile picture" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="Micro" />
                 <Grid x:Name="PersonalFieldsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />

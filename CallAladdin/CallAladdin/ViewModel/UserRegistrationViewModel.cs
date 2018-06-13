@@ -1,4 +1,5 @@
 ﻿using CallAladdin.Commands;
+using CallAladdin.EventArgs;
 using CallAladdin.Helper;
 using CallAladdin.Model;
 using CallAladdin.Services;
@@ -12,7 +13,9 @@ namespace CallAladdin.ViewModel
 {
     public class UserRegistrationViewModel : BaseViewModel
     {
+        public event EventHandler OnProfilePictureChanged;
         public ICommand GoToAgreementCmd { get; set; }
+        public ICommand ChangeProfileImageCmd { get; set; }
         private string name;
         private string mobile;
         private string email;
@@ -251,6 +254,7 @@ namespace CallAladdin.ViewModel
         public UserRegistrationViewModel()
         {
             GoToAgreementCmd = new GoToAgreementCommand(this);
+            ChangeProfileImageCmd = new ChangeProfileImageCommand(this);
             locationService = new MockLocationService();    //TODO switch this
             Cities = locationService.GetCities("Malaysia");
             Countries = locationService.GetCountries();
@@ -262,6 +266,7 @@ namespace CallAladdin.ViewModel
         {
             UserRegistration = new UserRegistration()
             {
+                Guid = Guid.NewGuid().ToString(),
                 Name = this.name,
                 Mobile = this.mobile,
                 Email = this.email,
@@ -303,5 +308,11 @@ namespace CallAladdin.ViewModel
             await Navigator.Instance.NavigateTo(PageType.DISCLAIMER, userRegistration);
         }
 
+        public async void ChangeProfileImageAsync()
+        {
+            var filePath = await Utilities.PickPhoto();
+            //TODO: need to think of how to enable photo pick and take photo
+            OnProfilePictureChanged?.Invoke(this, new ProfilePhotoChangedEventArgs(filePath));
+        }
     }
 }

@@ -20,9 +20,9 @@ namespace CallAladdin
             var viewModel = new PersonalDataProtectionViewModel(userRegistration);
             BindingContext = viewModel;
             viewModel.AcceptAgreementEvent += ConfirmDisclaimerAcceptance;
-		}
+        }
 
-        public void ConfirmDisclaimerAcceptance(object sender, EventArgs eventArgs)
+        public void ConfirmDisclaimerAcceptance(object sender, System.EventArgs eventArgs) 
         {
             DisplayAlert("Attention", "You have now agreed to ©2017 CallAladdin Disclaimer and Personal Data Protection.", "OK");
         }

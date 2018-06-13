@@ -1,4 +1,5 @@
-﻿using CallAladdin.Renderers;
+﻿using CallAladdin.EventArgs;
+using CallAladdin.Renderers;
 using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -18,25 +19,24 @@ namespace CallAladdin
         {
             InitializeComponent();
             //CustomNavigationPage.SetTitlePosition(this, CustomNavigationPage.TitleAlignment.Center);
-            BindingContext = new UserRegistrationViewModel();
+            var viewModel = new UserRegistrationViewModel();
+            BindingContext = viewModel;
+            viewModel.OnProfilePictureChanged += ProfilePictureChangedEventHandler;
             //var assembly = typeof(UserRegistrationPage);
             //this.AvatarImage.Source = ImageSource.FromResource("CallAladdin.Assets.Images.flooring.png", assembly);
         }
 
+        private void ProfilePictureChangedEventHandler(object sender, System.EventArgs e)
+        {
+            var eventArgs = (ProfilePhotoChangedEventArgs)e;
+            if (eventArgs != null)
+            {
+                this.AvatarImage.Source = ImageSource.FromFile(eventArgs.FilePath);
+            }
+        }
+
         protected override bool OnBackButtonPressed()
         {
-            //Device.BeginInvokeOnMainThread(async () =>
-            //{
-            //    var result = await DisplayAlert("Confirmation", "Are you sure to cancel your registration? All data entered will be lost.", "Ok", "Cancel");
-            //    if (result)
-            //    {
-            //        if (Device.OS == TargetPlatform.Android)
-            //        {
-            //            await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-            //        }
-            //    }
-            //});
-
             Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure to cancel your registration? All data entered will be lost.", "Ok", "Cancel", async () =>
             {
                 //For android
