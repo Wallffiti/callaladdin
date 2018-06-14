@@ -137,9 +137,18 @@ namespace CallAladdin.ViewModel
                 if (createUserResponse != null)
                 {
                     //TODO: save jwt and local id into local storage
-                    await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
 
-                    IsBusy = false;
+                    Navigator.Instance.OkAlert("Successful", "Thank you for registrating with us. You can now use Call Aladdin.", "OK", async () =>
+                    {
+                        //For android
+                        await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+                        IsBusy = false;
+                    }, async () =>
+                    {
+                        //For ios
+                        await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+                        IsBusy = false;
+                    });
 
                     return;
                 }
