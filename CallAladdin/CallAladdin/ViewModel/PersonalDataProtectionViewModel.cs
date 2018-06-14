@@ -16,6 +16,17 @@ namespace CallAladdin.ViewModel
         public ICommand GoToVerificationCmd { get; set; }
         public event EventHandler AcceptAgreementEvent;
         private string personalDataProtectionText;
+        private bool isBusy;
+
+        //public UserRegistration UserRegistration
+        //{
+        //    get { return userRegistration; }
+        //    set
+        //    {
+        //        userRegistration = value;
+        //        OnPropertyChanged("UserRegistration");
+        //    }
+        //}
 
         public string PersonalDataProtectionText
         {
@@ -23,6 +34,15 @@ namespace CallAladdin.ViewModel
             set { personalDataProtectionText = value; OnPropertyChanged("PersonalDataProtectionText"); }
         }
 
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged("IsBusy");
+            }
+        }
 
         public PersonalDataProtectionViewModel(UserRegistration userRegistration)
         {
@@ -91,6 +111,8 @@ namespace CallAladdin.ViewModel
             //1. Sign up via firebase auth
             //2. Create user via backend server
 
+            IsBusy = true;
+
             var signupUserResponse = await userService.RegisterUserToAuthServer(this.userRegistration);
 
             if (signupUserResponse != null)
@@ -104,6 +126,9 @@ namespace CallAladdin.ViewModel
                     {
                         //For ios
                     });
+
+                    IsBusy = false;
+
                     return;
                 }
 
@@ -113,6 +138,9 @@ namespace CallAladdin.ViewModel
                 {
                     //TODO: save jwt and local id into local storage
                     await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+
+                    IsBusy = false;
+
                     return;
                 }
             }
@@ -124,6 +152,8 @@ namespace CallAladdin.ViewModel
             {
                 //For ios
             });
+
+            IsBusy = false;
         }
 
         public void NotifyViewOnConfirmation()
