@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CallAladdin.Services.Interfaces
 {
     public interface ILocationService
     {
-        IList<string> GetCities(string area);
-        IList<string> GetCountries();
+        Task<IList<string>> GetCities(string area);
+        Task<IList<string>> GetCountries();
     }
 }

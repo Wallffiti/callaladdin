@@ -41,6 +41,10 @@ namespace CallAladdin.Droid
             string fullPath = Path.Combine(folderPath, dbname);
             dict.Add("call_aladdin.sqlite_path", fullPath);
 
+            //Call Aladdin
+            string apiUrl = b.GetString("com.call.aladdin.project.api.url", "");
+            dict.Add("com.call.aladdin.project.api.url", apiUrl);
+
             CrossCurrentActivity.Current.Init(this, bundle);
 
             LoadApplication(new App(dict));

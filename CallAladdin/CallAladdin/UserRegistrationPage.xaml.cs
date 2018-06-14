@@ -1,5 +1,7 @@
 ﻿using CallAladdin.EventArgs;
 using CallAladdin.Renderers;
+using CallAladdin.Services;
+using CallAladdin.Services.Interfaces;
 using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -16,16 +18,32 @@ namespace CallAladdin
     public partial class UserRegistrationPage : CustomPage //ContentPage
     {
         private UserRegistrationViewModel userRegistrationViewModel;
+        private ILocationService locationService;
 
         public UserRegistrationPage()
         {
             InitializeComponent();
             //CustomNavigationPage.SetTitlePosition(this, CustomNavigationPage.TitleAlignment.Center);
             userRegistrationViewModel = new UserRegistrationViewModel();
+            locationService = new LocationService();
             BindingContext = userRegistrationViewModel;
             userRegistrationViewModel.OnProfilePictureChanged += ProfilePictureChangedEventHandler;
             //var assembly = typeof(UserRegistrationPage);
             //this.AvatarImage.Source = ImageSource.FromResource("CallAladdin.Assets.Images.flooring.png", assembly);
+
+            PopulateLocations();
+        }
+
+        private void PopulateLocations()
+        {
+            Task.Run(() =>
+            {
+                //Long processes below
+                this.ProgressIndicator.IsRunning = true; this.ProgressIndicator.IsVisible = true;
+                userRegistrationViewModel.Countries = locationService.GetCountries().Result;
+                userRegistrationViewModel.Cities = locationService.GetCities("all").Result;  //right now no parameter needed to filter cities
+                this.ProgressIndicator.IsRunning = false; this.ProgressIndicator.IsVisible = false;
+            });
         }
 
         private void ProfilePictureChangedEventHandler(object sender, System.EventArgs e)

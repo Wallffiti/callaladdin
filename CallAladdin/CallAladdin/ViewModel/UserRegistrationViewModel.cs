@@ -13,6 +13,8 @@ namespace CallAladdin.ViewModel
 {
     public class UserRegistrationViewModel : BaseViewModel
     {
+        private const string CHOOSE_PHOTO_FROM_CAMERA = "Choose photo from camera";
+        private const string BROWSE_PHOTO_FROM_FOLDER = "Browse photo from folder";
         public event EventHandler OnProfilePictureChanged;
         public ICommand GoToAgreementCmd { get; set; }
         public ICommand ChangeProfileImageCmd { get; set; }
@@ -270,17 +272,19 @@ namespace CallAladdin.ViewModel
         {
             GoToAgreementCmd = new GoToAgreementCommand(this);
             ChangeProfileImageCmd = new ChangeProfileImageCommand(this);
-            locationService = new MockLocationService();    //TODO switch this
-            Cities = locationService.GetCities("Malaysia");
-            Countries = locationService.GetCountries();
+            //locationService = new LocationService();
             ShowPasswordField = !Auth.UsePasswordless();
             Mobile = Helper.Utilities.GetPhoneNumber();
             PhotoOptionSelections = new List<string>
             {
-                "Choose photo from camera",
-                "Browse photo from folder"
+                CHOOSE_PHOTO_FROM_CAMERA,
+                BROWSE_PHOTO_FROM_FOLDER
             };
-            SelectedPhotoOption = "Browse photo from folder";
+            SelectedPhotoOption = BROWSE_PHOTO_FROM_FOLDER;
+
+            //Long processes below
+            //Cities = locationService.GetCities("Malaysia").Result;
+            //Countries = locationService.GetCountries().Result;
         }
 
         public void UpdateUserRegistration()
@@ -336,11 +340,11 @@ namespace CallAladdin.ViewModel
 
             try
             {
-                if (this.selectedPhotoOption == "Choose photo from camera")
+                if (this.selectedPhotoOption == CHOOSE_PHOTO_FROM_CAMERA)
                 {
                     filePath = await Utilities.TakePhoto(userRegistration.Guid);
                 }
-                else if (this.selectedPhotoOption == "Browse photo from folder")
+                else if (this.selectedPhotoOption == BROWSE_PHOTO_FROM_FOLDER)
                 {
                     filePath = await Utilities.PickPhoto();
                 }

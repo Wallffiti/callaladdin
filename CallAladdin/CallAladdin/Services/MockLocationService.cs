@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CallAladdin.Services
 {
     public class MockLocationService : ILocationService
     {
-        public IList<string> GetCities(string area)
+        public async Task<IList<string>> GetCities(string area)
         {
             return new List<string>()
             {
@@ -20,7 +21,7 @@ namespace CallAladdin.Services
             };
         }
 
-        public IList<string> GetCountries()
+        public async Task<IList<string>> GetCountries()
         {
             return new List<string>()
             {
