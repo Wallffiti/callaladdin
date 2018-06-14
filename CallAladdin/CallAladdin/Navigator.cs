@@ -96,11 +96,28 @@ namespace CallAladdin
             }
         }
 
-        public void ConfirmationAlert(string title, string message, string okMessage, string cancelMessage, Action androidAction, Action iosAction)
+        public void OkAlert(string title, string message, string okMessage, Action androidAction, Action iosAction)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                var result = await App.Current.MainPage.DisplayAlert(title, message, okMessage, cancelMessage);
+                await App.Current.MainPage.DisplayAlert(title, message, okMessage);
+
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    androidAction();
+                }
+                else if (Device.OS == TargetPlatform.iOS)
+                {
+                    iosAction();
+                }
+            });
+        }
+
+        public void ConfirmationAlert(string title, string message, string confirmMessage, string cancelMessage, Action androidAction, Action iosAction)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var result = await App.Current.MainPage.DisplayAlert(title, message, confirmMessage, cancelMessage);
                 if (result)
                 {
                     if (Device.OS == TargetPlatform.Android)

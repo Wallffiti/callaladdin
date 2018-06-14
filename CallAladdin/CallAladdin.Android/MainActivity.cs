@@ -34,6 +34,8 @@ namespace CallAladdin.Droid
             //Firebase API
             var firebaseAndroidApiKey = b.GetString("com.google.android.firebase.API_KEY", "");
             dict.Add("com.google.android.firebase.API_KEY", firebaseAndroidApiKey);
+            var firebaseAuthApiUrl = b.GetString("com.google.android.firebase.restful.api.url", "");
+            dict.Add("com.google.android.firebase.restful.api.url", firebaseAuthApiUrl);
 
             //SQL lite
             string dbname = "call_aladdin.sqlite";

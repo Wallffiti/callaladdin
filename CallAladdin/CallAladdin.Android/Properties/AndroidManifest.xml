@@ -8,6 +8,7 @@
 	<application android:label="CallAladdin.Android">
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCjRvL9C-pSgwgal3rF1EG-uvSb9l4oei0" />
     <meta-data android:name="com.google.android.firebase.API_KEY" android:value="AIzaSyAyHKUI3hev9GhCYIGzpurI4g2HMKzozts" />  <!--key may not be correct-->
+    <meta-data android:name="com.google.android.firebase.restful.api.url" android:value="https://www.googleapis.com/identitytoolkit/v3/relyingparty" />
     <meta-data android:name="com.call.aladdin.project.api.url" android:value="http://facontractor.herokuapp.com/api" />
     <provider android:name="android.support.v4.content.FileProvider"
           android:authorities="${applicationId}.fileprovider"

@@ -1,5 +1,7 @@
 ﻿using CallAladdin.Commands;
 using CallAladdin.Model;
+using CallAladdin.Services;
+using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +11,7 @@ namespace CallAladdin.ViewModel
 {
     public class PersonalDataProtectionViewModel : BaseViewModel
     {
+        private IUserService userService;
         private UserRegistration userRegistration;
         public ICommand GoToVerificationCmd { get; set; }
         public event EventHandler AcceptAgreementEvent;
@@ -23,6 +26,7 @@ namespace CallAladdin.ViewModel
 
         public PersonalDataProtectionViewModel(UserRegistration userRegistration)
         {
+            this.userService = new UserService();
             this.userRegistration = userRegistration;
             GoToVerificationCmd = new GoToVerificationCommand(this);
             var strBuilder = new StringBuilder();
@@ -84,7 +88,42 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToHome(/*UserRegistration userRegistration*/)
         {
-            await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+            //1. Sign up via firebase auth
+            //2. Create user via backend server
+
+            var signupUserResponse = await userService.RegisterUserToAuthServer(this.userRegistration);
+
+            if (signupUserResponse != null)
+            {
+                if (signupUserResponse.IsError)
+                {
+                    Navigator.Instance.OkAlert("Alert", "There is a problem with the registration process. Error: " + signupUserResponse.ErrorMessage, "OK", () =>
+                    {
+                        //For android
+                    }, () =>
+                    {
+                        //For ios
+                    });
+                    return;
+                }
+
+                var createUserResponse = await userService.CreateUser(this.userRegistration);
+
+                if (createUserResponse != null)
+                {
+                    //TODO: save jwt and local id into local storage
+                    await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+                    return;
+                }
+            }
+
+            Navigator.Instance.OkAlert("Alert", "There is a problem with the registration process. Please try again later.", "OK", () =>
+            {
+                //For android
+            }, () =>
+            {
+                //For ios
+            });
         }
 
         public void NotifyViewOnConfirmation()

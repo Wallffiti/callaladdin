@@ -37,7 +37,6 @@ namespace CallAladdin.ViewModel
         private string reTypePassword;
         private string profileImagePath;
         private UserRegistration userRegistration;
-        private ILocationService locationService;
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
 
@@ -272,7 +271,6 @@ namespace CallAladdin.ViewModel
         {
             GoToAgreementCmd = new GoToAgreementCommand(this);
             ChangeProfileImageCmd = new ChangeProfileImageCommand(this);
-            //locationService = new LocationService();
             ShowPasswordField = !Auth.UsePasswordless();
             Mobile = Helper.Utilities.GetPhoneNumber();
             PhotoOptionSelections = new List<string>
@@ -281,10 +279,6 @@ namespace CallAladdin.ViewModel
                 BROWSE_PHOTO_FROM_FOLDER
             };
             SelectedPhotoOption = BROWSE_PHOTO_FROM_FOLDER;
-
-            //Long processes below
-            //Cities = locationService.GetCities("Malaysia").Result;
-            //Countries = locationService.GetCountries().Result;
         }
 
         public void UpdateUserRegistration()
@@ -354,22 +348,7 @@ namespace CallAladdin.ViewModel
 
             }
 
-            //try
-            //{
-            //    filePath = await Utilities.TakePhoto(userRegistration.Guid);
-            //}
-            //catch (Exception takePhotoEx)
-            //{
-            //    try
-            //    {
-            //        filePath = await Utilities.PickPhoto();
-            //    }
-            //    catch (Exception pickPhotoEx)
-            //    {
-
-            //    }
-            //}
-
+            this.profileImagePath = filePath;
             OnProfilePictureChanged?.Invoke(this, new ProfilePhotoChangedEventArgs(filePath));
         }
     }

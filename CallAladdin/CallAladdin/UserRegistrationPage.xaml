@@ -12,7 +12,6 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackLayout Margin="20,0" Grid.Row="0">
-                <!--<Label Margin="0,0,0,20" Text="Tap the above image to change profile picture" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="Micro" />-->
                 <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />

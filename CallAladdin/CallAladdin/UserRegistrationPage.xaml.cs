@@ -15,7 +15,7 @@ using Xamarin.Forms.Xaml;
 namespace CallAladdin
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class UserRegistrationPage : CustomPage //ContentPage
+    public partial class UserRegistrationPage : CustomPage
     {
         private UserRegistrationViewModel userRegistrationViewModel;
         private ILocationService locationService;
@@ -23,13 +23,10 @@ namespace CallAladdin
         public UserRegistrationPage()
         {
             InitializeComponent();
-            //CustomNavigationPage.SetTitlePosition(this, CustomNavigationPage.TitleAlignment.Center);
             userRegistrationViewModel = new UserRegistrationViewModel();
             locationService = new LocationService();
             BindingContext = userRegistrationViewModel;
             userRegistrationViewModel.OnProfilePictureChanged += ProfilePictureChangedEventHandler;
-            //var assembly = typeof(UserRegistrationPage);
-            //this.AvatarImage.Source = ImageSource.FromResource("CallAladdin.Assets.Images.flooring.png", assembly);
 
             PopulateLocations();
         }
