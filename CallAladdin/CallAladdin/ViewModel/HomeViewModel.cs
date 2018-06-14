@@ -18,7 +18,7 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToDummyPage()
         {
-            await Navigator.Instance.NavigateTo(PageType.DUMMY);
+            await Navigator.Instance.NavigateTo(PageType.DUMMY, titleAlignment: TitleAlignment.LEFT);
         }
 
         public async void NavigateToDummyModal()

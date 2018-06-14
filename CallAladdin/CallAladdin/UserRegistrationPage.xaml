@@ -12,12 +12,21 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackLayout Margin="20,0" Grid.Row="0">
-                <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}" >
+                <!--<Label Margin="0,0,0,20" Text="Tap the above image to change profile picture" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="Micro" />-->
+                <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
                     </Image.GestureRecognizers>
                 </Image>
-                <Label Margin="0,0,0,20" Text="Tap the above image to change profile picture" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="Micro" />
+                <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="0,0,0,0">
+                    <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
+                    <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" WidthRequest="180"/>
+                    <Image HeightRequest="40" WidthRequest="40" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </FlexLayout>
                 <Grid x:Name="PersonalFieldsGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />

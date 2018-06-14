@@ -42,7 +42,8 @@ namespace CallAladdin.Commands
 
                 bool hasContractorInfo = !string.IsNullOrEmpty(userRegistration.Category)
                     && !string.IsNullOrEmpty(userRegistration.CompanyName)
-                    && !string.IsNullOrEmpty(userRegistration.CompanyAddress);
+                    && !string.IsNullOrEmpty(userRegistration.CompanyAddress)
+                    && !string.IsNullOrEmpty(userRegistration.ProfileImagePath);
 
                 if (userRegistration.IsRegisteredAsContractor)
                 {

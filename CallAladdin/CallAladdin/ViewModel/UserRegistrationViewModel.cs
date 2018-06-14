@@ -33,8 +33,23 @@ namespace CallAladdin.ViewModel
         private bool passwordMismatch;
         private string password;
         private string reTypePassword;
+        private string profileImagePath;
         private UserRegistration userRegistration;
         private ILocationService locationService;
+        private IList<string> photoOptionSelections;
+        private string selectedPhotoOption;
+
+        public IList<string> PhotoOptionSelections
+        {
+            get { return photoOptionSelections; }
+            set { photoOptionSelections = value; OnPropertyChanged("PhotoOptionSelections"); }
+        }
+
+        public string SelectedPhotoOption
+        {
+            get { return selectedPhotoOption; }
+            set { selectedPhotoOption = value; OnPropertyChanged("SelectedPhotoOption"); }
+        }
 
         public bool PasswordIsNotValid
         {
@@ -260,6 +275,12 @@ namespace CallAladdin.ViewModel
             Countries = locationService.GetCountries();
             ShowPasswordField = !Auth.UsePasswordless();
             Mobile = Helper.Utilities.GetPhoneNumber();
+            PhotoOptionSelections = new List<string>
+            {
+                "Choose photo from camera",
+                "Browse photo from folder"
+            };
+            SelectedPhotoOption = "Browse photo from folder";
         }
 
         public void UpdateUserRegistration()
@@ -277,7 +298,8 @@ namespace CallAladdin.ViewModel
                 CompanyName = this.company,
                 CompanyAddress = this.companyAddress,
                 Password = this.password,
-                ReTypePassword = this.reTypePassword
+                ReTypePassword = this.reTypePassword,
+                ProfileImagePath = this.profileImagePath
             };
         }
 
@@ -314,20 +336,36 @@ namespace CallAladdin.ViewModel
 
             try
             {
-                filePath = await Utilities.TakePhoto(userRegistration.Guid);
-            }
-            catch (Exception takePhotoEx)
-            {
-                try
+                if (this.selectedPhotoOption == "Choose photo from camera")
+                {
+                    filePath = await Utilities.TakePhoto(userRegistration.Guid);
+                }
+                else if (this.selectedPhotoOption == "Browse photo from folder")
                 {
                     filePath = await Utilities.PickPhoto();
                 }
-                catch (Exception pickPhotoEx)
-                {
-
-                }
             }
-            //TODO: need to think of how to enable photo pick and take photo
+            catch (Exception ex)
+            {
+
+            }
+
+            //try
+            //{
+            //    filePath = await Utilities.TakePhoto(userRegistration.Guid);
+            //}
+            //catch (Exception takePhotoEx)
+            //{
+            //    try
+            //    {
+            //        filePath = await Utilities.PickPhoto();
+            //    }
+            //    catch (Exception pickPhotoEx)
+            //    {
+
+            //    }
+            //}
+
             OnProfilePictureChanged?.Invoke(this, new ProfilePhotoChangedEventArgs(filePath));
         }
     }

@@ -29,7 +29,7 @@ namespace CallAladdin
 
         }
 
-        public Page GetPage(PageType pageType, object parameter)
+        public Page GetPage(PageType pageType, object parameter, TitleAlignment titleAlignment)
         {
             Page view = null;
 
@@ -63,7 +63,19 @@ namespace CallAladdin
 
             if (view != null)
             {
-                CustomNavigationPage.SetTitlePosition(view, CustomNavigationPage.TitleAlignment.Center);
+                if (titleAlignment == TitleAlignment.LEFT)
+                {
+                    CustomNavigationPage.SetTitlePosition(view, CustomNavigationPage.TitleAlignment.Start);
+                }
+                else if (titleAlignment == TitleAlignment.RIGHT)
+                {
+                    CustomNavigationPage.SetTitlePosition(view, CustomNavigationPage.TitleAlignment.End);
+                }
+                else
+                {
+                    CustomNavigationPage.SetTitlePosition(view, CustomNavigationPage.TitleAlignment.Center);
+                }
+                
                 CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(NamedSize.Large));
                 CustomNavigationPage.SetTitleColor(view, Color.Black);
                 CustomNavigationPage.SetTitleFont(view, Font.SystemFontOfSize(20, FontAttributes.Bold)); 
@@ -103,9 +115,9 @@ namespace CallAladdin
             });
         }
 
-        public async Task NavigateTo(PageType pageType, object parameter = null, bool appendFromRoot = false, UIPageType uIPageType = UIPageType.PAGE)
+        public async Task NavigateTo(PageType pageType, object parameter = null, bool appendFromRoot = false, UIPageType uIPageType = UIPageType.PAGE, TitleAlignment titleAlignment = TitleAlignment.CENTER)
         {
-            var view = GetPage(pageType, parameter);
+            var view = GetPage(pageType, parameter, titleAlignment);
 
             if (uIPageType == UIPageType.PAGE)
             {
@@ -142,5 +154,12 @@ namespace CallAladdin
     {
         PAGE = 0,
         MODAL = 1
+    }
+
+    public enum TitleAlignment
+    {
+        CENTER = 0,
+        LEFT = 1,
+        RIGHT = 2
     }
 }

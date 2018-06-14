@@ -15,13 +15,15 @@ namespace CallAladdin
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserRegistrationPage : CustomPage //ContentPage
     {
+        private UserRegistrationViewModel userRegistrationViewModel;
+
         public UserRegistrationPage()
         {
             InitializeComponent();
             //CustomNavigationPage.SetTitlePosition(this, CustomNavigationPage.TitleAlignment.Center);
-            var viewModel = new UserRegistrationViewModel();
-            BindingContext = viewModel;
-            viewModel.OnProfilePictureChanged += ProfilePictureChangedEventHandler;
+            userRegistrationViewModel = new UserRegistrationViewModel();
+            BindingContext = userRegistrationViewModel;
+            userRegistrationViewModel.OnProfilePictureChanged += ProfilePictureChangedEventHandler;
             //var assembly = typeof(UserRegistrationPage);
             //this.AvatarImage.Source = ImageSource.FromResource("CallAladdin.Assets.Images.flooring.png", assembly);
         }
@@ -32,6 +34,7 @@ namespace CallAladdin
             if (eventArgs != null && !string.IsNullOrEmpty(eventArgs.FilePath))
             {
                 this.AvatarImage.Source = ImageSource.FromFile(eventArgs.FilePath);
+                userRegistrationViewModel.UpdateUserRegistration();
             }
         }
 
