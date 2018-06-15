@@ -19,7 +19,7 @@
                 </Image>
                 <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="0,0,0,0">
                     <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
-                    <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" WidthRequest="180"/>
+                    <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>
                     <Image HeightRequest="40" WidthRequest="40" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
@@ -126,11 +126,13 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="0" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
                 <Label FontSize="Small" Text="Password is not valid (min 8 characters combination of number, alphabet and at least 1 special character)" Grid.Row="1" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding PasswordIsNotValid}"/>
                 <Label FontSize="Small" Text="Password and Re-type Password fields must match" Grid.Row="2" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding PasswordMismatch}"/>
-                <Button Grid.Row="3" x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,20" Command="{Binding GoToAgreementCmd}" CommandParameter="{Binding UserRegistration}"/>
+                <Label FontSize="Micro" Text="Photo is mandatory for contractor" Grid.Row="3" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
+                <Button Grid.Row="4" x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,20" Command="{Binding GoToAgreementCmd}" CommandParameter="{Binding UserRegistration}"/>
             </Grid>
         </Grid>
     </ScrollView>

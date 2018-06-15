@@ -17,6 +17,7 @@ namespace CallAladdin.ViewModel
         //public event EventHandler OnProfilePictureChanged;
         private UserProfile userProfile;
         private IUserIdentityRepository userIdentityRepository;
+        private IUserProfileRepository userProfileRepository;
         private bool isContractor;
         private string name;
         private string mobile;
@@ -111,6 +112,7 @@ namespace CallAladdin.ViewModel
             }
 
             userIdentityRepository = new UserIdentityRepository();
+            userProfileRepository = new UserProfileRepository();
             LogoutCmd = new LogoutCommand(this);
             EditProfileCmd = new EditProfileCommand(this);
         }
@@ -122,7 +124,8 @@ namespace CallAladdin.ViewModel
 
         public void Logout()
         {
-            var rows = userIdentityRepository.DeleteUserIdentity();
+            var userIdentityDeletedRows = userIdentityRepository.DeleteUserIdentity();
+            var userProfileDeletedRows = userProfileRepository.DeleteUserProfile();
 
             Navigator.Instance.OkAlert("Info", "User is now logged out.", "OK", async () =>
             {

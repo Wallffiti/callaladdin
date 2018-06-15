@@ -14,6 +14,7 @@ namespace CallAladdin.ViewModel
     public class PersonalDataProtectionViewModel : BaseViewModel
     {
         private IUserIdentityRepository userIdentityRepository;
+        private IUserProfileRepository userProfileRepository;
         private IUserService userService;
         private UserRegistration userRegistration;
         public ICommand GoToVerificationCmd { get; set; }
@@ -50,6 +51,7 @@ namespace CallAladdin.ViewModel
         public PersonalDataProtectionViewModel(UserRegistration userRegistration)
         {
             this.userIdentityRepository = new UserIdentityRepository();
+            this.userProfileRepository = new UserProfileRepository();
             this.userService = new UserService();
             this.userRegistration = userRegistration;
             GoToVerificationCmd = new GoToVerificationCommand(this);
@@ -138,16 +140,11 @@ namespace CallAladdin.ViewModel
 
                 if (createUserResponse != null && createUserResponse.IsSuccess)
                 {
-                    var rows = userIdentityRepository.CreateOrUpdate(new Model.Entities.UserIdentityEntity()
-                    {
-                        Email = signupUserResponse.Email,
-                        ExpiresIn = signupUserResponse.ExpiresIn,
-                        IdToken = signupUserResponse.IdToken,
-                        LocalId = signupUserResponse.LocalId,
-                        RefreshToken = signupUserResponse.RefreshToken
-                    });
+                    var userIdentityRowsAffected = userIdentityRepository.CreateOrUpdate(GetUserIdentityEntity(signupUserResponse));
 
-                    if (rows < 0)
+                    var userProfileRowsAffected = userProfileRepository.CreateOrUpdate(GetUserProfileEntity());
+
+                    if (userIdentityRowsAffected < 0 || userProfileRowsAffected < 0)
                     {
                         Navigator.Instance.OkAlert("Error", "There is an issue with local storage.", "OK", () =>
                         {
@@ -160,22 +157,7 @@ namespace CallAladdin.ViewModel
                         IsBusy = false;
                         return;
                     }
-
-                    //3. Generate user profile
-                    var userProfile = new UserProfile()
-                    {
-                        Category = userRegistration.Category,
-                        City = userRegistration.City,
-                        CompanyName = userRegistration.CompanyName,
-                        CompanyRegisteredAddress = userRegistration.CompanyAddress,
-                        Country = userRegistration.Country,
-                        Email = userRegistration.Email,
-                        IsContractor = userRegistration.IsRegisteredAsContractor,
-                        Mobile = userRegistration.Mobile,
-                        Name = userRegistration.Name,
-                        PathToProfileImage = userRegistration.ProfileImagePath
-                        //TODO: update reviews
-                    };
+                    UserProfile userProfile = GetUserProfile();
 
                     //4. Navigate to home page
                     Navigator.Instance.OkAlert("Successful", "Thank you for registrating with us. You can now use Call Aladdin.", "OK", async () =>
@@ -203,6 +185,56 @@ namespace CallAladdin.ViewModel
             });
 
             IsBusy = false;
+        }
+
+        private UserProfile GetUserProfile()
+        {
+
+            //3. Generate user profile
+            var userProfile = new UserProfile()
+            {
+                Category = userRegistration.Category,
+                City = userRegistration.City,
+                CompanyName = userRegistration.CompanyName,
+                CompanyRegisteredAddress = userRegistration.CompanyAddress,
+                Country = userRegistration.Country,
+                Email = userRegistration.Email,
+                IsContractor = userRegistration.IsRegisteredAsContractor,
+                Mobile = userRegistration.Mobile,
+                Name = userRegistration.Name,
+                PathToProfileImage = userRegistration.ProfileImagePath
+                //TODO: update reviews
+            };
+            return userProfile;
+        }
+
+        private Model.Entities.UserIdentityEntity GetUserIdentityEntity(Model.Responses.UserSignupResponse signupUserResponse)
+        {
+            return new Model.Entities.UserIdentityEntity()
+            {
+                Email = signupUserResponse.Email,
+                ExpiresIn = signupUserResponse.ExpiresIn,
+                IdToken = signupUserResponse.IdToken,
+                LocalId = signupUserResponse.LocalId,
+                RefreshToken = signupUserResponse.RefreshToken
+            };
+        }
+
+        private Model.Entities.UserProfileEntity GetUserProfileEntity()
+        {
+            return new Model.Entities.UserProfileEntity()
+            {
+                Category = userRegistration.Category,
+                City = userRegistration.City,
+                CompanyName = userRegistration.CompanyName,
+                CompanyRegisteredAddress = userRegistration.CompanyAddress,
+                Country = userRegistration.Country,
+                Email = userRegistration.Email,
+                IsContractor = userRegistration.IsRegisteredAsContractor,
+                Mobile = userRegistration.Mobile,
+                Name = userRegistration.Name,
+                PathToProfileImage = userRegistration.ProfileImagePath
+            };
         }
 
         public void NotifyViewOnConfirmation()

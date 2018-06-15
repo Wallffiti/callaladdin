@@ -67,7 +67,8 @@ namespace CallAladdin.Repositories
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
                     con.CreateTable<UserProfileEntity>();
-                    result = con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", email).LastOrDefault();
+                    //result = con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", email).LastOrDefault();
+                    result = con.Table<UserProfileEntity>().Where(p => p.Email == email).Single();
                 }
             }
             catch (Exception ex)
@@ -87,7 +88,7 @@ namespace CallAladdin.Repositories
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
                     con.CreateTable<UserProfileEntity>();
-                    results = con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", "*");
+                    results = con.Table<UserProfileEntity>()?.ToList();// con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", "*");
                 }
             }
             catch (Exception ex)

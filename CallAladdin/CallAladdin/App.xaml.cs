@@ -10,14 +10,21 @@ namespace CallAladdin
 	public partial class App : Application
 	{
 		public App ()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
+            SetMainPage();
+        }
+
+        private void SetMainPage()
+        {
             MainPage = new CustomNavigationPage(new MainPage()) { BarBackgroundColor = Color.FromHex("#EDEF00"), BarTextColor = Color.Black };
         }
 
-        public App(Dictionary<string, object> dict) : this()
+        public App(Dictionary<string, object> dict)
         {
             SetUpConfig(dict);
+            InitializeComponent();
+            SetMainPage();
         }
 
         private void SetUpConfig(Dictionary<string, object> dict)

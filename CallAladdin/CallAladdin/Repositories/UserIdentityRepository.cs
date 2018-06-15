@@ -67,7 +67,8 @@ namespace CallAladdin.Repositories
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
                     con.CreateTable<UserIdentityEntity>();
-                    result = con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", Constants.PRINCIPAL).LastOrDefault();
+                    //result = con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", Constants.PRINCIPAL).LastOrDefault();
+                    result = con.Table<UserIdentityEntity>().Where(p => p.Principal == Constants.PRINCIPAL).Single();
                 }
             }
             catch (Exception ex)
@@ -87,7 +88,7 @@ namespace CallAladdin.Repositories
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
                     con.CreateTable<UserIdentityEntity>();
-                    results = con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", "*");
+                    results = con.Table<UserIdentityEntity>()?.ToList(); //con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", "*");
                 }
             }
             catch (Exception ex)
