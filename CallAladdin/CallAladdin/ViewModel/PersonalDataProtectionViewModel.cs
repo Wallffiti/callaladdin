@@ -138,7 +138,7 @@ namespace CallAladdin.ViewModel
 
                 if (createUserResponse != null && createUserResponse.IsSuccess)
                 {
-                    var rows = userIdentityRepository.CreateOrUpdate(new Model.Entities.UserIdentity()
+                    var rows = userIdentityRepository.CreateOrUpdate(new Model.Entities.UserIdentityEntity()
                     {
                         Email = signupUserResponse.Email,
                         ExpiresIn = signupUserResponse.ExpiresIn,

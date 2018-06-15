@@ -1,4 +1,5 @@
-﻿using CallAladdin.Model.Entities;
+﻿using CallAladdin.Model;
+using CallAladdin.Model.Entities;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,25 @@ using CallAladdin.Repositories.Interfaces;
 
 namespace CallAladdin.Repositories
 {
-    public class UserIdentityRepository : IUserIdentityRepository
+    public class UserProfileRepository : IUserProfileRepository
     {
         private string dbName = "";
 
-        public UserIdentityRepository()
+        public UserProfileRepository()
         {
             dbName = GlobalConfig.Instance.GetByKey("call_aladdin.sqlite_path")?.ToString();
         }
 
-        public int CreateOrUpdate(UserIdentityEntity userIdentity)
+        public int CreateOrUpdate(UserProfileEntity userProfileEntity)
         {
             int rows = -1;
-            userIdentity.Principal = Constants.PRINCIPAL;
 
             try
             {
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
-                    con.CreateTable<UserIdentityEntity>();
-                    rows = con.InsertOrReplace(userIdentity);
+                    con.CreateTable<UserProfileEntity>();
+                    rows = con.InsertOrReplace(userProfileEntity);
                 }
             }
             catch (Exception ex)
@@ -38,7 +38,7 @@ namespace CallAladdin.Repositories
             return rows;
         }
 
-        public int DeleteUserIdentity()
+        public int DeleteUserProfile()
         {
             int rows = -1;
 
@@ -46,8 +46,8 @@ namespace CallAladdin.Repositories
             {
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
-                    con.CreateTable<UserIdentityEntity>();
-                    rows = con.DeleteAll<UserIdentityEntity>();
+                    con.CreateTable<UserProfileEntity>();
+                    rows = con.DeleteAll<UserProfileEntity>();
                 }
             }
             catch (Exception ex)
@@ -58,16 +58,16 @@ namespace CallAladdin.Repositories
             return rows;
         }
 
-        public UserIdentityEntity GetUserIdentity()
+        public UserProfileEntity GetUserProfile(string email)
         {
-            UserIdentityEntity result = null;
+            UserProfileEntity result = null;
 
             try
             {
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
-                    con.CreateTable<UserIdentityEntity>();
-                    result = con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", Constants.PRINCIPAL).LastOrDefault();
+                    con.CreateTable<UserProfileEntity>();
+                    result = con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", email).LastOrDefault();
                 }
             }
             catch (Exception ex)
@@ -78,16 +78,16 @@ namespace CallAladdin.Repositories
             return result;
         }
 
-        public IList<UserIdentityEntity> GetAll()
+        public IList<UserProfileEntity> GetAll()
         {
-            IList<UserIdentityEntity> results = null;
+            IList<UserProfileEntity> results = null;
 
             try
             {
                 using (SQLiteConnection con = new SQLiteConnection(dbName))
                 {
-                    con.CreateTable<UserIdentityEntity>();
-                    results = con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", "*");
+                    con.CreateTable<UserProfileEntity>();
+                    results = con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", "*");
                 }
             }
             catch (Exception ex)

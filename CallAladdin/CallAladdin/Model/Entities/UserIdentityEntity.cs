@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CallAladdin.Model.Entities
 {
-    public class UserIdentity
+    public class UserIdentityEntity
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

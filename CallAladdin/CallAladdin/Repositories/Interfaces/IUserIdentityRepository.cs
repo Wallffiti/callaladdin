@@ -5,9 +5,9 @@ namespace CallAladdin.Repositories.Interfaces
 {
     public interface IUserIdentityRepository
     {
-        int CreateOrUpdate(UserIdentity userIdentity);
+        int CreateOrUpdate(UserIdentityEntity userIdentity);
         int DeleteUserIdentity();
-        IList<UserIdentity> GetAll();
-        UserIdentity GetUserIdentity();
+        IList<UserIdentityEntity> GetAll();
+        UserIdentityEntity GetUserIdentity();
     }
 }
