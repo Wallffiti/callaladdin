@@ -8,7 +8,7 @@
              x:Class="CallAladdin.HomePage" Title="HOME" NavigationPage.HasNavigationBar="False" Style="{StaticResource tertiaryBackground}" >
     <ContentPage Title="Home" Icon="home_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >
         <ContentPage.Content>
-            <uc:HomeUserControl />
+            <uc:HomeUserControl BindingContext="{Binding HomeUserControlViewModel}" />
         </ContentPage.Content>
     </ContentPage>
     <ContentPage Title="Dashboard" Icon="dashboard_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}">
@@ -63,18 +63,7 @@
     </ContentPage>
     <ContentPage Title="Profile" Icon="profile_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >
         <ContentPage.Content>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Label BackgroundColor="{StaticResource yellow}" TextColor="Black" HeightRequest="55" Text="HOME" FontAttributes="Bold" FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="0" />
-                <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
-                    <StackLayout Orientation="Vertical">
-                        <Label Text="This is profile page." />
-                    </StackLayout>
-                </Frame>
-            </Grid>
+            <uc:UserProfileUserControl BindingContext="{Binding UserProfileUserControlViewModel}" />
         </ContentPage.Content>
     </ContentPage>
 </xf:BottomBarPage>

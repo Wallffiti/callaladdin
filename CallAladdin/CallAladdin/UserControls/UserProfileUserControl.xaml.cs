@@ -1,5 +1,4 @@
-﻿using CallAladdin.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace CallAladdin.UserControls
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class HomeUserControl : Grid
-	{
-		public HomeUserControl ()
+	public partial class UserProfileUserControl : ScrollView //Grid
+    {
+		public UserProfileUserControl ()
 		{
 			InitializeComponent ();
-            //BindingContext = new HomeUserControlViewModel();
 		}
 	}
 }

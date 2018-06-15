@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScrollView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+            xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
+             x:Class="CallAladdin.UserControls.UserProfileUserControl">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Style="{StaticResource defaultHeader}" Text="USER PROFILE" Grid.Row="0" />
+        <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackLayout Orientation="Vertical" Margin="20,0" Grid.Row="0" x:Name="ProfileInfoLayout">
+                    <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,10" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}"/>
+                    <Grid x:Name="BasicInfoGrid" Margin="0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Text="Name" Style="{StaticResource fieldLabel}"/>
+                        <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Name}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Mobile" Style="{StaticResource fieldLabel}"/>
+                        <Label Grid.Row="1" Grid.Column="1"  Text="{Binding Mobile}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Email" Style="{StaticResource fieldLabel}"/>
+                        <Label Grid.Row="2" Grid.Column="1"  Text="{Binding Email}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="City" Style="{StaticResource fieldLabel}"/>
+                        <Label Grid.Row="3" Grid.Column="1"  Text="{Binding City}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Country" Style="{StaticResource fieldLabel}"/>
+                        <Label Grid.Row="4" Grid.Column="1"  Text="{Binding Country}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid x:Name="ContractorInfoGrid" Margin="0,10" IsVisible="{Binding IsContractor}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackLayout Orientation="Vertical" Grid.Row="0" Margin="0,0,0,10">
+                            <Label Text="Category" Style="{StaticResource fieldLabel}"/>
+                            <Label Text="{Binding Category}" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical" Grid.Row="1" Margin="0,0,0,10">
+                            <Label Text="Company Name" Style="{StaticResource fieldLabel}"/>
+                            <Label Text="{Binding CompanyName}" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical" Grid.Row="2" Margin="0,0,0,10">
+                            <Label Text="Company Registered Address" Style="{StaticResource fieldLabel}"/>
+                            <Label Text="{Binding CompanyRegisteredAddress}" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" x:Name="LogoutButton" Style="{StaticResource defaultButton}" Text="LOGOUT" Command="{Binding LogoutCmd}"  WidthRequest="100" Margin="10"/>
+                    <Button Grid.Column="1" x:Name="EditProfileButton" Style="{StaticResource defaultButton}" Text="EDIT" Command="{Binding EditProfileCmd}" WidthRequest="100" Margin="10"/>
+                </Grid>
+            </Grid>
+        </Frame>
+    </Grid>
+</ScrollView>

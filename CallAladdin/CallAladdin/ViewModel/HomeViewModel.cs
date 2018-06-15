@@ -12,11 +12,29 @@ namespace CallAladdin.ViewModel
         public DummyCommand dummyCmd { get; set; }
         public Dummy2Command dummy2Cmd { get; set; }
 
+        private HomeUserControlViewModel homeUserControlViewModel;
+        private UserProfileUserControlViewModel userProfileUserControlViewModel;
+
+        public HomeUserControlViewModel HomeUserControlViewModel
+        {
+            get { return homeUserControlViewModel; }
+            set { homeUserControlViewModel = value; OnPropertyChanged("HomeUserControlViewModel"); }
+        }
+
+        public UserProfileUserControlViewModel UserProfileUserControlViewModel
+        {
+            get { return userProfileUserControlViewModel; }
+            set { userProfileUserControlViewModel = value; OnPropertyChanged("UserProfileUserControlViewModel"); }
+        }
+
+
         public HomeViewModel(UserProfile userProfile)
         {
             this.userProfile = userProfile;
             dummyCmd = new DummyCommand(this);
             dummy2Cmd = new Dummy2Command(this);
+            HomeUserControlViewModel = new HomeUserControlViewModel(userProfile);
+            UserProfileUserControlViewModel = new UserProfileUserControlViewModel(userProfile);
         }
 
         public async void NavigateToDummyPage()

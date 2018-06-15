@@ -92,7 +92,7 @@
                     <Label Text="Also Register As Contractor" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Switch IsToggled="{Binding IsRegisteredAsContractor}" VerticalOptions="Center" />
                 </FlexLayout>
-                <Grid>
+                <Grid IsVisible="{Binding IsRegisteredAsContractor}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="3*" />
@@ -109,7 +109,7 @@
                     <Label Text="Company" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
                     <Entry Placeholder="ABC Contractor Sdn Bhd" x:Name="CompanyEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Company}" FontSize="Small" IsVisible="{Binding IsRegisteredAsContractor}"/>
                 </Grid>
-                <Grid>
+                <Grid IsVisible="{Binding IsRegisteredAsContractor}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>

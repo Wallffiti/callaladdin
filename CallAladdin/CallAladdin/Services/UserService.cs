@@ -31,6 +31,7 @@ namespace CallAladdin.Services
             {
                 Name = "Jackson",
                 Mobile = "012 345 678",
+                Email = "dimensionconcept@yahoo.com",
                 City = "Miri",
                 Country = "Malaysia",
                 Category = Constants.INTERIOR_DESIGN_CARPENTERS,
@@ -38,7 +39,8 @@ namespace CallAladdin.Services
                 CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
                 OverallRating = 4,
                 TotalReviewers = 102,
-                LastReviewedDate = new DateTime(2018, 5, 1)
+                LastReviewedDate = new DateTime(2018, 5, 1),
+                IsContractor = localId == "contractor"
             };
         }
 

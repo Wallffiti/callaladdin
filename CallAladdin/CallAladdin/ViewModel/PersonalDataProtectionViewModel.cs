@@ -110,7 +110,7 @@ namespace CallAladdin.ViewModel
         {
             IsBusy = true;
 
-            //1. Sign up via firebase auth
+            //1. Sign up via firebase auth using userRegistration data
             var signupUserResponse = await userService.RegisterUserToAuthServer(this.userRegistration);
 
             if (signupUserResponse != null)
@@ -130,22 +130,38 @@ namespace CallAladdin.ViewModel
                     return;
                 }
 
-                //2. Create user via backend server
+                //2. Create user via backend server using userRegistration data
                 var createUserResponse = await userService.CreateUser(this.userRegistration);
 
                 if (createUserResponse != null && createUserResponse.IsSuccess)
                 {
-                    //TODO: save jwt and local id into local storage
+                    //TODO: save signupUserResponse into local storage
 
+                    //3. Generate user profile
+                    var userProfile = new UserProfile()
+                    {
+                        Category = userRegistration.Category,
+                        City = userRegistration.City,
+                        CompanyName = userRegistration.CompanyName,
+                        CompanyRegisteredAddress = userRegistration.CompanyAddress,
+                        Country = userRegistration.Country,
+                        Email = userRegistration.Email,
+                        IsContractor = userRegistration.IsRegisteredAsContractor,
+                        Mobile = userRegistration.Mobile,
+                        Name = userRegistration.Name,
+                        //TODO: update reviews
+                    };
+
+                    //4. Navigate to home page
                     Navigator.Instance.OkAlert("Successful", "Thank you for registrating with us. You can now use Call Aladdin.", "OK", async () =>
                     {
                         //For android
-                        await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+                        await Navigator.Instance.NavigateTo(PageType.HOME, userProfile);
                         IsBusy = false;
                     }, async () =>
                     {
                         //For ios
-                        await Navigator.Instance.NavigateTo(PageType.HOME/*, userRegistration*/);
+                        await Navigator.Instance.NavigateTo(PageType.HOME, userProfile);
                         IsBusy = false;
                     });
 
