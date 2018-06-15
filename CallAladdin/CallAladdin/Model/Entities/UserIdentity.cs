@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CallAladdin.Model.Database
+namespace CallAladdin.Model.Entities
 {
     public class UserIdentity
     {

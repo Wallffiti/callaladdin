@@ -39,6 +39,17 @@ namespace CallAladdin.ViewModel
         private UserRegistration userRegistration;
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
+        private IList<string> categories;
+
+        public IList<string> Categories
+        {
+            get { return categories; }
+            set
+            {
+                categories = value;
+                OnPropertyChanged("Categories");
+            }
+        }
 
         public IList<string> PhotoOptionSelections
         {
@@ -273,12 +284,48 @@ namespace CallAladdin.ViewModel
             ChangeProfileImageCmd = new ChangeProfileImageCommand(this);
             ShowPasswordField = !Auth.UsePasswordless();
             Mobile = Helper.Utilities.GetPhoneNumber();
+            LoadImageUploaderOptions();
+            LoadContractorOptions();
+        }
+
+        private void LoadImageUploaderOptions()
+        {
             PhotoOptionSelections = new List<string>
             {
                 CHOOSE_PHOTO_FROM_CAMERA,
                 BROWSE_PHOTO_FROM_FOLDER
             };
             SelectedPhotoOption = BROWSE_PHOTO_FROM_FOLDER;
+        }
+
+        private void LoadContractorOptions()
+        {
+            Categories = new List<string>
+            {
+                Constants.CONSTRUCTION_TILING_PAINTING,
+                Constants.WIRING_LIGHING,
+                Constants.INTERIOR_DESIGN_CARPENTERS,
+
+                Constants.LAMINATED_TIMBER_FLOORING,
+                Constants.CURTAIN_CARPET_WALLPAPER,
+                Constants.SIGNBOARD,
+
+                Constants.AIR_CONDITIONER,
+                Constants.PLASTERED_CEILING,
+                Constants.ALUMINIUM_GLASSWORKS,
+
+                Constants.ALARM_CCTV,
+                Constants.CLEANING_SERVICES,
+                Constants.LANDSCAPING_POND,
+
+                Constants.GATES_STEEL_WORKS,
+                Constants.PLUMBER,
+                Constants.PEST_CONTROL,
+
+                Constants.FENGSHUI_CONSULTATION,
+                Constants.GENERAL_WORKERS,
+                Constants.HOUSE_MOVERS
+            };
         }
 
         public void UpdateUserRegistration()

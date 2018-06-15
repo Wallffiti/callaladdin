@@ -13,16 +13,33 @@ namespace CallAladdin.Services
 {
     public class UserService : IUserService
     {
-        public async Task<object> CreateUser(UserRegistration userRegistration)
+        public async Task<UserRegistrationOnServerResponse> CreateUser(UserRegistration userRegistration)
         {
-            //TODO: replace the below dummy data
-            //TODO: usage of Request.UserRegistrationOnServer model class
-            return new
-            {
-                success = true
-            };
+            //TODO: add logic to fill in UserRegistrationOnServerResponse
 
-            //return null;
+            return new UserRegistrationOnServerResponse()
+            {
+                IsSuccess = true
+            };
+        }
+
+        public async Task<UserProfile> GetUserProfile(string localId)
+        {
+            //TODO: add logic to replace data in UserProfile
+
+            return new UserProfile()
+            {
+                Name = "Jackson",
+                Mobile = "012 345 678",
+                City = "Miri",
+                Country = "Malaysia",
+                Category = Constants.INTERIOR_DESIGN_CARPENTERS,
+                CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
+                CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
+                OverallRating = 4,
+                TotalReviewers = 102,
+                LastReviewedDate = new DateTime(2018, 5, 1)
+            };
         }
 
         public async Task<UserSignupResponse> RegisterUserToAuthServer(UserRegistration userRegistration)

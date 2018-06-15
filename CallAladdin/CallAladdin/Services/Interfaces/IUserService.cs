@@ -7,6 +7,7 @@ namespace CallAladdin.Services.Interfaces
     public interface IUserService
     {
         Task<UserSignupResponse> RegisterUserToAuthServer(UserRegistration userRegistration);
-        Task<object> CreateUser(UserRegistration userRegistration);
+        Task<UserRegistrationOnServerResponse> CreateUser(UserRegistration userRegistration);
+        Task<UserProfile> GetUserProfile(string localId);
     }
 }

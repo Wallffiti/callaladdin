@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CallAladdin.Model.Database;
+using CallAladdin.Model.Entities;
 
 namespace CallAladdin.Repositories.Interfaces
 {

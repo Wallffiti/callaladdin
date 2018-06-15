@@ -1,4 +1,4 @@
-﻿using CallAladdin.Model.Database;
+﻿using CallAladdin.Model.Entities;
 using SQLite;
 using System;
 using System.Collections.Generic;

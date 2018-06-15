@@ -9,5 +9,6 @@ namespace CallAladdin.Model.Responses
     /// </summary>
     public class UserRegistrationOnServerResponse
     {
+        public bool IsSuccess { get; set; }
     }
 }

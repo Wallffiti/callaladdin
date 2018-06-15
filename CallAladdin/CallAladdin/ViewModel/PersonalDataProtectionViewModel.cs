@@ -133,7 +133,7 @@ namespace CallAladdin.ViewModel
                 //2. Create user via backend server
                 var createUserResponse = await userService.CreateUser(this.userRegistration);
 
-                if (createUserResponse != null)
+                if (createUserResponse != null && createUserResponse.IsSuccess)
                 {
                     //TODO: save jwt and local id into local storage
 
