@@ -5,6 +5,9 @@
              x:Class="CallAladdin.UserControls.DummyUserControl">
     <Frame Margin="20" OutlineColor="Red" BackgroundColor="Silver">
         <!--<Label Text="This is just a dummy page" />-->
-        <Label Text="{Binding Source={x:Static const:Constants.CONSTRUCTION_TILING_PAINTING}}" />
+        <StackLayout Orientation="Vertical">
+            <Label Text="{Binding Source={x:Static const:Constants.CONSTRUCTION_TILING_PAINTING}}" />
+            <Label Text="{Binding DummyText}" />
+        </StackLayout>
     </Frame>
 </Grid>

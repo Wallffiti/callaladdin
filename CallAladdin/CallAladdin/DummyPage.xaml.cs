@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CallAladdin.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace CallAladdin
 		public DummyPage ()
 		{
 			InitializeComponent ();
+            BindingContext = new DummyViewModel();
 		}
 	}
 }

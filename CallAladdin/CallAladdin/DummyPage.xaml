@@ -13,5 +13,5 @@
         <ToolbarItem Name="MenuItem1" Order="Primary" Icon="contractor_dark_grey.pn" Text="Item 1" Priority="0" />
         <ToolbarItem Name="MenuItem2" Order="Primary" Icon="history_dark_grey.png" Text="Item 2" Priority="1" />
     </local:CustomPage.ToolbarItems>
-    <uc:DummyUserControl />
+    <uc:DummyUserControl BindingContext="{Binding ChildViewModel}" />
 </local:CustomPage>
