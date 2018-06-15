@@ -34,6 +34,6 @@ namespace CallAladdin
         //Row 6
         public const string FENGSHUI_CONSULTATION = "FENGSHUI CONSULTATION";
         public const string GENERAL_WORKERS = "GENERAL WORKERS";
-        public const string HOME_MOVERS = "HOME MOVERS";
+        public const string HOUSE_MOVERS = "HOUSE MOVERS";
     }
 }
