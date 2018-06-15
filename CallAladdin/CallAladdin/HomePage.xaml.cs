@@ -1,4 +1,5 @@
-﻿using CallAladdin.ViewModel;
+﻿using CallAladdin.Model;
+using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,10 @@ namespace CallAladdin
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class HomePage //: CustomPage
 	{
-		public HomePage ()
+		public HomePage (UserProfile userProfile)
 		{
 			InitializeComponent ();
-            BindingContext = new HomeViewModel();
+            BindingContext = new HomeViewModel(userProfile);
 		} 
 
         protected override bool OnBackButtonPressed()

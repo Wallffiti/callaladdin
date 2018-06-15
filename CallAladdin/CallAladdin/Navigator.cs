@@ -51,7 +51,7 @@ namespace CallAladdin
                     view = new SmsVerificationPage(parameter as UserRegistration);
                     break;
                 case PageType.HOME:
-                    view = new HomePage();
+                    view = new HomePage(parameter as UserProfile);
                     break;
                 case PageType.CHANGE_PHONE_NUMBER:
                     view = new ChangePhoneNumberPage(parameter);

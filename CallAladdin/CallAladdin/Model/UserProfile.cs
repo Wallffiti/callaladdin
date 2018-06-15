@@ -18,5 +18,6 @@ namespace CallAladdin.Model
         public int TotalReviewers { get; set; }
         public DateTime LastReviewedDate { get; set; }
         public bool IsContractor { get; set; }
+        public IList<Review> Reviews { get; set; }
     }
 }
