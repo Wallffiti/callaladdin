@@ -153,6 +153,11 @@ namespace CallAladdin
                 await App.Current.MainPage.Navigation.PushModalAsync(view);
             }
         }
+
+        public async Task NavigateToRoot()
+        {
+            await App.Current.MainPage.Navigation.PopToRootAsync();
+        }
     }
 
     public enum PageType

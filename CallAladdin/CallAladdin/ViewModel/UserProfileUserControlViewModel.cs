@@ -1,13 +1,22 @@
-﻿using CallAladdin.Model;
+﻿using CallAladdin.Commands;
+using CallAladdin.EventArgs;
+using CallAladdin.Model;
+using CallAladdin.Repositories;
+using CallAladdin.Repositories.Interfaces;
+using CallAladdin.Services;
+using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
     public class UserProfileUserControlViewModel : BaseViewModel
     {
+        //public event EventHandler OnProfilePictureChanged;
         private UserProfile userProfile;
+        private IUserIdentityRepository userIdentityRepository;
         private bool isContractor;
         private string name;
         private string mobile;
@@ -68,6 +77,9 @@ namespace CallAladdin.ViewModel
             set { companyRegisteredAddress = value; OnPropertyChanged("CompanyRegisteredAddress"); }
         }
 
+        public ICommand LogoutCmd { get; set; }
+        public ICommand EditProfileCmd { get; set; }
+
         public UserProfileUserControlViewModel(UserProfile userProfile)
         {
             this.userProfile = userProfile;
@@ -86,7 +98,42 @@ namespace CallAladdin.ViewModel
                     CompanyName = userProfile.CompanyName;
                     CompanyRegisteredAddress = userProfile.CompanyRegisteredAddress;
                 }
+
+                if (userProfile.PathToProfileImage != null)
+                {
+                    //if (OnProfilePictureChanged != null)
+                    //{
+                    //    OnProfilePictureChanged(this, new ProfilePhotoChangedEventArgs(userProfile.PathToProfileImage));
+                    //}
+
+                //TODO: update image
+                }
             }
+
+            userIdentityRepository = new UserIdentityRepository();
+            LogoutCmd = new LogoutCommand(this);
+            EditProfileCmd = new EditProfileCommand(this);
+        }
+
+        public void NavigateToEditUserProfile()
+        {
+            //TODO: navigate tp edit user profile page (different page for each requestor and contractor)
+        }
+
+        public void Logout()
+        {
+            var rows = userIdentityRepository.DeleteUserIdentity();
+
+            Navigator.Instance.OkAlert("Info", "User is now logged out.", "OK", async () =>
+            {
+                //For android
+                await Navigator.Instance.NavigateToRoot();
+            }, async () =>
+            {
+                //For ios
+                await Navigator.Instance.NavigateToRoot();
+            });
+
         }
     }
 }

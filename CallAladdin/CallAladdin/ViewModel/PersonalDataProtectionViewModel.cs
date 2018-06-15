@@ -1,5 +1,7 @@
 ﻿using CallAladdin.Commands;
 using CallAladdin.Model;
+using CallAladdin.Repositories;
+using CallAladdin.Repositories.Interfaces;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
 using System;
@@ -11,6 +13,7 @@ namespace CallAladdin.ViewModel
 {
     public class PersonalDataProtectionViewModel : BaseViewModel
     {
+        private IUserIdentityRepository userIdentityRepository;
         private IUserService userService;
         private UserRegistration userRegistration;
         public ICommand GoToVerificationCmd { get; set; }
@@ -46,6 +49,7 @@ namespace CallAladdin.ViewModel
 
         public PersonalDataProtectionViewModel(UserRegistration userRegistration)
         {
+            this.userIdentityRepository = new UserIdentityRepository();
             this.userService = new UserService();
             this.userRegistration = userRegistration;
             GoToVerificationCmd = new GoToVerificationCommand(this);
@@ -117,7 +121,7 @@ namespace CallAladdin.ViewModel
             {
                 if (signupUserResponse.IsError)
                 {
-                    Navigator.Instance.OkAlert("Alert", "There is a problem with the registration process. Error: " + signupUserResponse.ErrorMessage, "OK", () =>
+                    Navigator.Instance.OkAlert("Error", "There is a problem with the registration process. Error: " + signupUserResponse.ErrorMessage, "OK", () =>
                     {
                         //For android
                     }, () =>
@@ -126,7 +130,6 @@ namespace CallAladdin.ViewModel
                     });
 
                     IsBusy = false;
-
                     return;
                 }
 
@@ -135,7 +138,28 @@ namespace CallAladdin.ViewModel
 
                 if (createUserResponse != null && createUserResponse.IsSuccess)
                 {
-                    //TODO: save signupUserResponse into local storage
+                    var rows = userIdentityRepository.CreateOrUpdate(new Model.Entities.UserIdentity()
+                    {
+                        Email = signupUserResponse.Email,
+                        ExpiresIn = signupUserResponse.ExpiresIn,
+                        IdToken = signupUserResponse.IdToken,
+                        LocalId = signupUserResponse.LocalId,
+                        RefreshToken = signupUserResponse.RefreshToken
+                    });
+
+                    if (rows < 0)
+                    {
+                        Navigator.Instance.OkAlert("Error", "There is an issue with local storage.", "OK", () =>
+                        {
+                            //For android
+                        }, () =>
+                        {
+                            //For ios
+                        });
+
+                        IsBusy = false;
+                        return;
+                    }
 
                     //3. Generate user profile
                     var userProfile = new UserProfile()
@@ -149,6 +173,7 @@ namespace CallAladdin.ViewModel
                         IsContractor = userRegistration.IsRegisteredAsContractor,
                         Mobile = userRegistration.Mobile,
                         Name = userRegistration.Name,
+                        PathToProfileImage = userRegistration.ProfileImagePath
                         //TODO: update reviews
                     };
 
@@ -169,7 +194,7 @@ namespace CallAladdin.ViewModel
                 }
             }
 
-            Navigator.Instance.OkAlert("Alert", "There is a problem with the registration process. Please try again later.", "OK", () =>
+            Navigator.Instance.OkAlert("Error", "There is a problem with the registration process. Please try again later.", "OK", () =>
             {
                 //For android
             }, () =>

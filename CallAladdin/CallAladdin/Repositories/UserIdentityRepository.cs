@@ -14,7 +14,7 @@ namespace CallAladdin.Repositories
 
         public UserIdentityRepository()
         {
-            dbName = GlobalConfig.Instance.GetByKey("call_aladdin.sqlite")?.ToString();
+            dbName = GlobalConfig.Instance.GetByKey("call_aladdin.sqlite_path")?.ToString();
         }
 
         public int CreateOrUpdate(UserIdentity userIdentity)

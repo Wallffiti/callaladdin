@@ -14,6 +14,7 @@ namespace CallAladdin.Model
         public string Category { get; set; }
         public string CompanyName { get; set; }
         public string CompanyRegisteredAddress { get; set; }
+        public string PathToProfileImage { get; set; }
         public float OverallRating { get; set; }
         public int TotalReviewers { get; set; }
         public DateTime LastReviewedDate { get; set; }
