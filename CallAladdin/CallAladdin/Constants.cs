@@ -6,6 +6,12 @@ namespace CallAladdin
 {
     public class Constants
     {
+        // GENERAL
+
+        public const string PRINCIPAL = "PRINCIPAL";
+
+        //HOME ICONS
+
         //Row 1
         public const string CONSTRUCTION_TILING_PAINTING = "CONSTRUCTION, TILING & PAINTING";
         public const string WIRING_LIGHING = "WIRING & LIGHTING";

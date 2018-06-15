@@ -108,11 +108,9 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToHome(/*UserRegistration userRegistration*/)
         {
-            //1. Sign up via firebase auth
-            //2. Create user via backend server
-
             IsBusy = true;
 
+            //1. Sign up via firebase auth
             var signupUserResponse = await userService.RegisterUserToAuthServer(this.userRegistration);
 
             if (signupUserResponse != null)
@@ -132,6 +130,7 @@ namespace CallAladdin.ViewModel
                     return;
                 }
 
+                //2. Create user via backend server
                 var createUserResponse = await userService.CreateUser(this.userRegistration);
 
                 if (createUserResponse != null)

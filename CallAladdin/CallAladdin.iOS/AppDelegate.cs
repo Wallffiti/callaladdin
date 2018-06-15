@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Foundation;
@@ -23,7 +24,16 @@ namespace CallAladdin.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+
+            var dict = new Dictionary<string, object>();
+
+            //SQL lite
+            string dbname = "call_aladdin.sqlite";
+            string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string fullPath = Path.Combine(folderPath, dbname);
+            dict.Add("call_aladdin.sqlite_path", fullPath);
+
+            LoadApplication(new App(dict));
 
             return base.FinishedLaunching(app, options);
         }

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace CallAladdin.Model.Responses
 {
+    /// <summary>
+    /// Response that matches data returned from Firebase upon authentication (signup and login)
+    /// </summary>
     public class UserSignupResponse
     {
         public bool IsError { get; set; }
@@ -12,5 +15,6 @@ namespace CallAladdin.Model.Responses
         public string LocalId { get; set; }
         public int ExpiresIn { get; set; }
         public string RefreshToken { get; set; }
+        public string Email { get; set; }
     }
 }

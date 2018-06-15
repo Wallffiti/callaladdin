@@ -1,4 +1,5 @@
 ﻿using CallAladdin.Model;
+using CallAladdin.Model.Requests;
 using CallAladdin.Model.Responses;
 using CallAladdin.Services.Interfaces;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace CallAladdin.Services
         public async Task<object> CreateUser(UserRegistration userRegistration)
         {
             //TODO: replace the below dummy data
+            //TODO: usage of Request.UserRegistrationOnServer model class
             return new
             {
                 success = true
@@ -37,6 +39,7 @@ namespace CallAladdin.Services
                 result.RefreshToken = "AK2wQ-zMoiNL4L4yw1MkDG_qkjT2OBES8KNJKYNQKo0fhRiavidLAmBXQeLetYlwkxhnxj7woP69cFC5auhBWyatYkhT6r96mE7UA9RnvUDbLvVQNKoaRSIeSAcOxoKuWf2X8F6LInWr_aQzkKAgF2hKDfkjy-H4HWurJAvnmieqrY48XCSpkJSLjh2AHnAlGYTRQUZ_bMx66vlCT6Xg82_bbPba6JYhtWjYqO7P-Y2bg3fAi0dBAEk";
                 result.ExpiresIn = 3600;
                 result.LocalId = "xxzyKSVQoBd9zwasPKZYKyaIrEN2";
+                result.Email = "tester0@test.com";
             }
             else
             {
@@ -49,12 +52,18 @@ namespace CallAladdin.Services
                     using (var httpClient = new HttpClient())
                     {
                         httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                        var body = new
+                        //var body = new
+                        //{
+                        //    email = userRegistration.Email,
+                        //    password = userRegistration.Password,
+                        //    returnSecureToken = true
+
+                        //};
+                        var body = new UserSignupRequest()
                         {
                             email = userRegistration.Email,
                             password = userRegistration.Password,
                             returnSecureToken = true
-
                         };
                         var bodyStr = JsonConvert.SerializeObject(body);
                         var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
@@ -77,6 +86,7 @@ namespace CallAladdin.Services
                             result.ExpiresIn = int.Parse(expiresIn);
                             result.LocalId = deserializedContent.localId?.ToString();
                             result.RefreshToken = deserializedContent.refreshToken?.ToString();
+                            result.Email = deserializedContent.email?.ToString();
                         }
                     }
                 }
