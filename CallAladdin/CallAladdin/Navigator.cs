@@ -104,11 +104,11 @@ namespace CallAladdin
 
                 if (Device.OS == TargetPlatform.Android)
                 {
-                    androidAction();
+                    androidAction?.Invoke();
                 }
                 else if (Device.OS == TargetPlatform.iOS)
                 {
-                    iosAction();
+                    iosAction?.Invoke();
                 }
             });
         }
@@ -122,11 +122,11 @@ namespace CallAladdin
                 {
                     if (Device.OS == TargetPlatform.Android)
                     {
-                        androidAction();
+                        androidAction?.Invoke();
                     }
                     else if (Device.OS == TargetPlatform.iOS)
                     {
-                        iosAction();
+                        iosAction?.Invoke();
                     }
                 }
             });

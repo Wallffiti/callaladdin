@@ -83,21 +83,25 @@ namespace CallAladdin.ViewModel
 
         private UserProfile ConvertProfileEntityToUserProfile(UserProfileEntity userProfileEntity)
         {
-            UserProfile userProfile;
-            userProfile = new UserProfile()
+            UserProfile userProfile = null;
+
+            if (userProfileEntity != null)
             {
-                Category = userProfileEntity.Category,
-                City = userProfileEntity.City,
-                CompanyName = userProfileEntity.CompanyName,
-                CompanyRegisteredAddress = userProfileEntity.CompanyRegisteredAddress,
-                Country = userProfileEntity.Country,
-                Email = userProfileEntity.Email,
-                IsContractor = userProfileEntity.IsContractor,
-                Mobile = userProfileEntity.Mobile,
-                Name = userProfileEntity.Name,
-                PathToProfileImage = userProfileEntity.PathToProfileImage,
-                //TODO: fill in review data
-            };
+                userProfile = new UserProfile()
+                {
+                    Category = userProfileEntity.Category,
+                    City = userProfileEntity.City,
+                    CompanyName = userProfileEntity.CompanyName,
+                    CompanyRegisteredAddress = userProfileEntity.CompanyRegisteredAddress,
+                    Country = userProfileEntity.Country,
+                    Email = userProfileEntity.Email,
+                    IsContractor = userProfileEntity.IsContractor,
+                    Mobile = userProfileEntity.Mobile,
+                    Name = userProfileEntity.Name,
+                    PathToProfileImage = userProfileEntity.PathToProfileImage,
+                    //TODO: fill in review data
+                };
+            }
             return userProfile;
         }
     }

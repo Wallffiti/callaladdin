@@ -68,7 +68,7 @@ namespace CallAladdin.Repositories
                 {
                     con.CreateTable<UserIdentityEntity>();
                     //result = con.Query<UserIdentityEntity>("select * from UserIdentity where Principal = ?", Constants.PRINCIPAL).LastOrDefault();
-                    result = con.Table<UserIdentityEntity>().Where(p => p.Principal == Constants.PRINCIPAL).Single();
+                    result = con.Table<UserIdentityEntity>().Where(p => p.Principal == Constants.PRINCIPAL)?.LastOrDefault();//.Single();
                 }
             }
             catch (Exception ex)

@@ -68,7 +68,7 @@ namespace CallAladdin.Repositories
                 {
                     con.CreateTable<UserProfileEntity>();
                     //result = con.Query<UserProfileEntity>("select * from UserProfileEntity where Email = ?", email).LastOrDefault();
-                    result = con.Table<UserProfileEntity>().Where(p => p.Email == email).Single();
+                    result = con.Table<UserProfileEntity>().Where(p => p.Email == email)?.LastOrDefault();
                 }
             }
             catch (Exception ex)

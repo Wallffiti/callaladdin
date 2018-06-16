@@ -189,52 +189,66 @@ namespace CallAladdin.ViewModel
 
         private UserProfile GetUserProfile()
         {
+            UserProfile userProfile = null;
 
             //3. Generate user profile
-            var userProfile = new UserProfile()
+            if (userRegistration != null)
             {
-                Category = userRegistration.Category,
-                City = userRegistration.City,
-                CompanyName = userRegistration.CompanyName,
-                CompanyRegisteredAddress = userRegistration.CompanyAddress,
-                Country = userRegistration.Country,
-                Email = userRegistration.Email,
-                IsContractor = userRegistration.IsRegisteredAsContractor,
-                Mobile = userRegistration.Mobile,
-                Name = userRegistration.Name,
-                PathToProfileImage = userRegistration.ProfileImagePath
-                //TODO: update reviews
-            };
+                userProfile = new UserProfile()
+                {
+                    Category = userRegistration.Category,
+                    City = userRegistration.City,
+                    CompanyName = userRegistration.CompanyName,
+                    CompanyRegisteredAddress = userRegistration.CompanyAddress,
+                    Country = userRegistration.Country,
+                    Email = userRegistration.Email,
+                    IsContractor = userRegistration.IsRegisteredAsContractor,
+                    Mobile = userRegistration.Mobile,
+                    Name = userRegistration.Name,
+                    PathToProfileImage = userRegistration.ProfileImagePath
+                    //TODO: update reviews
+                };
+            }
             return userProfile;
         }
 
         private Model.Entities.UserIdentityEntity GetUserIdentityEntity(Model.Responses.UserSignupResponse signupUserResponse)
         {
-            return new Model.Entities.UserIdentityEntity()
+            if (signupUserResponse != null)
             {
-                Email = signupUserResponse.Email,
-                ExpiresIn = signupUserResponse.ExpiresIn,
-                IdToken = signupUserResponse.IdToken,
-                LocalId = signupUserResponse.LocalId,
-                RefreshToken = signupUserResponse.RefreshToken
-            };
+                return new Model.Entities.UserIdentityEntity()
+                {
+                    Email = signupUserResponse.Email,
+                    ExpiresIn = signupUserResponse.ExpiresIn,
+                    IdToken = signupUserResponse.IdToken,
+                    LocalId = signupUserResponse.LocalId,
+                    RefreshToken = signupUserResponse.RefreshToken
+                };
+            }
+
+            return null;
         }
 
         private Model.Entities.UserProfileEntity GetUserProfileEntity()
         {
-            return new Model.Entities.UserProfileEntity()
+            if (userRegistration != null)
             {
-                Category = userRegistration.Category,
-                City = userRegistration.City,
-                CompanyName = userRegistration.CompanyName,
-                CompanyRegisteredAddress = userRegistration.CompanyAddress,
-                Country = userRegistration.Country,
-                Email = userRegistration.Email,
-                IsContractor = userRegistration.IsRegisteredAsContractor,
-                Mobile = userRegistration.Mobile,
-                Name = userRegistration.Name,
-                PathToProfileImage = userRegistration.ProfileImagePath
-            };
+                return new Model.Entities.UserProfileEntity()
+                {
+                    Category = userRegistration.Category,
+                    City = userRegistration.City,
+                    CompanyName = userRegistration.CompanyName,
+                    CompanyRegisteredAddress = userRegistration.CompanyAddress,
+                    Country = userRegistration.Country,
+                    Email = userRegistration.Email,
+                    IsContractor = userRegistration.IsRegisteredAsContractor,
+                    Mobile = userRegistration.Mobile,
+                    Name = userRegistration.Name,
+                    PathToProfileImage = userRegistration.ProfileImagePath
+                };
+            }
+
+            return null;
         }
 
         public void NotifyViewOnConfirmation()

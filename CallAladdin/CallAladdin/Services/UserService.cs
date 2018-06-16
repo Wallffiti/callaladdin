@@ -44,6 +44,55 @@ namespace CallAladdin.Services
             };
         }
 
+        public async Task<UserLoginResponse> LoginUserToAuthServer(UserLogin userLogin)
+        {
+            UserLoginResponse result = null;
+            string fullUrl = "";
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.google.android.firebase.restful.api.url")?.ToString();
+            var apiKey = GlobalConfig.Instance.GetByKey("com.google.android.firebase.API_KEY")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+            {
+                fullUrl = baseUrl + "/verifyPassword?key=" + apiKey;
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    var body = new UserLoginRequest
+                    {
+                        email = userLogin.Email,
+                        password = userLogin.Password,
+                        returnSecureToken = true
+                    };
+                    var bodyStr = JsonConvert.SerializeObject(body);
+                    var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    result = new UserLoginResponse();
+                    dynamic deserializedContent = JsonConvert.DeserializeObject(content);
+
+                    if (deserializedContent?.error != null)
+                    {
+                        result.IsError = true;
+                        result.ErrorMessage = deserializedContent.error?.message?.ToString();
+                    }
+
+                    if (deserializedContent?.idToken != null)
+                    {
+                        result.IdToken = deserializedContent.idToken.ToString();
+                        var expiresIn = deserializedContent.expiresIn?.ToString();
+                        result.ExpiresIn = int.Parse(expiresIn);
+                        result.LocalId = deserializedContent.localId?.ToString();
+                        result.RefreshToken = deserializedContent.refreshToken?.ToString();
+                        result.Email = deserializedContent.email?.ToString();
+                    }
+                }
+            }
+
+            return result;
+
+        }
+
         public async Task<UserSignupResponse> RegisterUserToAuthServer(UserRegistration userRegistration)
         {
             UserSignupResponse result = null;
