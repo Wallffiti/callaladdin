@@ -2,11 +2,29 @@
 <local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CallAladdin"
+             xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
              x:Class="CallAladdin.UserLoginPage" FormattedTitle="USER LOGIN" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
-    <StackLayout>
-        <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        <Button Text="test" Style="{StaticResource defaultButton}" />
-    </StackLayout>
+    <Grid Margin="20,0" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Image x:Name="LogoImage" HeightRequest="100" WidthRequest="100" Source="{ext:ImageResource CallAladdin.Assets.Images.aladdin-logo-new-2017.png}" Grid.Row="0" Grid.ColumnSpan="2" />
+        <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+        <Entry Placeholder="john.doe" x:Name="UsernameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" Text="{Binding Email}" FontSize="Small"/>
+
+        <Label Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+        <Entry x:Name="PasswordEntry" IsPassword="True" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="1" Text="{Binding Password}" FontSize="Small"/>
+
+        <StackLayout Margin="0,40" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+            <Button x:Name="CancelButton" Style="{StaticResource defaultButton}" Text="CANCEL" Command="{Binding CancelLoginCmd}" WidthRequest="150" />
+            <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN" Command="{Binding LoginToHomeCmd}" CommandParameter="{Binding UserLogin}" WidthRequest="150"/>
+        </StackLayout>
+    </Grid>
 </local:CustomPage>

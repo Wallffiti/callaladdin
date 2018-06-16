@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CallAladdin.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace CallAladdin
 		public UserLoginPage ()
 		{
 			InitializeComponent ();
+            BindingContext = new UserLoginViewModel();
+
             //TODO:
             //1. Login via firebase auth api to get signupUserResponse (if db doesn't have cached data)
             //2. save signupUserResponse into local storage (if db doesn't have cached data)

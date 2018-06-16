@@ -39,7 +39,7 @@ namespace CallAladdin.ViewModel
         }
         public async void NavigateToRegister() => await Navigator.Instance.NavigateTo(PageType.USER_REGISTRATION);
 
-        public async void NavigateToLogin() => await Navigator.Instance.NavigateTo(PageType.USER_LOGIN);
+        public async void NavigateToLogin() => await Navigator.Instance.NavigateTo(PageType.USER_LOGIN);    //TODO: if using passwordless, need to go to another page
 
         public void UpdateUserProfile()
         {
