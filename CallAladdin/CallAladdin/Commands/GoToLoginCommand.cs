@@ -18,7 +18,13 @@ namespace CallAladdin.Commands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (parameter != null)
+            {
+                bool isBusy = (bool)parameter;
+                return !isBusy;
+            }
+
+            return false;
         }
 
         public void Execute(object parameter)

@@ -18,8 +18,16 @@ namespace CallAladdin.ViewModel
         private IUserIdentityRepository userIdentityRepository;
         private IUserProfileRepository userProfileRepository;
         private IUserService userService;
+        private UserProfile userProfile;
+        private bool isBusy;
         public ICommand GoToLoginCmd { get; set; }
         public ICommand GoToRegisterCmd { get; set; }
+
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set { isBusy = value; OnPropertyChanged("IsBusy"); }
+        }
 
         public MainViewModel()
         {
@@ -31,33 +39,49 @@ namespace CallAladdin.ViewModel
         }
         public async void NavigateToRegister() => await Navigator.Instance.NavigateTo(PageType.USER_REGISTRATION);
 
-        public async void NavigateToLogin()
+        public async void NavigateToLogin() => await Navigator.Instance.NavigateTo(PageType.USER_LOGIN);
+
+        public void UpdateUserProfile()
+        {
+            userProfile = GetUserProfile();
+        }
+
+        public void SetPageBusy(bool isBusy)
+        {
+            IsBusy = isBusy;
+        }
+
+        public async void NavigateToHome()
+        {
+            if (userProfile != null)
+            {
+                try
+                {
+                    await Navigator.Instance.NavigateTo(PageType.HOME, userProfile);
+                }
+                catch (Exception ex)
+                {
+                    //sometimes page may not load fast enough
+                }
+            }
+        }
+
+        public UserProfile GetUserProfile()
         {
             UserIdentityEntity userIdentityEntity = userIdentityRepository.GetAll().LastOrDefault();
             UserProfileEntity userProfileEntity = null;
-            UserProfile userProfile = null;
+            userProfile = null;
 
             if (userIdentityEntity != null && !string.IsNullOrEmpty(userIdentityEntity.Email))
             {
                 userProfileEntity = userProfileRepository.GetUserProfile(userIdentityEntity.Email);
-                userProfile = GetUserProfile(userProfileEntity);
-            }
-            else
-            {
-                //TODO:
-                //1. Login via firebase auth api to get signupUserResponse (if db doesn't have cached data)
-                //2. save signupUserResponse into local storage (if db doesn't have cached data)
-                //3. Call backend server api to get user profile using data from signupUserResponse
-                //4. Navigate to home page
-
-                userProfile = await userService.GetUserProfile("dummy");  //DEBUG
+                userProfile = ConvertProfileEntityToUserProfile(userProfileEntity);
             }
 
-            //await Navigator.Instance.NavigateTo(PageType.USER_LOGIN); //DEBUG
-            await Navigator.Instance.NavigateTo(PageType.HOME, userProfile); //DEBUG
+            return userProfile;
         }
 
-        private UserProfile GetUserProfile(UserProfileEntity userProfileEntity)
+        private UserProfile ConvertProfileEntityToUserProfile(UserProfileEntity userProfileEntity)
         {
             UserProfile userProfile;
             userProfile = new UserProfile()

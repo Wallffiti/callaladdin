@@ -9,10 +9,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackLayout VerticalOptions="Center" CompressedLayout.IsHeadless="True" >
+        <ActivityIndicator x:Name="IsBusyIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Grid.Row="0" WidthRequest="80" HeightRequest="80" VerticalOptions="Center" HorizontalOptions="Center" />
+        <StackLayout VerticalOptions="Center" CompressedLayout.IsHeadless="True" Grid.Row="0" >
             <Image x:Name="LogoImage" HeightRequest="100" WidthRequest="100" />
-            <Button x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,0" Command="{Binding GoToRegisterCmd}"/>
-            <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN"  Margin="100,0" Command="{Binding GoToLoginCmd}"/>
+            <Button x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,0" Command="{Binding GoToRegisterCmd}" CommandParameter="{Binding IsBusy}"/>
+            <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN"  Margin="100,0" Command="{Binding GoToLoginCmd}" CommandParameter="{Binding IsBusy}"/>
         </StackLayout>
         <StackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" CompressedLayout.IsHeadless="True">
             <Label Text="©2017 Call Aladdin Group" TextColor="Black" FontSize="Small" HorizontalOptions="Center"/>
