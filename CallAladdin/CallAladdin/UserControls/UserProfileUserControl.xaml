@@ -3,7 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CallAladdin"
             xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
+            xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Class="CallAladdin.UserControls.UserProfileUserControl">
+    <ScrollView.Resources>
+        <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+    </ScrollView.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -17,7 +21,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackLayout Orientation="Vertical" Margin="20,0" Grid.Row="0" x:Name="ProfileInfoLayout">
-                    <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,10" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}"/>
+                    <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,10" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}"/>
                     <Grid x:Name="BasicInfoGrid" Margin="0,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

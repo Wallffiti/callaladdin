@@ -14,7 +14,6 @@ namespace CallAladdin.ViewModel
 {
     public class UserProfileUserControlViewModel : BaseViewModel
     {
-        //public event EventHandler OnProfilePictureChanged;
         private UserProfile userProfile;
         private IUserIdentityRepository userIdentityRepository;
         private IUserProfileRepository userProfileRepository;
@@ -27,6 +26,7 @@ namespace CallAladdin.ViewModel
         private string category;
         private string companyName;
         private string companyRegisteredAddress;
+        private string imagePath;
 
         public bool IsContractor
         {
@@ -78,6 +78,12 @@ namespace CallAladdin.ViewModel
             set { companyRegisteredAddress = value; OnPropertyChanged("CompanyRegisteredAddress"); }
         }
 
+        public string ImagePath
+        {
+            get { return imagePath; }
+            set { imagePath = value; OnPropertyChanged("ImagePath"); }
+        }
+
         public ICommand LogoutCmd { get; set; }
         public ICommand EditProfileCmd { get; set; }
 
@@ -100,15 +106,7 @@ namespace CallAladdin.ViewModel
                     CompanyRegisteredAddress = userProfile.CompanyRegisteredAddress;
                 }
 
-                if (userProfile.PathToProfileImage != null)
-                {
-                    //if (OnProfilePictureChanged != null)
-                    //{
-                    //    OnProfilePictureChanged(this, new ProfilePhotoChangedEventArgs(userProfile.PathToProfileImage));
-                    //}
-
-                //TODO: update image
-                }
+                ImagePath = userProfile.PathToProfileImage;
             }
 
             userIdentityRepository = new UserIdentityRepository();

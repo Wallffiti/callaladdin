@@ -41,5 +41,14 @@ namespace CallAladdin.Helper
             int result;
             return int.TryParse(number, out result);
         }
+
+        public static bool ValidateUrl(string uriName)
+        {
+            Uri uriResult;
+            bool result = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+            return result;
+        }
     }
 }
