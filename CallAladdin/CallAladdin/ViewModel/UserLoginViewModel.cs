@@ -1,4 +1,5 @@
 ﻿using CallAladdin.Commands;
+using CallAladdin.Helper;
 using CallAladdin.Model;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace CallAladdin.ViewModel
         private UserLogin userLogin;
         private string email;
         private string password;
+        private bool emailIsNotValid;
 
         public UserLogin UserLogin
         {
@@ -22,13 +24,19 @@ namespace CallAladdin.ViewModel
         public string Email
         {
             get { return email; }
-            set { email = value; UpdateUserLogin(); OnPropertyChanged("Email"); }
+            set { email = value; UpdateUserLogin(); ValidateForm();  OnPropertyChanged("Email"); }
         }
 
         public string Password
         {
             get { return password; }
-            set { password = value; UpdateUserLogin();  OnPropertyChanged("Password"); }
+            set { password = value; UpdateUserLogin(); ValidateForm();  OnPropertyChanged("Password"); }
+        }
+
+        public bool EmailIsNotValid
+        {
+            get { return emailIsNotValid; }
+            set { emailIsNotValid = value; OnPropertyChanged("EmailIsNotValid"); }
         }
 
         public ICommand CancelLoginCmd { get; set; }
@@ -47,6 +55,11 @@ namespace CallAladdin.ViewModel
                 Email = email,
                 Password = password
             };
+        }
+
+        public void ValidateForm()
+        {
+            EmailIsNotValid = string.IsNullOrEmpty(email) ? false : !Validators.ValidateEmail(email);
         }
 
         public void NavigateToHome()

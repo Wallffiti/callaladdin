@@ -1,4 +1,5 @@
-﻿using CallAladdin.Model;
+﻿using CallAladdin.Helper;
+using CallAladdin.Model;
 using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,9 @@ namespace CallAladdin.Commands
                 var userLogin = (UserLogin)parameter;
                 if (userLogin != null)
                 {
-                    return !string.IsNullOrEmpty(userLogin.Email) && !string.IsNullOrEmpty(userLogin.Password);
+                    return !string.IsNullOrEmpty(userLogin.Email) 
+                        && Validators.ValidateEmail(userLogin.Email)
+                        && !string.IsNullOrEmpty(userLogin.Password);
                 }
             }
 
