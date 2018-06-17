@@ -28,10 +28,10 @@ namespace CallAladdin
         {
             base.OnAppearing();
             mainViewModel.UpdateUserProfile();
-            mainViewModel.SetPageBusy(true);
+            mainViewModel.IsBusy = true;
             await Task.Delay(3000); //this is a workaround, since there is an issue with xamarin on page load
             mainViewModel.NavigateToHome();   //auto navigate to home if logged in
-            mainViewModel.SetPageBusy(false);
+            mainViewModel.IsBusy = false;
         }
     }
 }

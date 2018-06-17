@@ -46,11 +46,6 @@ namespace CallAladdin.ViewModel
             userProfile = GetUserProfile();
         }
 
-        public void SetPageBusy(bool isBusy)
-        {
-            IsBusy = isBusy;
-        }
-
         public async void NavigateToHome()
         {
             if (userProfile != null)
