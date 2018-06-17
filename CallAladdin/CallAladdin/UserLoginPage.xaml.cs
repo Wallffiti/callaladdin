@@ -13,10 +13,13 @@ namespace CallAladdin
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class UserLoginPage : CustomPage //ContentPage
 	{
+        private UserLoginViewModel userLoginViewModel;
+
 		public UserLoginPage ()
 		{
 			InitializeComponent ();
-            BindingContext = new UserLoginViewModel();
+            userLoginViewModel = new UserLoginViewModel();
+            BindingContext = userLoginViewModel;
 
             //TODO:
             //1. Login via firebase auth api to get signupUserResponse (if db doesn't have cached data)
@@ -28,6 +31,12 @@ namespace CallAladdin
 
             //await Navigator.Instance.NavigateTo(PageType.USER_LOGIN); //DEBUG
             //await Navigator.Instance.NavigateTo(PageType.HOME, userProfile); //DEBUG
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            userLoginViewModel.ReturnMainPage();
+            return true; //base.OnBackButtonPressed();
         }
     }
 }

@@ -7,6 +7,7 @@ using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
@@ -109,7 +110,16 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToSmsVerification(/*UserRegistration userRegistration*/)
         {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
             await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, this.userRegistration);
+            await Task.Delay(1500);
+            IsBusy = false;
         }
 
         public async void NavigateToHome(/*UserRegistration userRegistration*/)

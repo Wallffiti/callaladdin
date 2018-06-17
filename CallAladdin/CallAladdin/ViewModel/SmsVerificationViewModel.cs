@@ -79,7 +79,8 @@ namespace CallAladdin.ViewModel
             }
 
             isBusy = true;
-            await Navigator.Instance.NavigateTo(PageType.HOME, userRegistration, appendFromRoot: true);
+            var userProfile = GetUserProfile();
+            await Navigator.Instance.NavigateTo(PageType.HOME, userProfile, appendFromRoot: true);
             await Task.Delay(1500);
             isBusy = false;
         }
@@ -87,6 +88,31 @@ namespace CallAladdin.ViewModel
         public async void PromptPhoneNumberChange()
         {
             await Navigator.Instance.NavigateTo(PageType.CHANGE_PHONE_NUMBER, this, uIPageType: UIPageType.MODAL);
+        }
+
+        private UserProfile GetUserProfile()
+        {
+            UserProfile userProfile = null;
+
+            //3. Generate user profile
+            if (userRegistration != null)
+            {
+                userProfile = new UserProfile()
+                {
+                    Category = userRegistration.Category,
+                    City = userRegistration.City,
+                    CompanyName = userRegistration.CompanyName,
+                    CompanyRegisteredAddress = userRegistration.CompanyAddress,
+                    Country = userRegistration.Country,
+                    Email = userRegistration.Email,
+                    IsContractor = userRegistration.IsRegisteredAsContractor,
+                    Mobile = userRegistration.Mobile,
+                    Name = userRegistration.Name,
+                    PathToProfileImage = userRegistration.ProfileImagePath
+                    //TODO: update reviews
+                };
+            }
+            return userProfile;
         }
     }
 }
