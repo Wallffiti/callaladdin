@@ -17,6 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -36,9 +37,15 @@
         <Label Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
         <Entry x:Name="PasswordEntry" IsPassword="True" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="1" Text="{Binding Password}" FontSize="Small"/>
 
-        <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="4" Grid.ColumnSpan="2" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
+        <Label Grid.Row="4" Grid.ColumnSpan="2" Text="Tap here if you have forgotten your password" TextColor="Purple"  FontSize="Micro" HorizontalOptions="Center" HorizontalTextAlignment="Center" >
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ForgottenPasswordCmd}" CommandParameter="{Binding IsBusy}" />
+            </Label.GestureRecognizers>
+        </Label>
+
+        <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="5" Grid.ColumnSpan="2" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
         
-        <StackLayout Margin="0,40" Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsEnabled="{Binding IsBusy, Converter={StaticResource boolInverterConverter}}">
+        <StackLayout Margin="0,40" Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsEnabled="{Binding IsBusy, Converter={StaticResource boolInverterConverter}}">
             <Button x:Name="CancelButton" Style="{StaticResource defaultButton}" Text="CANCEL" Command="{Binding CancelLoginCmd}" WidthRequest="150" CommandParameter="{Binding IsBusy}" />
             <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN" Command="{Binding LoginToHomeCmd}" CommandParameter="{Binding UserLogin}" WidthRequest="150"/>
         </StackLayout>

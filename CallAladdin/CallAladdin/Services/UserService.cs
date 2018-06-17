@@ -163,6 +163,38 @@ namespace CallAladdin.Services
             return result;
         }
 
+        public async Task<bool> SendForgottenPasswordLink(string email)
+        {
+            bool result = false;
+            string fullUrl = "";
+
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.google.android.firebase.restful.api.url")?.ToString();
+            var apiKey = GlobalConfig.Instance.GetByKey("com.google.android.firebase.API_KEY")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(email))
+            {
+                fullUrl = baseUrl + "/getOobConfirmationCode?key=" + apiKey;
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    var body = new ForgottenPasswordRequest
+                    {
+                        requestType = "PASSWORD_RESET",
+                        email = email
+                    };
+                    var bodyStr = JsonConvert.SerializeObject(body);
+                    var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+                    var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var deserializedContent = JsonConvert.DeserializeObject<ForgottenPasswordResponse>(content);
+
+                    result = deserializedContent != null && !string.IsNullOrEmpty(deserializedContent.email) && !string.IsNullOrEmpty(deserializedContent.kind);
+                }
+            }
+
+            return result;
+        }
+
         public async Task<bool> UpdateUserProfile(UserProfile userProfile)
         {
             //TODO

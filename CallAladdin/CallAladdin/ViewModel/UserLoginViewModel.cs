@@ -55,6 +55,7 @@ namespace CallAladdin.ViewModel
 
         public ICommand CancelLoginCmd { get; set; }
         public ICommand LoginToHomeCmd { get; set; }
+        public ICommand ForgottenPasswordCmd { get; set; }
 
         public UserLoginViewModel()
         {
@@ -63,6 +64,43 @@ namespace CallAladdin.ViewModel
             userIdentityRepository = new UserIdentityRepository();
             CancelLoginCmd = new CancelLoginCommand(this);
             LoginToHomeCmd = new LoginToHomeCommand(this);
+            ForgottenPasswordCmd = new ForgottenPasswordCommand(this);
+        }
+
+        public async void SendForgottenPasswordLink()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                Navigator.Instance.OkAlert("Alert", "Please enter your email address at the field provided and hit this link again.", "OK", null, null);
+                IsBusy = false;
+                return;
+            }
+
+            if (!Validators.ValidateEmail(email))
+            {
+                Navigator.Instance.OkAlert("Alert", "Your email is not in the correct format (it should be something like john.doe@email.com).", "OK", null, null);
+                IsBusy = false;
+                return;
+            }
+
+            var response = await userService.SendForgottenPasswordLink(email);
+            if (response)
+            {
+                Navigator.Instance.OkAlert("Alert", "Password reset link is sent to your email at " + email + ".", "OK", null, null);
+                IsBusy = false;
+                return;
+            }
+
+            Navigator.Instance.OkAlert("Error", "There is a problem with the server. Please try again later.", "OK", null, null);
+            IsBusy = false;
         }
 
         public void UpdateUserLogin()
