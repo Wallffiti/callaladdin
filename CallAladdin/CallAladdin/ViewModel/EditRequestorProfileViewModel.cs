@@ -1,4 +1,5 @@
-﻿using CallAladdin.Model;
+﻿using CallAladdin.Helper;
+using CallAladdin.Model;
 using CallAladdin.Repositories;
 using CallAladdin.Repositories.Interfaces;
 using CallAladdin.Services;
@@ -17,6 +18,7 @@ namespace CallAladdin.ViewModel
         private IUserService userService;
         private IUserProfileRepository userProfileRepository;
         private ICommand submitProfileChangeCmd;
+        private ICommand changeProfileImageCmd;
         private bool isBusy;
         private bool isRegisteredAsContractor;
         private const string CHOOSE_PHOTO_FROM_CAMERA = "Choose photo from camera";
@@ -31,6 +33,7 @@ namespace CallAladdin.ViewModel
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
         private UserProfile userProfile;
+        private string imagePath;
 
         public ICommand SubmitProfileChangeCmd
         {
@@ -39,6 +42,16 @@ namespace CallAladdin.ViewModel
             {
                 submitProfileChangeCmd = value;
                 OnPropertyChanged("SubmitProfileChangeCmd");
+            }
+        }
+
+        public ICommand ChangeProfileImageCmd
+        {
+            get { return changeProfileImageCmd; }
+            set
+            {
+                changeProfileImageCmd = value;
+                OnPropertyChanged("ChangeProfileImageCmd");
             }
         }
 
@@ -163,6 +176,12 @@ namespace CallAladdin.ViewModel
             set { userProfile = value; OnPropertyChanged("UserProfile"); }
         }
 
+        public string ImagePath
+        {
+            get { return imagePath; }
+            set { imagePath = value; OnPropertyChanged("ImagePath"); }
+        }
+
         private UserProfileUserControlViewModel parentViewModel;
 
         public EditRequestorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
@@ -193,13 +212,46 @@ namespace CallAladdin.ViewModel
                     {
                         return !string.IsNullOrEmpty(userProfile.Name) && !string.IsNullOrEmpty(userProfile.City) && !string.IsNullOrEmpty(userProfile.Country);
                     }
-
-                    //var isBusy = (bool)param;
-                    //return !isBusy;
                 }
 
                 return false;
             });
+
+            ChangeProfileImageCmd = new Xamarin.Forms.Command((e) =>
+            {
+                ChangeProfileImageAsync();
+            }, (param) =>
+            {
+                if (param == null)
+                    return false;
+
+                var isBusy = (bool)param;
+
+                return !isBusy;
+            });
+        }
+
+        public async void ChangeProfileImageAsync()
+        {
+            string filePath = "";
+
+            try
+            {
+                if (this.selectedPhotoOption == CHOOSE_PHOTO_FROM_CAMERA)
+                {
+                    filePath = await Utilities.TakePhoto(new Guid().ToString());
+                }
+                else if (this.selectedPhotoOption == BROWSE_PHOTO_FROM_FOLDER)
+                {
+                    filePath = await Utilities.PickPhoto();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            this.ImagePath = filePath;
         }
 
         private void PopulateLocations()
@@ -231,6 +283,7 @@ namespace CallAladdin.ViewModel
                 IsRegisteredAsContractor = userProfile.IsContractor;
                 SelectedCity = userProfile.City;
                 SelectedCountry = userProfile.Country;
+                ImagePath = userProfile.PathToProfileImage;
             }
 
             UpdateUserProfile();
@@ -268,7 +321,8 @@ namespace CallAladdin.ViewModel
                 Email = email,
                 City = selectedCity,
                 Country = selectedCountry,
-                IsContractor = isRegisteredAsContractor
+                IsContractor = isRegisteredAsContractor,
+                PathToProfileImage = imagePath
             };
         }
 

@@ -18,7 +18,7 @@
             <StackLayout Margin="20,0" Grid.Row="0">
                 <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                        <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" CommandParameter="{Binding IsBusy}" />
                     </Image.GestureRecognizers>
                 </Image>
                 <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="0,0,0,0">
@@ -26,7 +26,7 @@
                     <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>
                     <Image HeightRequest="40" WidthRequest="40" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
                         <Image.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                            <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" CommandParameter="{Binding IsBusy}" />
                         </Image.GestureRecognizers>
                     </Image>
                 </FlexLayout>

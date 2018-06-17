@@ -161,16 +161,17 @@ namespace CallAladdin.ViewModel
 
             isBusy = true;
 
-            var userIdentityDeletedRows = userIdentityRepository.DeleteUserIdentity();
-            var userProfileDeletedRows = userProfileRepository.DeleteUserProfile();
-
             Navigator.Instance.ConfirmationAlert("Alert", "Are you sure you want to log out?", "OK", "Cancel", async () =>
             {
                 //For android
+                var userIdentityDeletedRows = userIdentityRepository.DeleteUserIdentity();
+                var userProfileDeletedRows = userProfileRepository.DeleteUserProfile();
                 await Navigator.Instance.NavigateToRoot();
             }, async () =>
             {
                 //For ios
+                var userIdentityDeletedRows = userIdentityRepository.DeleteUserIdentity();
+                var userProfileDeletedRows = userProfileRepository.DeleteUserProfile();
                 await Navigator.Instance.NavigateToRoot();
             });
 
