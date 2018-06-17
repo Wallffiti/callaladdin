@@ -1,5 +1,6 @@
 ﻿using CallAladdin.Commands;
 using CallAladdin.EventArgs;
+using CallAladdin.Helper;
 using CallAladdin.Model;
 using CallAladdin.Repositories;
 using CallAladdin.Repositories.Interfaces;
@@ -8,12 +9,14 @@ using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
     public class UserProfileUserControlViewModel : BaseViewModel
     {
+        private bool isBusy;
         private UserProfile userProfile;
         private IUserIdentityRepository userIdentityRepository;
         private IUserProfileRepository userProfileRepository;
@@ -115,17 +118,46 @@ namespace CallAladdin.ViewModel
             EditProfileCmd = new EditProfileCommand(this);
         }
 
-        public void NavigateToEditUserProfile()
+        public async void NavigateToEditUserProfile()
         {
-            //TODO: navigate tp edit user profile page (different page for each requestor and contractor)
+            if (userProfile == null)
+                return;
+
+            if (isBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            isBusy = true;
+
+            if (userProfile.IsContractor)
+            {
+                await Navigator.Instance.NavigateTo(PageType.EDIT_CONTRACTOR_PROFILE, userProfile);
+            }
+            else
+            {
+                await Navigator.Instance.NavigateTo(PageType.EDIT_REQUESTOR_PROFILE, userProfile);
+            }
+
+            await Task.Delay(1500);
+            isBusy = false;
         }
 
-        public void Logout()
+        public async void Logout()
         {
+            if (isBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            isBusy = true;
+
             var userIdentityDeletedRows = userIdentityRepository.DeleteUserIdentity();
             var userProfileDeletedRows = userProfileRepository.DeleteUserProfile();
 
-            Navigator.Instance.OkAlert("Info", "User is now logged out.", "OK", async () =>
+            Navigator.Instance.ConfirmationAlert("Alert", "Are you sure you want to log out?", "OK", "Cancel", async () =>
             {
                 //For android
                 await Navigator.Instance.NavigateToRoot();
@@ -135,6 +167,8 @@ namespace CallAladdin.ViewModel
                 await Navigator.Instance.NavigateToRoot();
             });
 
+            await Task.Delay(1500);
+            isBusy = false;
         }
     }
 }

@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+             xmlns:conv="clr-namespace:CallAladdin.Converters"
+             xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
+             x:Class="CallAladdin.EditRequestorProfilePage" FormattedTitle="EDIT USER PROFILE" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False" >
+    <local:CustomPage.Resources>
+        <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+    </local:CustomPage.Resources>
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<Label Style="{StaticResource defaultHeader}" Text="EDIT USER PROFILE" Grid.Row="0" />-->
+            <StackLayout Margin="20,0" Grid.Row="0">
+                <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="0,0,0,0">
+                    <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
+                    <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>
+                    <Image HeightRequest="40" WidthRequest="40" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </FlexLayout>
+                <Grid x:Name="PersonalFieldsGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ActivityIndicator x:Name="ProgressIndicator" Grid.RowSpan="2" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60"/>
+
+                    <Label Text="Name" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry Placeholder="John Doe" x:Name="NameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="{Binding Name}" FontSize="Small"/>
+
+                    <Label Text="Mobile" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                    <Label x:Name="MobileField" TextColor="Red" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Mobile}" FontSize="Small"/>
+
+                    <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                    <Label x:Name="EmailField" TextColor="Red" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" Text="{Binding Email}" FontSize="Small"/>
+
+                    <Label Text="City" TextColor="Black" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                    <Picker x:Name="CityPicker" Title="Select Your City" ItemsSource="{Binding Cities}" Grid.Row="3" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCity, Mode=TwoWay}"/>
+
+                    <Label Text="Country" TextColor="Black" HorizontalOptions="Start" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
+                    <Picker x:Name="CountryPicker" Title="Select Your Country" ItemsSource="{Binding Countries}" Grid.Row="4" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"/>
+                </Grid>
+                <FlexLayout Direction="Row" x:Name="IsContractorTogglerFlex"
+                    AlignItems="Center"
+                    JustifyContent="SpaceBetween">
+                    <Label Text="Also Register As Contractor" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Switch IsToggled="{Binding IsRegisteredAsContractor}" VerticalOptions="Center" />
+                </FlexLayout>
+            </StackLayout>
+            <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Text="SUBMIT" Margin="100,20" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding UserProfile}"/>
+        </Grid>
+    </ScrollView>
+</local:CustomPage>

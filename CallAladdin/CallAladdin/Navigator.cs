@@ -56,6 +56,12 @@ namespace CallAladdin
                 case PageType.CHANGE_PHONE_NUMBER:
                     view = new ChangePhoneNumberPage(parameter);
                     break;
+                case PageType.EDIT_REQUESTOR_PROFILE:
+                    view = new EditRequestorProfilePage(parameter as UserProfile);
+                    break;
+                case PageType.EDIT_CONTRACTOR_PROFILE:
+                    view = new EditContractorProfilePage(parameter as UserProfile);
+                    break;
                 case PageType.DUMMY:
                     view = new DummyPage();
                     break;
@@ -169,6 +175,8 @@ namespace CallAladdin
         SMS_VERIFICATION = 4,
         HOME = 5,
         CHANGE_PHONE_NUMBER = 6,
+        EDIT_REQUESTOR_PROFILE = 7,
+        EDIT_CONTRACTOR_PROFILE = 8,
         DUMMY = 99
     }
 
