@@ -4,9 +4,14 @@
              xmlns:local="clr-namespace:CallAladdin"
              xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
              xmlns:validator="clr-namespace:CallAladdin.Behaviors"
+             xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Class="CallAladdin.UserLoginPage" FormattedTitle="USER LOGIN" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False">
+    <local:CustomPage.Resources>
+        <conv:BooleanInverserConverter x:Key="boolInverterConverter"/>
+    </local:CustomPage.Resources>
     <Grid Margin="20,0" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -18,20 +23,23 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Image x:Name="LogoImage" HeightRequest="100" WidthRequest="100" Source="{ext:ImageResource CallAladdin.Assets.Images.aladdin-logo-new-2017.png}" Grid.Row="0" Grid.ColumnSpan="2" />
-        <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
-        <Entry Placeholder="john.doe@email.com" x:Name="UsernameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" Text="{Binding Email}" FontSize="Small">
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="True" WidthRequest="60" HeightRequest="60" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+        
+        <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+        <Entry Placeholder="john.doe@email.com" x:Name="UsernameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="1" Text="{Binding Email}" FontSize="Small">
             <Entry.Behaviors>
                 <validator:EmailValidatorBehavior />
             </Entry.Behaviors>
         </Entry>
 
-        <Label Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
-        <Entry x:Name="PasswordEntry" IsPassword="True" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="1" Text="{Binding Password}" FontSize="Small"/>
+        <Label Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+        <Entry x:Name="PasswordEntry" IsPassword="True" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="1" Text="{Binding Password}" FontSize="Small"/>
 
-        <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="3" Grid.ColumnSpan="2" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
+        <Label FontSize="Small" Text="Email is not valid (should be something like john.doe@email.com)" Grid.Row="4" Grid.ColumnSpan="2" TextColor="Red" Margin="20,0" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding EmailIsNotValid}"/>
         
-        <StackLayout Margin="0,40" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-            <Button x:Name="CancelButton" Style="{StaticResource defaultButton}" Text="CANCEL" Command="{Binding CancelLoginCmd}" WidthRequest="150" />
+        <StackLayout Margin="0,40" Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsEnabled="{Binding IsBusy, Converter={StaticResource boolInverterConverter}}">
+            <Button x:Name="CancelButton" Style="{StaticResource defaultButton}" Text="CANCEL" Command="{Binding CancelLoginCmd}" WidthRequest="150" CommandParameter="{Binding IsBusy}" />
             <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN" Command="{Binding LoginToHomeCmd}" CommandParameter="{Binding UserLogin}" WidthRequest="150"/>
         </StackLayout>
     </Grid>

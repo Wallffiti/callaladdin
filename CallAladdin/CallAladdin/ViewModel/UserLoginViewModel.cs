@@ -21,6 +21,7 @@ namespace CallAladdin.ViewModel
         private string email;
         private string password;
         private bool emailIsNotValid;
+        private bool isBusy;
 
         public UserLogin UserLogin
         {
@@ -44,6 +45,12 @@ namespace CallAladdin.ViewModel
         {
             get { return emailIsNotValid; }
             set { emailIsNotValid = value; OnPropertyChanged("EmailIsNotValid"); }
+        }
+
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set { isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
         public ICommand CancelLoginCmd { get; set; }
@@ -74,6 +81,14 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToHome()
         {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+
             //1. Login via firebase auth api to get signupUserResponse (if db doesn't have cached data)
             var authResponse = await userService.LoginUserToAuthServer(userLogin);
 
@@ -82,6 +97,7 @@ namespace CallAladdin.ViewModel
                 if (authResponse.IsError)
                 {
                     Navigator.Instance.OkAlert("Error", "There is a problem with user log in. Error: Credentials are invalid (check your email and password).", "OK", null, null);
+                    IsBusy = false;
                     return;
                 }
 
@@ -97,16 +113,20 @@ namespace CallAladdin.ViewModel
                     if (rowAffectedUserIdentity < 0 || rowAffectedUserProfile < 0)
                     {
                         Navigator.Instance.OkAlert("Error", "There is an issue with local storage.", "OK", null, null);
+                        IsBusy = false;
                         return;
                     }
 
+                    //4. Navigate to home page
                     Navigator.Instance.OkAlert("Successful", "Login successful! You can now use Call Aladdin.", "OK", null, null);
                     await Navigator.Instance.NavigateTo(PageType.HOME, userProfile);
+                    IsBusy = false;
                     return;
                 }
             }
 
             Navigator.Instance.OkAlert("Error", "There is a problem with user log in. Please try again later.", "OK", null, null);
+            IsBusy = false;
         }
 
         private Model.Entities.UserProfileEntity GetUserProfile(UserProfile userProfile)
@@ -150,7 +170,7 @@ namespace CallAladdin.ViewModel
 
         public void ReturnMainPage()
         {
-            Navigator.Instance.ConfirmationAlert("Alert", "Are you sure you want to return to main page? All changes will be lost.", "OK", "Cancel", async() =>
+            Navigator.Instance.ConfirmationAlert("Alert", "Are you sure you want to return to main page? All changes will be lost.", "OK", "Cancel", async () =>
             {
                 //For android
                 await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);

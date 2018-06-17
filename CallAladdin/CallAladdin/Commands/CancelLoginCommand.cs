@@ -19,7 +19,11 @@ namespace CallAladdin.Commands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (parameter == null)
+                return false;
+
+            var boolVal = (bool)parameter;
+            return !boolVal;
         }
 
         public void Execute(object parameter)
