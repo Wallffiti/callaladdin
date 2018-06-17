@@ -7,12 +7,14 @@ using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
     public class UserRegistrationViewModel : BaseViewModel
     {
+        private bool isBusy;
         private const string CHOOSE_PHOTO_FROM_CAMERA = "Choose photo from camera";
         private const string BROWSE_PHOTO_FROM_FOLDER = "Browse photo from folder";
         public event EventHandler OnProfilePictureChanged;
@@ -372,7 +374,16 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToAgreement(UserRegistration userRegistration)
         {
+            if (isBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            isBusy = true;
             await Navigator.Instance.NavigateTo(PageType.DISCLAIMER, userRegistration);
+            await Task.Delay(1500);
+            isBusy = false;
         }
 
         public async void ChangeProfileImageAsync()

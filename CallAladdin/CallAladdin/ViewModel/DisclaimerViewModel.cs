@@ -3,6 +3,7 @@ using CallAladdin.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
@@ -11,6 +12,7 @@ namespace CallAladdin.ViewModel
     {
         private UserRegistration userRegistration;
         private string disclaimerText;
+        private bool isBusy;
 
         public string DisclaimerText
         {
@@ -121,7 +123,16 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToPersonalDataProtection(UserRegistration userRegistration)
         {
+            if (isBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            isBusy = true;
             await Navigator.Instance.NavigateTo(PageType.PERSONAL_DATA_PROTECTION, userRegistration);
+            await Task.Delay(1500);
+            isBusy = false;
         }
     }
 }

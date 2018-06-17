@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using CallAladdin.Commands;
-using Xamarin.Forms; 
+using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace CallAladdin.ViewModel
 {
@@ -26,6 +27,7 @@ namespace CallAladdin.ViewModel
         }
 
         private string mobileNumber;
+        private bool isBusy;
 
         public string MobileNumber
         {
@@ -70,7 +72,16 @@ namespace CallAladdin.ViewModel
         public async void NavigateToHome(/*UserRegistration userRegistration*/)
         {
             //TODO: verify sms code before navigate to home
+            if (isBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            isBusy = true;
             await Navigator.Instance.NavigateTo(PageType.HOME, userRegistration, appendFromRoot: true);
+            await Task.Delay(1500);
+            isBusy = false;
         }
 
         public async void PromptPhoneNumberChange()

@@ -114,6 +114,12 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToHome(/*UserRegistration userRegistration*/)
         {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
             IsBusy = true;
 
             //1. Sign up via firebase auth using userRegistration data
