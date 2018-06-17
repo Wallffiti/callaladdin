@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
     public class EditRequestorProfileViewModel : BaseViewModel
     {
         private ILocationService locationService;
+        private ICommand submitProfileChangeCmd;
         private bool isBusy;
         private bool isRegisteredAsContractor;
         private const string CHOOSE_PHOTO_FROM_CAMERA = "Choose photo from camera";
@@ -25,6 +27,16 @@ namespace CallAladdin.ViewModel
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
         private UserProfile userProfile;
+
+        public ICommand SubmitProfileChangeCmd
+        {
+            get { return submitProfileChangeCmd; }
+            set
+            {
+                submitProfileChangeCmd = value;
+                OnPropertyChanged("SubmitProfileChangeCmd");
+            }
+        }
 
         public bool IsBusy
         {
@@ -43,7 +55,7 @@ namespace CallAladdin.ViewModel
             {
                 isRegisteredAsContractor = value;
                 UpdateUserProfile();
-                ValidateForm();
+                //ValidateForm();
                 OnPropertyChanged("IsRegisteredAsContractor");
             }
         }
@@ -78,7 +90,7 @@ namespace CallAladdin.ViewModel
             {
                 name = value;
                 UpdateUserProfile();
-                ValidateForm();
+                //ValidateForm();
                 OnPropertyChanged("Name");
             }
         }
@@ -90,7 +102,7 @@ namespace CallAladdin.ViewModel
             {
                 selectedCountry = value;
                 UpdateUserProfile();
-                ValidateForm();
+                //ValidateForm();
                 OnPropertyChanged("SelectedCountry");
             }
         }
@@ -102,7 +114,7 @@ namespace CallAladdin.ViewModel
             {
                 selectedCity = value;
                 UpdateUserProfile();
-                ValidateForm();
+                //ValidateForm();
                 OnPropertyChanged("SelectedCity");
             }
         }
@@ -113,6 +125,7 @@ namespace CallAladdin.ViewModel
             set
             {
                 countries = value;
+                //UpdateUserProfile();
                 OnPropertyChanged("Countries");
             }
         }
@@ -123,6 +136,7 @@ namespace CallAladdin.ViewModel
             set
             {
                 cities = value;
+                //UpdateUserProfile();
                 OnPropertyChanged("Cities");
             }
         }
@@ -145,9 +159,30 @@ namespace CallAladdin.ViewModel
             set { userProfile = value; OnPropertyChanged("UserProfile"); }
         }
 
-        public EditRequestorProfileViewModel(/*UserProfile userProfile*/)
+        public EditRequestorProfileViewModel()
         {
             locationService = new LocationService();
+            SubmitProfileChangeCmd = new Xamarin.Forms.Command((e) =>
+            {
+                SubmitProfileChanges();
+            },
+            (param) =>
+            {
+                if (param != null)
+                {
+                    var userProfile = (UserProfile)param;
+
+                    if (userProfile != null)
+                    {
+                        return !string.IsNullOrEmpty(userProfile.Name) && !string.IsNullOrEmpty(userProfile.City) && !string.IsNullOrEmpty(userProfile.Country);
+                    }
+
+                    //var isBusy = (bool)param;
+                    //return !isBusy;
+                }
+
+                return false;
+            });
         }
 
         private void PopulateLocations()
@@ -169,19 +204,22 @@ namespace CallAladdin.ViewModel
         public void PopulateData(UserProfile userProfile)
         {
             PopulateLocations();
-            UserProfile = userProfile;
+            LoadImageUploaderOptions();
 
             if (userProfile != null)
             {
                 Name = userProfile.Name;
                 Mobile = userProfile.Mobile;
                 Email = userProfile.Email;
-                //SelectedCity = userProfile.City;
-                //SelectedCountry = userProfile.Country;
                 IsRegisteredAsContractor = userProfile.IsContractor;
+                SelectedCity = userProfile.City;
+                SelectedCountry = userProfile.Country;
             }
 
-            LoadImageUploaderOptions();
+            UpdateUserProfile();
+
+            //UserProfile = userProfile;
+
         }
 
         private void LoadImageUploaderOptions()
@@ -194,12 +232,64 @@ namespace CallAladdin.ViewModel
             SelectedPhotoOption = BROWSE_PHOTO_FROM_FOLDER;
         }
 
-        private void ValidateForm()
+        private bool FormIsValid()
         {
-            //TODO
+            if (string.IsNullOrEmpty(userProfile?.Name) || string.IsNullOrEmpty(userProfile?.City) || string.IsNullOrEmpty(userProfile?.Country))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void UpdateUserProfile()
+        {
+            UserProfile = new UserProfile
+            {
+                Name = name,
+                Mobile = mobile,
+                Email = email,
+                City = selectedCity,
+                Country = selectedCountry,
+                IsContractor = isRegisteredAsContractor
+            };
+        }
+
+        public void SubmitProfileChanges()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+
+            if (FormIsValid())
+            {
+                if (IsRegisteredAsContractor)
+                {
+                    Navigator.Instance.ConfirmationAlert("Warning", "Once you have switched to CONTRACTOR, you can no longer switch back to REQUESTOR. Continue?", "Yes", "No", () =>
+                    {
+                        //For android
+                        SendToServer();
+                    },
+                    () =>
+                    {
+                        //For ios
+                        SendToServer();
+                    });
+                    IsBusy = false;
+                    return;
+                }
+
+                SendToServer();
+            }
+
+            IsBusy = false;
+        }
+
+        public void SendToServer()
         {
             //TODO
         }
