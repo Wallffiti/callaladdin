@@ -162,5 +162,11 @@ namespace CallAladdin.Services
 
             return result;
         }
+
+        public async Task<bool> UpdateUserProfile(UserProfile userProfile)
+        {
+            //TODO
+            return true;
+        }
     }
 }

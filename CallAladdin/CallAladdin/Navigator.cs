@@ -57,10 +57,10 @@ namespace CallAladdin
                     view = new ChangePhoneNumberPage(parameter);
                     break;
                 case PageType.EDIT_REQUESTOR_PROFILE:
-                    view = new EditRequestorProfilePage(parameter as UserProfile);
+                    view = new EditRequestorProfilePage(parameter);
                     break;
                 case PageType.EDIT_CONTRACTOR_PROFILE:
-                    view = new EditContractorProfilePage(parameter as UserProfile);
+                    view = new EditContractorProfilePage(parameter);
                     break;
                 case PageType.DUMMY:
                     view = new DummyPage();

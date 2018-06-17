@@ -10,5 +10,6 @@ namespace CallAladdin.Services.Interfaces
         Task<UserLoginResponse> LoginUserToAuthServer(UserLogin userLogin);
         Task<UserRegistrationOnServerResponse> CreateUser(UserRegistration userRegistration);
         Task<UserProfile> GetUserProfile(string localId);
+        Task<bool> UpdateUserProfile(UserProfile userProfile);
     }
 }

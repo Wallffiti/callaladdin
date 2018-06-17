@@ -1,4 +1,6 @@
 ﻿using CallAladdin.Model;
+using CallAladdin.Repositories;
+using CallAladdin.Repositories.Interfaces;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
 using System;
@@ -12,6 +14,8 @@ namespace CallAladdin.ViewModel
     public class EditRequestorProfileViewModel : BaseViewModel
     {
         private ILocationService locationService;
+        private IUserService userService;
+        private IUserProfileRepository userProfileRepository;
         private ICommand submitProfileChangeCmd;
         private bool isBusy;
         private bool isRegisteredAsContractor;
@@ -159,12 +163,25 @@ namespace CallAladdin.ViewModel
             set { userProfile = value; OnPropertyChanged("UserProfile"); }
         }
 
-        public EditRequestorProfileViewModel()
+        private UserProfileUserControlViewModel parentViewModel;
+
+        public EditRequestorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
         {
+            this.parentViewModel = parentViewModel;
             locationService = new LocationService();
+            userService = new UserService();
+            userProfileRepository = new UserProfileRepository();
             SubmitProfileChangeCmd = new Xamarin.Forms.Command((e) =>
             {
-                SubmitProfileChanges();
+                Navigator.Instance.ConfirmationAlert("Confirmation", "Submit your profile now?", "OK", "Cancel", () =>
+                {
+                    //For android
+                    SubmitProfileChanges();
+                }, () =>
+                {
+                    //For ios
+                    SubmitProfileChanges();
+                });
             },
             (param) =>
             {
@@ -289,9 +306,48 @@ namespace CallAladdin.ViewModel
             IsBusy = false;
         }
 
-        public void SendToServer()
+        public async void SendToServer()
         {
-            //TODO
+            if (this.userProfile == null)
+                return;
+
+            IsBusy = true;
+            var response = await userService.UpdateUserProfile(this.userProfile);
+
+            if (response)
+            {
+                var profileData = userProfileRepository.GetUserProfile(this.userProfile.Email);
+                if (profileData != null)
+                {
+                    profileData.Category = this.userProfile.Category;
+                    profileData.City = this.userProfile.City;
+                    profileData.CompanyName = this.userProfile.CompanyName;
+                    profileData.CompanyRegisteredAddress = this.userProfile.CompanyRegisteredAddress;
+                    profileData.Country = this.userProfile.Country;
+                    profileData.Email = this.userProfile.Email;
+                    profileData.IsContractor = this.userProfile.IsContractor;
+                    profileData.Mobile = this.userProfile.Mobile;
+                    profileData.Name = this.userProfile.Name;
+                    profileData.PathToProfileImage = this.userProfile.PathToProfileImage;
+                }
+
+                var rowUpdated = userProfileRepository.CreateOrUpdate(profileData);
+
+                if (rowUpdated < 0)
+                {
+                    Navigator.Instance.OkAlert("Error", "There is a problem storing user profile locally. Please try again later.", "OK", null, null);
+                    IsBusy = false;
+                    return;
+                }
+
+                Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", null, null);
+                this.parentViewModel.UpdateUserProfile(this.userProfile);
+                IsBusy = false;
+                return;
+            }
+
+            Navigator.Instance.OkAlert("Error", "There is a problem updating user profile on the server. Please try again later.", "OK", null, null);
+            IsBusy = false;
         }
     }
 }

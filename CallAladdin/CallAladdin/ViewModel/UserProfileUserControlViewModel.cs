@@ -31,6 +31,8 @@ namespace CallAladdin.ViewModel
         private string companyRegisteredAddress;
         private string imagePath;
 
+        public UserProfile UserProfile { get { return userProfile; } }
+
         public bool IsContractor
         {
             get { return isContractor; }
@@ -92,6 +94,16 @@ namespace CallAladdin.ViewModel
 
         public UserProfileUserControlViewModel(UserProfile userProfile)
         {
+            UpdateUserProfile(userProfile);
+
+            userIdentityRepository = new UserIdentityRepository();
+            userProfileRepository = new UserProfileRepository();
+            LogoutCmd = new LogoutCommand(this);
+            EditProfileCmd = new EditProfileCommand(this);
+        }
+
+        public void UpdateUserProfile(UserProfile userProfile)
+        {
             this.userProfile = userProfile;
             if (userProfile != null)
             {
@@ -111,11 +123,6 @@ namespace CallAladdin.ViewModel
 
                 ImagePath = userProfile.PathToProfileImage;
             }
-
-            userIdentityRepository = new UserIdentityRepository();
-            userProfileRepository = new UserProfileRepository();
-            LogoutCmd = new LogoutCommand(this);
-            EditProfileCmd = new EditProfileCommand(this);
         }
 
         public async void NavigateToEditUserProfile()
@@ -133,11 +140,11 @@ namespace CallAladdin.ViewModel
 
             if (userProfile.IsContractor)
             {
-                await Navigator.Instance.NavigateTo(PageType.EDIT_CONTRACTOR_PROFILE, userProfile);
+                await Navigator.Instance.NavigateTo(PageType.EDIT_CONTRACTOR_PROFILE, this);
             }
             else
             {
-                await Navigator.Instance.NavigateTo(PageType.EDIT_REQUESTOR_PROFILE, userProfile);
+                await Navigator.Instance.NavigateTo(PageType.EDIT_REQUESTOR_PROFILE, this);
             }
 
             await Task.Delay(1500);

@@ -18,12 +18,28 @@ namespace CallAladdin
 	{
         private EditRequestorProfileViewModel editRequestorProfileViewModel;
 
-        public EditRequestorProfilePage (UserProfile userProfile)
+        public EditRequestorProfilePage (/*UserProfile userProfile*/ object sender)
 		{
 			InitializeComponent ();
-            editRequestorProfileViewModel = new EditRequestorProfileViewModel();
+            var parentViewModel = sender as UserProfileUserControlViewModel;
+            editRequestorProfileViewModel = new EditRequestorProfileViewModel(parentViewModel);
             BindingContext = editRequestorProfileViewModel;
-            editRequestorProfileViewModel.PopulateData(userProfile);
+            editRequestorProfileViewModel.PopulateData(parentViewModel.UserProfile);
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            //return base.OnBackButtonPressed();
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to exit from editing user profile? All changes will be lost.", "Yes", "No", async () =>
+            {
+                //For android
+                await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+            }, async () =>
+            {
+                //For IOS
+                await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+            });
+            return true;
         }
     }
 }
