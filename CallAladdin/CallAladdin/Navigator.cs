@@ -39,7 +39,7 @@ namespace CallAladdin
                     view = new UserRegistrationPage() { };
                     break;
                 case PageType.USER_LOGIN:
-                    view = new UserLoginPage();
+                    view = new UserLoginPage(parameter as string);
                     break;
                 case PageType.DISCLAIMER:
                     view = new DisclaimerPage(parameter as UserRegistration);
@@ -119,7 +119,7 @@ namespace CallAladdin
             });
         }
 
-        public void ConfirmationAlert(string title, string message, string confirmMessage, string cancelMessage, Action androidAction, Action iosAction)
+        public void ConfirmationAlert(string title, string message, string confirmMessage, string cancelMessage, Action androidAction = null, Action iosAction = null, Action androidCancelAction = null, Action iosCancelACtion = null)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -133,6 +133,17 @@ namespace CallAladdin
                     else if (Device.OS == TargetPlatform.iOS)
                     {
                         iosAction?.Invoke();
+                    }
+                }
+                else
+                {
+                    if (Device.OS == TargetPlatform.Android)
+                    {
+                        androidCancelAction?.Invoke();
+                    }
+                    else if (Device.OS == TargetPlatform.iOS)
+                    {
+                        androidCancelAction?.Invoke();
                     }
                 }
             });

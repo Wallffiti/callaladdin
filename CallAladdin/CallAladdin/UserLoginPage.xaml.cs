@@ -15,10 +15,10 @@ namespace CallAladdin
 	{
         private UserLoginViewModel userLoginViewModel;
 
-		public UserLoginPage ()
+		public UserLoginPage (string emailAddress)
 		{
 			InitializeComponent ();
-            userLoginViewModel = new UserLoginViewModel();
+            userLoginViewModel = new UserLoginViewModel(emailAddress);
             BindingContext = userLoginViewModel;
 
             //TODO:

@@ -57,8 +57,12 @@ namespace CallAladdin.ViewModel
         public ICommand LoginToHomeCmd { get; set; }
         public ICommand ForgottenPasswordCmd { get; set; }
 
-        public UserLoginViewModel()
+        public UserLoginViewModel(string emailAddress)
         {
+            if (!string.IsNullOrEmpty(emailAddress))
+            {
+                Email = emailAddress;
+            }
             userService = new UserService();
             userProfileRepository = new UserProfileRepository();
             userIdentityRepository = new UserIdentityRepository();

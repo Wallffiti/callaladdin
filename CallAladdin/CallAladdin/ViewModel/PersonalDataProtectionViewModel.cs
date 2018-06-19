@@ -139,16 +139,52 @@ namespace CallAladdin.ViewModel
             {
                 if (signupUserResponse.IsError)
                 {
-                    Navigator.Instance.OkAlert("Error", "There is a problem with the registration process. Error: " + signupUserResponse.ErrorMessage, "OK", () =>
+                    if (signupUserResponse.ErrorMessage == "EMAIL_EXISTS")
                     {
-                        //For android
-                    }, () =>
-                    {
-                        //For ios
-                    });
+                        Navigator.Instance.ConfirmationAlert("Error", "The email supplied has already been registered.", "Return to user profile", "Go to login", async () =>
+                        {
+                            //For android return to user profile
+                            await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                            await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                            IsBusy = false;
+                        },
+                       async () =>
+                       {
+                           //For android return to user profile
+                           await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                           await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                           IsBusy = false;
+                       },
+                       async () =>
+                       {
+                           //For android go to login
+                           await Navigator.Instance.NavigateToRoot();
+                           await Navigator.Instance.NavigateTo(PageType.USER_LOGIN, userRegistration.Email);
+                           IsBusy = false;
+                       },
+                       async () =>
+                       {
+                           //For ios go to login
+                           await Navigator.Instance.NavigateToRoot();
+                           await Navigator.Instance.NavigateTo(PageType.USER_LOGIN, userRegistration.Email);
+                           IsBusy = false;
+                       });
 
-                    IsBusy = false;
-                    return;
+                        return;
+                    }
+                    else
+                    {
+                        Navigator.Instance.OkAlert("Error", "There is a problem with the registration process. Error: " + signupUserResponse.ErrorMessage, "OK", () =>
+                        {
+                            //For android
+                        }, () =>
+                        {
+                            //For ios
+                        });
+
+                        IsBusy = false;
+                        return;
+                    }
                 }
 
                 //2. Create user via backend server using userRegistration data
