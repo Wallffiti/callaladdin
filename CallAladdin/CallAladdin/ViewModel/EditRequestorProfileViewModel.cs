@@ -26,8 +26,12 @@ namespace CallAladdin.ViewModel
         private string name;
         private string mobile;
         private string email;
+        private string company;
+        private string companyAddress;
+        private string selectedCategory;
         private IList<string> countries;
         private IList<string> cities;
+        private IList<string> categories;
         private string selectedCountry;
         private string selectedCity;
         private IList<string> photoOptionSelections;
@@ -85,6 +89,39 @@ namespace CallAladdin.ViewModel
             {
                 email = value;
                 OnPropertyChanged("Email");
+            }
+        }
+
+        public string Company
+        {
+            get { return company; }
+            set
+            {
+                company = value;
+                UpdateUserProfile();
+                OnPropertyChanged("Company");
+            }
+        }
+
+        public string CompanyAddress
+        {
+            get { return companyAddress; }
+            set
+            {
+                companyAddress = value;
+                UpdateUserProfile();
+                OnPropertyChanged("CompanyAddress");
+            }
+        }
+
+        public string SelectedCategory
+        {
+            get { return selectedCategory; }
+            set
+            {
+                selectedCategory = value;
+                UpdateUserProfile();
+                OnPropertyChanged("SelectedCategory");
             }
         }
 
@@ -158,6 +195,17 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public IList<string> Categories
+        {
+            get { return categories; }
+            set
+            {
+                categories = value;
+                //UpdateUserProfile();
+                OnPropertyChanged("Categories");
+            }
+        }
+
         public IList<string> PhotoOptionSelections
         {
             get { return photoOptionSelections; }
@@ -179,7 +227,10 @@ namespace CallAladdin.ViewModel
         public string ImagePath
         {
             get { return imagePath; }
-            set { imagePath = value; OnPropertyChanged("ImagePath"); }
+            set
+            {
+                imagePath = value; UpdateUserProfile(); OnPropertyChanged("ImagePath");
+            }
         }
 
         private UserProfileUserControlViewModel parentViewModel;
@@ -210,7 +261,23 @@ namespace CallAladdin.ViewModel
 
                     if (userProfile != null)
                     {
-                        return !string.IsNullOrEmpty(userProfile.Name) && !string.IsNullOrEmpty(userProfile.City) && !string.IsNullOrEmpty(userProfile.Country);
+                        bool hasMandatoryInfo = !string.IsNullOrEmpty(userProfile.Name)
+                        && !string.IsNullOrEmpty(userProfile.City)
+                        && !string.IsNullOrEmpty(userProfile.Country);
+
+                        bool hasContractorInfo = !string.IsNullOrEmpty(userProfile.Category)
+                        && !string.IsNullOrEmpty(userProfile.CompanyName)
+                        && !string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress)
+                        && !string.IsNullOrEmpty(userProfile.PathToProfileImage);
+
+                        if (userProfile.IsContractor)
+                        {
+                            return hasMandatoryInfo && hasContractorInfo;
+                        }
+                        else
+                        {
+                            return hasMandatoryInfo;
+                        }
                     }
                 }
 
@@ -229,6 +296,8 @@ namespace CallAladdin.ViewModel
 
                 return !isBusy;
             });
+
+            LoadContractorOptions();
         }
 
         public async void ChangeProfileImageAsync()
@@ -268,6 +337,36 @@ namespace CallAladdin.ViewModel
 
                 this.IsBusy = false;
             });
+        }
+
+        private void LoadContractorOptions()
+        {
+            Categories = new List<string>
+            {
+                Constants.CONSTRUCTION_TILING_PAINTING,
+                Constants.WIRING_LIGHING,
+                Constants.INTERIOR_DESIGN_CARPENTERS,
+
+                Constants.LAMINATED_TIMBER_FLOORING,
+                Constants.CURTAIN_CARPET_WALLPAPER,
+                Constants.SIGNBOARD,
+
+                Constants.AIR_CONDITIONER,
+                Constants.PLASTERED_CEILING,
+                Constants.ALUMINIUM_GLASSWORKS,
+
+                Constants.ALARM_CCTV,
+                Constants.CLEANING_SERVICES,
+                Constants.LANDSCAPING_POND,
+
+                Constants.GATES_STEEL_WORKS,
+                Constants.PLUMBER,
+                Constants.PEST_CONTROL,
+
+                Constants.FENGSHUI_CONSULTATION,
+                Constants.GENERAL_WORKERS,
+                Constants.HOUSE_MOVERS
+            };
         }
 
         public void PopulateData(UserProfile userProfile)
@@ -322,7 +421,10 @@ namespace CallAladdin.ViewModel
                 City = selectedCity,
                 Country = selectedCountry,
                 IsContractor = isRegisteredAsContractor,
-                PathToProfileImage = imagePath
+                PathToProfileImage = imagePath,
+                Category = selectedCategory,
+                CompanyName = company,
+                CompanyRegisteredAddress = companyAddress
             };
         }
 

@@ -27,7 +27,7 @@
             </Grid.RowDefinitions>
             
             <!--row 1-->
-            <Grid Grid.Row="0" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}">
+            <Grid Grid.Row="0" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}" Padding="15">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="{Binding Source={x:Static const:Constants.CONSTRUCTION_TILING_PAINTING}}" />
                 </Grid.GestureRecognizers>

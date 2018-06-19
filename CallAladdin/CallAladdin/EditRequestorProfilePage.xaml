@@ -65,8 +65,43 @@
                     <Label Text="Also Register As Contractor" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Switch IsToggled="{Binding IsRegisteredAsContractor}" VerticalOptions="Center" />
                 </FlexLayout>
+                <Grid IsVisible="{Binding IsRegisteredAsContractor}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Text="Category" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"  IsVisible="{Binding IsRegisteredAsContractor}"/>
+                    <Picker x:Name="CategoryPicker" Title="Select Your Category" ItemsSource="{Binding Categories}" Grid.Row="0" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCategory}" IsVisible="{Binding IsRegisteredAsContractor}">
+                        <!--TODO-->
+                    </Picker>
+                    <Label Text="Company" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
+                    <Entry Placeholder="ABC Contractor Sdn Bhd" x:Name="CompanyEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Company}" FontSize="Small" IsVisible="{Binding IsRegisteredAsContractor}"/>
+                </Grid>
+                <Grid IsVisible="{Binding IsRegisteredAsContractor}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Text="Company Registered Address" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
+                    <Editor HeightRequest="60" Text="{Binding CompanyAddress}" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" IsVisible="{Binding IsRegisteredAsContractor}" FontSize="Small"/>
+                </Grid>
             </StackLayout>
-            <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Text="SUBMIT" Margin="100,20" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding UserProfile}"/>
+            <Grid Margin="20" Grid.Row="1" HorizontalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" FontSize="Micro" Text="Photo is mandatory for contractor" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
+                <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Margin="100,0" Text="SUBMIT" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding UserProfile}"/>
+            </Grid>
             <!--<Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Text="SUBMIT" Margin="100,20" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding IsBusy}"/>-->
         </Grid>
     </ScrollView>
