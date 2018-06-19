@@ -35,15 +35,20 @@
                         <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <ActivityIndicator x:Name="ProgressIndicator" Grid.RowSpan="2" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60"/>
-                    
+
                     <Label Text="Name" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
                     <Entry Placeholder="John Doe" x:Name="NameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="{Binding Name}" FontSize="Small"/>
 
@@ -58,8 +63,25 @@
 
                     <Label Text="Country" TextColor="Black" HorizontalOptions="Start" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
                     <Picker x:Name="CountryPicker" Title="Select Your Country" ItemsSource="{Binding Countries}" Grid.Row="4" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"/>
+
+                    <Label Text="Category" TextColor="Black" HorizontalOptions="Start" Grid.Row="5" Grid.Column="0" VerticalOptions="Center" />
+                    <Label x:Name="CategoryField" TextColor="Red" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" Grid.Row="5" Grid.Column="1" VerticalOptions="Center" Text="{Binding SelectedCategory}" FontSize="Small"/>
+
+                    <Label Text="Company" TextColor="Black" HorizontalOptions="Start" Grid.Row="6" Grid.Column="0" VerticalOptions="Center" />
+                    <Entry Placeholder="ABC Contractor Sdn Bhd" x:Name="CompanyEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="6" Grid.Column="1" VerticalOptions="Center" Text="{Binding Company}" FontSize="Small"/>
+
+                    <Label Text="Company Registered Address" TextColor="Black" HorizontalOptions="Start" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center"/>
+                    <Editor HeightRequest="60" Text="{Binding CompanyAddress}" HorizontalOptions="FillAndExpand" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" FontSize="Small"/>
                 </Grid>
             </StackLayout>
+            <Grid Margin="20" Grid.Row="1" HorizontalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" FontSize="Micro" Text="Photo is mandatory for contractor" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Margin="100,0" Text="SUBMIT" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding UserProfile}"/>
+            </Grid>
         </Grid>
     </ScrollView>
 </local:CustomPage>

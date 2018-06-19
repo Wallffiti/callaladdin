@@ -165,10 +165,45 @@ namespace CallAladdin.ViewModel
                     IsBusy = false;
                     return;
                 }
+                //else  
+                //{
+                //    //2.a. In case backend server issue, we get cached user profile
+                //    var userProfileEntity = userProfileRepository.GetUserProfile(authResponse.Email);
+                //    if (userProfileEntity != null)
+                //    {
+                //        userProfile = ConvertToUserProfileFromEntity(userProfileEntity);
+
+                //        if (userProfile != null)
+                //        {
+                //            //3.a. Navigate to home page with cached user profile data
+                //            Navigator.Instance.OkAlert("Alert", "There is a problem with backend server. You are currently in offline mode.", "OK", null, null);
+                //            await Navigator.Instance.NavigateTo(PageType.HOME, userProfile);
+                //            IsBusy = false;
+                //            return;
+                //        }
+                //    }
+                //}
             }
 
             Navigator.Instance.OkAlert("Error", "There is a problem with user log in. Please try again later.", "OK", null, null);
             IsBusy = false;
+        }
+
+        private static UserProfile ConvertToUserProfileFromEntity(Model.Entities.UserProfileEntity userProfileEntity)
+        {
+            return new UserProfile
+            {
+                Category = userProfileEntity.Category,
+                City = userProfileEntity.City,
+                CompanyName = userProfileEntity.CompanyName,
+                CompanyRegisteredAddress = userProfileEntity.CompanyRegisteredAddress,
+                Country = userProfileEntity.Country,
+                Email = userProfileEntity.Email,
+                IsContractor = userProfileEntity.IsContractor,
+                Mobile = userProfileEntity.Mobile,
+                Name = userProfileEntity.Name,
+                PathToProfileImage = userProfileEntity.PathToProfileImage
+            };
         }
 
         private Model.Entities.UserProfileEntity GetUserProfile(UserProfile userProfile)

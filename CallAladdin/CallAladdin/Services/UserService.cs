@@ -42,6 +42,8 @@ namespace CallAladdin.Services
                 LastReviewedDate = new DateTime(2018, 5, 1),
                 IsContractor = localId == "contractor"
             };
+
+            //return null;
         }
 
         public async Task<UserLoginResponse> LoginUserToAuthServer(UserLogin userLogin)

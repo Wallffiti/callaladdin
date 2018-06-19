@@ -1,4 +1,5 @@
 ﻿using CallAladdin.Model;
+using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,16 @@ namespace CallAladdin
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class EditContractorProfilePage : CustomPage
 	{
-		public EditContractorProfilePage (object sender)
+        private EditContractorProfileViewModel editRequestorProfileViewModel;
+
+        public EditContractorProfilePage (object sender)
 		{
 			InitializeComponent ();
-		}
+            var parentViewModel = sender as UserProfileUserControlViewModel;
+            editRequestorProfileViewModel = new EditContractorProfileViewModel(parentViewModel);
+            BindingContext = editRequestorProfileViewModel;
+            editRequestorProfileViewModel.PopulateData(parentViewModel.UserProfile);
+        }
 
         protected override bool OnBackButtonPressed()
         {
