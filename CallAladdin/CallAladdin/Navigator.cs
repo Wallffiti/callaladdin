@@ -102,7 +102,7 @@ namespace CallAladdin
             }
         }
 
-        public void OkAlert(string title, string message, string okMessage, Action androidAction, Action iosAction)
+        public void OkAlert(string title, string message, string okMessage, Action androidAction = null, Action iosAction = null)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {

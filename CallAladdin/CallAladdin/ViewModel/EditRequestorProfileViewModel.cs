@@ -496,9 +496,19 @@ namespace CallAladdin.ViewModel
                     return;
                 }
 
-                Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", null, null);
+                
                 this.parentViewModel.UpdateUserProfile(this.userProfile);
-                IsBusy = false;
+
+                Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", async ()=> {
+                    //For android
+                    await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    IsBusy = false;
+                }, async () => 
+                {
+                    //For ios
+                    await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    IsBusy = false;
+                });
                 return;
             }
 
