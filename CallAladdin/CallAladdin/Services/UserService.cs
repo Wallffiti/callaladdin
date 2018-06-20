@@ -23,32 +23,32 @@ namespace CallAladdin.Services
             if (string.IsNullOrEmpty(localId) || userRegistration == null)
                 return null;
 
-            //TODO: add logic to fill in UserRegistrationOnServerResponse
             var result = new UserRegistrationOnServerResponse();
-            result.IsSuccess = true;    //DEBUG
+            //result.IsSuccess = true;    //DEBUG
             var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
             var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+            IRestResponse response = null;
 
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
                 var fullUrl = baseUrl + "/user_profiles/";
-                var name = "ABC";
-                var city = "MIRI";
-                var phone = "+16505551234";
-                var address = "address";
-                var country = "MALAYSIA";
-                var email = "email00@email.com";
-                var isContractor = false;
-                var category = "SIGNBOARD";
-                var companyName = "Unspecified";
-                var companyAddress = "Unspecified";
+                var name = userRegistration.Name;
+                var city = userRegistration.City;
+                var phone = userRegistration.Mobile;
+                var address = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
+                var country = userRegistration.Country;
+                var email = userRegistration.Email;
+                var isContractor = userRegistration.IsRegisteredAsContractor;
+                var category = userRegistration.Category;
+                var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "Unspecified" : userRegistration.CompanyName;
+                var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
 
 
                 var client = new RestClient(fullUrl);
                 var request = new RestRequest(Method.POST);
-                request.AddHeader("postman-token", "c51b5943-db03-a887-372e-79ef32cb03c1");
+                //request.AddHeader("postman-token", "c51b5943-db03-a887-372e-79ef32cb03c1");
                 request.AddHeader("cache-control", "no-cache");
-                request.AddHeader("authorization", "Basic bmc0bjI1alZGS3pMQTZIZTp3U1NhayhQWU5ieDQ1JSQv");
+                request.AddHeader("authorization", "Basic " + apiKey);
                 request.AddParameter("name", name);
                 request.AddParameter("city", city);
                 request.AddParameter("phone", phone);
@@ -61,13 +61,32 @@ namespace CallAladdin.Services
                 request.AddParameter("company_name", companyName);
                 request.AddParameter("company_address", companyAddress);
 
-                using (var fs = File.OpenRead(userRegistration.ProfileImagePath))
+                try
                 {
-                    var bytes = Utilities.ReadFully(fs);
-                    request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
+                    if (File.Exists(userRegistration.ProfileImagePath))
+                    {
+                        using (var fs = File.OpenRead(userRegistration.ProfileImagePath))
+                        {
+                            var bytes = Utilities.StreamToBytes(fs);
+                            request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
 
-                    IRestResponse r = client.Execute(request);
+                            response = client.Execute(request);
+                        }
+                    }
+                    else
+                    {
+                        response = client.Execute(request);
+                    }
                 }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            if (response != null && response.IsSuccessful)
+            {
+                result.IsSuccess = true;
             }
 
             return result;
@@ -117,40 +136,24 @@ namespace CallAladdin.Services
                     }
                     catch (Exception ex)
                     {
-                        result = new UserProfile()    //DEBUG
-                        {
-                            Name = "Jackson",
-                            Mobile = "012 345 678",
-                            Email = "dimensionconcept@yahoo.com",
-                            City = "Miri",
-                            Country = "Malaysia",
-                            Category = Constants.INTERIOR_DESIGN_CARPENTERS,
-                            CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
-                            CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
-                            OverallRating = 4,
-                            TotalReviewers = 102,
-                            LastReviewedDate = new DateTime(2018, 5, 1),
-                            IsContractor = localId == "contractor"
-                        };
+                        //result = new UserProfile()    //DEBUG
+                        //{
+                        //    Name = "Jackson",
+                        //    Mobile = "012 345 678",
+                        //    Email = "dimensionconcept@yahoo.com",
+                        //    City = "Miri",
+                        //    Country = "Malaysia",
+                        //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
+                        //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
+                        //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
+                        //    OverallRating = 4,
+                        //    TotalReviewers = 102,
+                        //    LastReviewedDate = new DateTime(2018, 5, 1),
+                        //    IsContractor = localId == "contractor"
+                        //};
                     }
                 }
             }
-
-            //return new UserProfile()    //DEBUG
-            //{
-            //    Name = "Jackson",
-            //    Mobile = "012 345 678",
-            //    Email = "dimensionconcept@yahoo.com",
-            //    City = "Miri",
-            //    Country = "Malaysia",
-            //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
-            //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
-            //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
-            //    OverallRating = 4,
-            //    TotalReviewers = 102,
-            //    LastReviewedDate = new DateTime(2018, 5, 1),
-            //    IsContractor = localId == "contractor"
-            //};
 
             return result;
         }
