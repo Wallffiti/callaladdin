@@ -46,6 +46,8 @@ namespace CallAladdin.Droid
             //Call Aladdin
             string apiUrl = b.GetString("com.call.aladdin.project.api.url", "");
             dict.Add("com.call.aladdin.project.api.url", apiUrl);
+            string apiKey = b.GetString("com.call.aladdin.project.api.key", "");
+            dict.Add("com.call.aladdin.project.api.key", apiKey);
 
             CrossCurrentActivity.Current.Init(this, bundle);
 

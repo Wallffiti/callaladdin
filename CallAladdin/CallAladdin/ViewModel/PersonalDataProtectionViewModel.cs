@@ -188,7 +188,7 @@ namespace CallAladdin.ViewModel
                 }
 
                 //2. Create user via backend server using userRegistration data
-                var createUserResponse = await userService.CreateUser(this.userRegistration);
+                var createUserResponse = await userService.CreateUser(this.userRegistration, signupUserResponse.LocalId);
 
                 if (createUserResponse != null && createUserResponse.IsSuccess)
                 {

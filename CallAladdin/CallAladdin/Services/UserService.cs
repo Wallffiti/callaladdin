@@ -8,42 +8,192 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace CallAladdin.Services
 {
     public class UserService : IUserService
     {
-        public async Task<UserRegistrationOnServerResponse> CreateUser(UserRegistration userRegistration)
+        public async Task<UserRegistrationOnServerResponse> CreateUser(UserRegistration userRegistration, string localId)
         {
-            //TODO: add logic to fill in UserRegistrationOnServerResponse
+            if (string.IsNullOrEmpty(localId) || userRegistration == null)
+                return null;
 
-            return new UserRegistrationOnServerResponse()
+            //TODO: add logic to fill in UserRegistrationOnServerResponse
+            var result = new UserRegistrationOnServerResponse();
+            result.IsSuccess = true;    //DEBUG
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+            var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+            HttpResponseMessage response = null;
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
-                IsSuccess = true
-            };
+                var fullUrl = baseUrl + "/user_profiles";
+                using (var httpClient = new HttpClient())
+                {
+                    //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", apiKey);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + apiKey);
+                    var boundary = "Upload----" + DateTime.Now.Ticks.ToString();
+
+                    using (var content = new MultipartFormDataContent(boundary))
+                    {
+                        try
+                        {
+                            var name = string.IsNullOrEmpty(userRegistration.Name) ? "" : userRegistration.Name;
+                            var city = string.IsNullOrEmpty(userRegistration.City) ? "" : userRegistration.City.ToUpper();
+                            var phone = string.IsNullOrEmpty(userRegistration.Mobile) ? "" : userRegistration.Mobile;
+                            phone = phone.Replace(" ", ""); //remove empty string in between and at edges
+                            phone = phone.StartsWith("+") ? phone : "+" + phone;
+                            var address = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
+                            var country = string.IsNullOrEmpty(userRegistration.Country) ? "" : userRegistration.Country.ToUpper();
+                            var email = string.IsNullOrEmpty(userRegistration.Email) ? "" : userRegistration.Email;
+                            var isContractor = userRegistration.IsRegisteredAsContractor.ToString();
+                            var category = string.IsNullOrEmpty(userRegistration.Category) ? "" : userRegistration.Category;
+                            var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "" : userRegistration.CompanyName;
+                            var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "" : userRegistration.CompanyAddress;
+
+                            //TEST
+                            //var body = new
+                            //{
+                            //    city,
+                            //    phone,
+                            //    address,
+                            //    country,
+                            //    email,
+                            //    name,
+                            //    identifier_for_vendor = localId,
+                            //    is_contractor = isContractor,
+                            //    work_categories = category,
+                            //    company_name = companyName,
+                            //    company_address = companyAddress
+                            //};
+
+                            //var bodyStr = JsonConvert.SerializeObject(body);
+                            //var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+
+                            //content.Add(stringContent);
+                            //response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
+                            //TEST
+
+                            content.Add(new StringContent(name, Encoding.UTF8, "text/plain"), "name");
+                            content.Add(new StringContent(city, Encoding.UTF8, "text/plain"), "city");
+                            content.Add(new StringContent(phone, Encoding.UTF8, "text/plain"), "phone");
+                            content.Add(new StringContent(companyAddress, Encoding.UTF8, "text/plain"), "address");
+                            content.Add(new StringContent(country, Encoding.UTF8, "text/plain"), "country");
+                            content.Add(new StringContent(email, Encoding.UTF8, "text/plain"), "email");
+                            content.Add(new StringContent(localId, Encoding.UTF8, "text/plain"), "identifier_for_vendor");
+                            content.Add(new StringContent(isContractor, Encoding.UTF8, "text/plain"), "is_contractor");
+                            content.Add(new StringContent(category, Encoding.UTF8, "text/plain"), "work_categories");
+                            content.Add(new StringContent(companyName, Encoding.UTF8, "text/plain"), "company_name");
+                            content.Add(new StringContent(companyAddress, Encoding.UTF8, "text/plain"), "company_address");
+
+                            if (!string.IsNullOrEmpty(userRegistration.ProfileImagePath) && File.Exists(userRegistration.ProfileImagePath))
+                            {
+                                using (var stream = File.OpenRead(userRegistration.ProfileImagePath))
+                                {
+                                    //stream.Seek(0, SeekOrigin.Begin);
+                                    var fileName = Guid.NewGuid().ToString() + ".jpg";
+                                    content.Add(new StreamContent(stream), "image", fileName);
+                                    response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
+                                }
+                            }
+                            else
+                            {
+                                response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         public async Task<UserProfile> GetUserProfile(string localId)
         {
-            //TODO: add logic to replace data in UserProfile
+            UserProfile result = null;
 
-            return new UserProfile()
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+            var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
-                Name = "Jackson",
-                Mobile = "012 345 678",
-                Email = "dimensionconcept@yahoo.com",
-                City = "Miri",
-                Country = "Malaysia",
-                Category = Constants.INTERIOR_DESIGN_CARPENTERS,
-                CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
-                CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
-                OverallRating = 4,
-                TotalReviewers = 102,
-                LastReviewedDate = new DateTime(2018, 5, 1),
-                IsContractor = localId == "contractor"
-            };
+                var fullUrl = baseUrl + "/user_profiles" + "?identifier_for_vendor=" + localId;
 
-            //return null;
+                using (var httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        var response = await httpClient.GetAsync(fullUrl).ConfigureAwait(false);
+                        var content = await response.Content.ReadAsStringAsync();
+                        if (!string.IsNullOrEmpty(content))
+                        {
+                            dynamic responseData = JsonConvert.DeserializeObject(content);
+                            dynamic item = responseData?[0];
+                           if (item != null)
+                            {
+                                result = new UserProfile
+                                {
+                                    SystemUUID = item.uuid,
+                                    Name = item.name,
+                                    Email = item.email,
+                                    PathToProfileImage = item.image,
+                                    CompanyRegisteredAddress = item.address,
+                                    Longitude = item.longitude,
+                                    Latitude = item.latitude,
+                                    Mobile = item.phone,
+                                    City = item.city,
+                                    Country = item.country,
+                                    IsContractor = item.is_contractor,
+                                    CompanyName = item.company_name,
+                                    Category = item.work_categories,
+                                };
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        result = new UserProfile()    //DEBUG
+                        {
+                            Name = "Jackson",
+                            Mobile = "012 345 678",
+                            Email = "dimensionconcept@yahoo.com",
+                            City = "Miri",
+                            Country = "Malaysia",
+                            Category = Constants.INTERIOR_DESIGN_CARPENTERS,
+                            CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
+                            CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
+                            OverallRating = 4,
+                            TotalReviewers = 102,
+                            LastReviewedDate = new DateTime(2018, 5, 1),
+                            IsContractor = localId == "contractor"
+                        };
+                    }
+                }
+            }
+
+            //return new UserProfile()    //DEBUG
+            //{
+            //    Name = "Jackson",
+            //    Mobile = "012 345 678",
+            //    Email = "dimensionconcept@yahoo.com",
+            //    City = "Miri",
+            //    Country = "Malaysia",
+            //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
+            //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
+            //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
+            //    OverallRating = 4,
+            //    TotalReviewers = 102,
+            //    LastReviewedDate = new DateTime(2018, 5, 1),
+            //    IsContractor = localId == "contractor"
+            //};
+
+            return result;
         }
 
         public async Task<UserLoginResponse> LoginUserToAuthServer(UserLogin userLogin)

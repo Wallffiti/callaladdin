@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CallAladdin.ViewModel
 {
@@ -41,9 +42,10 @@ namespace CallAladdin.ViewModel
 
         public async void NavigateToLogin() => await Navigator.Instance.NavigateTo(PageType.USER_LOGIN);    //TODO: if using passwordless, need to go to another page
 
-        public void UpdateUserProfile()
+        public async Task<UserProfile> UpdateUserProfile()
         {
-            userProfile = GetUserProfile();
+            userProfile = await GetUserProfile();
+            return userProfile;
         }
 
         public async void NavigateToHome()
@@ -61,7 +63,7 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public UserProfile GetUserProfile()
+        public async Task<UserProfile> GetUserProfile()
         {
             UserIdentityEntity userIdentityEntity = userIdentityRepository.GetAll().LastOrDefault();
             UserProfileEntity userProfileEntity = null;
@@ -69,11 +71,43 @@ namespace CallAladdin.ViewModel
 
             if (userIdentityEntity != null && !string.IsNullOrEmpty(userIdentityEntity.Email))
             {
-                userProfileEntity = userProfileRepository.GetUserProfile(userIdentityEntity.Email);
-                userProfile = ConvertProfileEntityToUserProfile(userProfileEntity);
+                userProfile = await userService.GetUserProfile(userIdentityEntity.LocalId);
+
+                //Below code: tries to get latest data from server (and update cached data), otherwise get from cached data
+                if (userProfile == null)
+                {
+                    Navigator.Instance.OkAlert("Alert", "Currently in offline mode due to issue on server. Your profile is temporarily not synced.", "OK");
+                    userProfileEntity = userProfileRepository.GetUserProfile(userIdentityEntity.Email);
+                    userProfile = ConvertProfileEntityToUserProfile(userProfileEntity);
+                }
+                else
+                {
+                    var row = userProfileRepository.CreateOrUpdate(GetUserProfileEntity());
+                    if (row < 0)
+                    {
+                        Navigator.Instance.OkAlert("Alert", "There is an issue trying to update your profile onto your device from server.", "OK");
+                    }
+                }
             }
 
             return userProfile;
+        }
+
+        private UserProfileEntity GetUserProfileEntity()
+        {
+            return new UserProfileEntity
+            {
+                Category = userProfile.Category,
+                City = userProfile.City,
+                CompanyName = userProfile.CompanyName,
+                CompanyRegisteredAddress = userProfile.CompanyRegisteredAddress,
+                Country = userProfile.Country,
+                Email = userProfile.Email,
+                IsContractor = userProfile.IsContractor,
+                Mobile = userProfile.Mobile,
+                Name = userProfile.Name,
+                PathToProfileImage = userProfile.PathToProfileImage
+            };
         }
 
         private UserProfile ConvertProfileEntityToUserProfile(UserProfileEntity userProfileEntity)

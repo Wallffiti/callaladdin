@@ -27,10 +27,13 @@ namespace CallAladdin
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            mainViewModel.UpdateUserProfile();
             mainViewModel.IsBusy = true;
-            await Task.Delay(3000); //this is a workaround, since there is an issue with xamarin on page load
-            mainViewModel.NavigateToHome();   //auto navigate to home if logged in
+            var userProfile = await mainViewModel.UpdateUserProfile();
+            if (userProfile != null)
+            {
+                await Task.Delay(1500); //this is a workaround, since there is an issue with xamarin on page load
+                mainViewModel.NavigateToHome();   //auto navigate to home if logged in
+            }
             mainViewModel.IsBusy = false;
         }
     }
