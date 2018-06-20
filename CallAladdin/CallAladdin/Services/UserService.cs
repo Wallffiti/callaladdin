@@ -28,120 +28,45 @@ namespace CallAladdin.Services
             result.IsSuccess = true;    //DEBUG
             var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
             var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
-            HttpResponseMessage response = null;
 
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
-                var fullUrl = baseUrl + "/user_profiles";
-                using (var httpClient = new HttpClient())
+                var fullUrl = baseUrl + "/user_profiles/";
+                var name = "ABC";
+                var city = "MIRI";
+                var phone = "+16505551234";
+                var address = "address";
+                var country = "MALAYSIA";
+                var email = "email00@email.com";
+                var isContractor = false;
+                var category = "SIGNBOARD";
+                var companyName = "Unspecified";
+                var companyAddress = "Unspecified";
+
+
+                var client = new RestClient(fullUrl);
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("postman-token", "c51b5943-db03-a887-372e-79ef32cb03c1");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "Basic bmc0bjI1alZGS3pMQTZIZTp3U1NhayhQWU5ieDQ1JSQv");
+                request.AddParameter("name", name);
+                request.AddParameter("city", city);
+                request.AddParameter("phone", phone);
+                request.AddParameter("address", address);
+                request.AddParameter("country", country);
+                request.AddParameter("email", email);
+                request.AddParameter("identifier_for_vendor", localId);
+                request.AddParameter("is_contractor", isContractor);
+                request.AddParameter("work_categories", category);
+                request.AddParameter("company_name", companyName);
+                request.AddParameter("company_address", companyAddress);
+
+                using (var fs = File.OpenRead(userRegistration.ProfileImagePath))
                 {
-                    //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", apiKey);
-                    httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + apiKey);
-                    //httpClient.DefaultRequestHeaders.Add("content-type", "multipart/form-data");
-                    var boundary = "Upload----" + DateTime.Now.Ticks.ToString();
+                    var bytes = Utilities.ReadFully(fs);
+                    request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
 
-                    using (var content = new MultipartFormDataContent(boundary))
-                    {
-                        try
-                        {
-                            var name = string.IsNullOrEmpty(userRegistration.Name) ? "" : userRegistration.Name;
-                            var city = string.IsNullOrEmpty(userRegistration.City) ? "" : userRegistration.City.ToUpper();
-                            var phone = string.IsNullOrEmpty(userRegistration.Mobile) ? "" : userRegistration.Mobile;
-                            phone = phone.Replace(" ", ""); //remove empty string in between and at edges
-                            phone = phone.StartsWith("+") ? phone : "+" + phone;
-                            var address = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
-                            var country = string.IsNullOrEmpty(userRegistration.Country) ? "" : userRegistration.Country.ToUpper();
-                            var email = string.IsNullOrEmpty(userRegistration.Email) ? "" : userRegistration.Email;
-                            var isContractor = userRegistration.IsRegisteredAsContractor.ToString();
-                            var category = string.IsNullOrEmpty(userRegistration.Category) ? "" : userRegistration.Category;
-                            var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "Unspecified" : userRegistration.CompanyName;
-                            var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
-
-                            //TEST using restsharp
-                            //var client = new RestClient("https://call-aladdin-dev.herokuapp.com/api/user_profiles/");
-                            //var request = new RestRequest(Method.POST);
-                            //request.AddHeader("postman-token", "c51b5943-db03-a887-372e-79ef32cb03c1");
-                            //request.AddHeader("cache-control", "no-cache");
-                            //request.AddHeader("authorization", "Basic bmc0bjI1alZGS3pMQTZIZTp3U1NhayhQWU5ieDQ1JSQv");
-                            //request.AddParameter("name", name);
-                            //request.AddParameter("city", city);
-                            //request.AddParameter("phone", phone);
-                            //request.AddParameter("address", companyAddress);
-                            //request.AddParameter("country", country);
-                            //request.AddParameter("email", email);
-                            //request.AddParameter("identifier_for_vendor", localId);
-                            //request.AddParameter("is_contractor", isContractor);
-                            //request.AddParameter("work_categories", category);
-                            //request.AddParameter("company_name", companyName);
-                            //request.AddParameter("company_address", companyAddress);
-
-                            //using (var fs = File.OpenRead(userRegistration.ProfileImagePath))
-                            //{
-                            //    var bytes = Utilities.ReadFully(fs);
-                            //    request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
-
-                            //    IRestResponse r = client.Execute(request);
-                            //}
-                            //TEST using restsharp end
-
-                            Uri postURL = new Uri(fullUrl);
-                            using (var client = new HttpClient())
-                            {
-                                using (var stream = File.OpenRead(userRegistration.ProfileImagePath))
-                                {
-                                    JObject RequestData = new JObject(
-                                   new JProperty("name", name),
-                                   new JProperty("city", city),
-                                   new JProperty("phone", phone),
-                                   new JProperty("address", address),
-                                   new JProperty("country", country),
-                                   new JProperty("email", email),
-                                   new JProperty("identifier_for_vendor", localId),
-                                   new JProperty("is_contractor", isContractor),
-                                   new JProperty("work_categories", category),
-                                   new JProperty("company_name", companyName),
-                                   new JProperty("company_address", companyAddress));
-                                   //new JProperty("image", System.Convert.ToBase64String(Utilities.ReadFully(stream))));
-
-                                    var RequestDataString = new StringContent(RequestData.ToString(), Encoding.UTF8, "application/json");
-                                    HttpResponseMessage responsePost = await client.PostAsync(postURL, RequestDataString).ConfigureAwait(false);
-                                    string resp = await responsePost.Content.ReadAsStringAsync();
-                                }
-                            }
-
-
-                            content.Add(new StringContent(name, Encoding.UTF8, "text/plain"), "name");
-                            content.Add(new StringContent(city, Encoding.UTF8, "text/plain"), "city");
-                            content.Add(new StringContent(phone, Encoding.UTF8, "text/plain"), "phone");
-                            content.Add(new StringContent(companyAddress, Encoding.UTF8, "text/plain"), "address");
-                            content.Add(new StringContent(country, Encoding.UTF8, "text/plain"), "country");
-                            content.Add(new StringContent(email, Encoding.UTF8, "text/plain"), "email");
-                            content.Add(new StringContent(localId, Encoding.UTF8, "text/plain"), "identifier_for_vendor");
-                            content.Add(new StringContent(isContractor, Encoding.UTF8, "text/plain"), "is_contractor");
-                            content.Add(new StringContent(category, Encoding.UTF8, "text/plain"), "work_categories");
-                            content.Add(new StringContent(companyName, Encoding.UTF8, "text/plain"), "company_name");
-                            content.Add(new StringContent(companyAddress, Encoding.UTF8, "text/plain"), "company_address");
-
-                            if (!string.IsNullOrEmpty(userRegistration.ProfileImagePath) && File.Exists(userRegistration.ProfileImagePath))
-                            {
-                                using (var stream = File.OpenRead(userRegistration.ProfileImagePath))
-                                {
-                                    //stream.Seek(0, SeekOrigin.Begin);
-                                    var fileName = Guid.NewGuid().ToString() + ".jpg";
-                                    content.Add(new ByteArrayContent(Utilities.ReadFully(stream)), "image", fileName);
-                                    response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
-                                }
-                            }
-                            else
-                            {
-                                response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    }
+                    IRestResponse r = client.Execute(request);
                 }
             }
 
