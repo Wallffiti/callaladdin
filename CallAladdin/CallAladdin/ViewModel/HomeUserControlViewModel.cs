@@ -17,5 +17,10 @@ namespace CallAladdin.ViewModel
             this.userProfile = userProfile;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
+
+        public async System.Threading.Tasks.Task NavigateToJobRequestAsync()
+        {
+            await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST);
+        }
     }
 }

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:local="clr-namespace:CallAladdin"
+                xmlns:conv="clr-namespace:CallAladdin.Converters"
+             x:Class="CallAladdin.JobRequestPage" FormattedTitle="JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
+    <local:CustomPage.Resources>
+        <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+    </local:CustomPage.Resources>
+    <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+        <FlexLayout Direction="Row" AlignItems="Center" JustifyContent="Center" Margin="0, 10, 0, 0" HorizontalOptions="Center">
+            <Image Source="{Binding ContractorIcon, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"/>
+            <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
+        </FlexLayout>
+        <Image Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" HorizontalOptions="Center"  VerticalOptions="Center"/>
+        <Grid Margin="20, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Title" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="0" Grid.Column="0" />
+            <Entry Placeholder="Need requestors to move furnitures" x:Name="TitleEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="{Binding Title}" FontSize="Small"/>
+
+            <Label Text="Scope of Work" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+            <Grid Grid.Row="2" Grid.Column="0"  Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Editor HeightRequest="60" Text="{Binding ScopeOfWork}" HorizontalOptions="FillAndExpand" Grid.Column="0" FontSize="Small"/>
+                <Image HorizontalOptions="End" VerticalOptions="Start"/>
+            </Grid>
+        </Grid>
+        <Grid Margin="20, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Preferred Start and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+            <DatePicker Grid.Row="1" Grid.Column="0" x:Name="StartDatePicker"/>
+            <TimePicker Grid.Row="1" Grid.Column="1" x:Name="StartTimePicker"/>
+            <Label Text="Preferred End and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
+            <DatePicker Grid.Row="3" Grid.Column="0" x:Name="EndDatePicker"/>
+            <TimePicker Grid.Row="3" Grid.Column="1" x:Name="EndTimePicker"/>
+        </Grid>
+        <Grid Margin="20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="City" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+            <Picker x:Name="CityPicker" Title="City" ItemsSource="{Binding Cities}" Grid.Row="0" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCity}">
+            </Picker>
+        </Grid>
+    </StackLayout>
+</local:CustomPage>

@@ -17,6 +17,12 @@ namespace CallAladdin.Converters
             {
                 try
                 {
+                    var param = (string)parameter;
+                    if (!string.IsNullOrEmpty(param) && param == "isEmbedded")
+                    {
+                        return ImageSource.FromResource(path);
+                    }
+
                     if (Validators.ValidateUrl(path))
                     {
                         return ImageSource.FromUri(new Uri(path));

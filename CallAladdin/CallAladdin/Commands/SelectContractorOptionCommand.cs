@@ -23,7 +23,7 @@ namespace CallAladdin.Commands
 
         public void Execute(object parameter)
         {
-            //TODO
+            homeUserControlViewModel.NavigateToJobRequestAsync();
         }
     }
 }

@@ -62,6 +62,9 @@ namespace CallAladdin
                 case PageType.EDIT_CONTRACTOR_PROFILE:
                     view = new EditContractorProfilePage(parameter);
                     break;
+                case PageType.JOB_REQUEST:
+                    view = new JobRequestPage(parameter);
+                    break;
                 case PageType.DUMMY:
                     view = new DummyPage();
                     break;
@@ -188,6 +191,7 @@ namespace CallAladdin
         CHANGE_PHONE_NUMBER = 6,
         EDIT_REQUESTOR_PROFILE = 7,
         EDIT_CONTRACTOR_PROFILE = 8,
+        JOB_REQUEST = 9,
         DUMMY = 99
     }
 
