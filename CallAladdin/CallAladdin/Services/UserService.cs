@@ -10,6 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http.Headers;
+using RestSharp;
+using CallAladdin.Helper;
+using Newtonsoft.Json.Linq;
 
 namespace CallAladdin.Services
 {
@@ -34,6 +37,7 @@ namespace CallAladdin.Services
                 {
                     //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", apiKey);
                     httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + apiKey);
+                    //httpClient.DefaultRequestHeaders.Add("content-type", "multipart/form-data");
                     var boundary = "Upload----" + DateTime.Now.Ticks.ToString();
 
                     using (var content = new MultipartFormDataContent(boundary))
@@ -50,31 +54,61 @@ namespace CallAladdin.Services
                             var email = string.IsNullOrEmpty(userRegistration.Email) ? "" : userRegistration.Email;
                             var isContractor = userRegistration.IsRegisteredAsContractor.ToString();
                             var category = string.IsNullOrEmpty(userRegistration.Category) ? "" : userRegistration.Category;
-                            var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "" : userRegistration.CompanyName;
-                            var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "" : userRegistration.CompanyAddress;
+                            var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "Unspecified" : userRegistration.CompanyName;
+                            var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
 
-                            //TEST
-                            //var body = new
+                            //TEST using restsharp
+                            //var client = new RestClient("https://call-aladdin-dev.herokuapp.com/api/user_profiles/");
+                            //var request = new RestRequest(Method.POST);
+                            //request.AddHeader("postman-token", "c51b5943-db03-a887-372e-79ef32cb03c1");
+                            //request.AddHeader("cache-control", "no-cache");
+                            //request.AddHeader("authorization", "Basic bmc0bjI1alZGS3pMQTZIZTp3U1NhayhQWU5ieDQ1JSQv");
+                            //request.AddParameter("name", name);
+                            //request.AddParameter("city", city);
+                            //request.AddParameter("phone", phone);
+                            //request.AddParameter("address", companyAddress);
+                            //request.AddParameter("country", country);
+                            //request.AddParameter("email", email);
+                            //request.AddParameter("identifier_for_vendor", localId);
+                            //request.AddParameter("is_contractor", isContractor);
+                            //request.AddParameter("work_categories", category);
+                            //request.AddParameter("company_name", companyName);
+                            //request.AddParameter("company_address", companyAddress);
+
+                            //using (var fs = File.OpenRead(userRegistration.ProfileImagePath))
                             //{
-                            //    city,
-                            //    phone,
-                            //    address,
-                            //    country,
-                            //    email,
-                            //    name,
-                            //    identifier_for_vendor = localId,
-                            //    is_contractor = isContractor,
-                            //    work_categories = category,
-                            //    company_name = companyName,
-                            //    company_address = companyAddress
-                            //};
+                            //    var bytes = Utilities.ReadFully(fs);
+                            //    request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
 
-                            //var bodyStr = JsonConvert.SerializeObject(body);
-                            //var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+                            //    IRestResponse r = client.Execute(request);
+                            //}
+                            //TEST using restsharp end
 
-                            //content.Add(stringContent);
-                            //response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
-                            //TEST
+                            Uri postURL = new Uri(fullUrl);
+                            using (var client = new HttpClient())
+                            {
+                                using (var stream = File.OpenRead(userRegistration.ProfileImagePath))
+                                {
+                                    JObject RequestData = new JObject(
+                                   new JProperty("name", name),
+                                   new JProperty("city", city),
+                                   new JProperty("phone", phone),
+                                   new JProperty("address", address),
+                                   new JProperty("country", country),
+                                   new JProperty("email", email),
+                                   new JProperty("identifier_for_vendor", localId),
+                                   new JProperty("is_contractor", isContractor),
+                                   new JProperty("work_categories", category),
+                                   new JProperty("company_name", companyName),
+                                   new JProperty("company_address", companyAddress));
+                                   //new JProperty("image", System.Convert.ToBase64String(Utilities.ReadFully(stream))));
+
+                                    var RequestDataString = new StringContent(RequestData.ToString(), Encoding.UTF8, "application/json");
+                                    HttpResponseMessage responsePost = await client.PostAsync(postURL, RequestDataString).ConfigureAwait(false);
+                                    string resp = await responsePost.Content.ReadAsStringAsync();
+                                }
+                            }
+
 
                             content.Add(new StringContent(name, Encoding.UTF8, "text/plain"), "name");
                             content.Add(new StringContent(city, Encoding.UTF8, "text/plain"), "city");
@@ -94,7 +128,7 @@ namespace CallAladdin.Services
                                 {
                                     //stream.Seek(0, SeekOrigin.Begin);
                                     var fileName = Guid.NewGuid().ToString() + ".jpg";
-                                    content.Add(new StreamContent(stream), "image", fileName);
+                                    content.Add(new ByteArrayContent(Utilities.ReadFully(stream)), "image", fileName);
                                     response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
                                 }
                             }
@@ -135,7 +169,7 @@ namespace CallAladdin.Services
                         {
                             dynamic responseData = JsonConvert.DeserializeObject(content);
                             dynamic item = responseData?[0];
-                           if (item != null)
+                            if (item != null)
                             {
                                 result = new UserProfile
                                 {
