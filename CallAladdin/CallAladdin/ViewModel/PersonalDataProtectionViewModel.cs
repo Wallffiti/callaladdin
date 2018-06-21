@@ -57,7 +57,6 @@ namespace CallAladdin.ViewModel
             .Append("<body style=\"background-color: #EAECF5\">")
             .Append("<div style=\"background-color: lightgray; padding: 10px\">")
 
-            //TODO for body
             .Append(" <h3><u>PERSONAL DATA PROTECTION</u></h3>")
             .Append(" <p>You agree and consent to the Company using and processing your Personal Data for the Purposes and in the manner as identified hereunder.</p>")
             .Append(" <p>The Company views your Personal Data and privacy seriously. For the purposes of this Agreement, “Personal Data” means information about you, from which you are identifiable, including but not limited to your name, identification card number, birth certificate number, passport number, nationality, address, telephone number, credit or debit card details, race, gender, date of birth, email address, any information about you which you have provided to the Company in registration forms, application forms or any other similar forms and / or any information about you that has been or may be collected, stored, used and processed by the Company from time to time and includes sensitive personal data such as data relating to health, religious or other similar beliefs.</p>")

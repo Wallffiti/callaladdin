@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CallAladdin.Model
+namespace CallAladdin.Model.Requests
 {
-    public class Job
+    public class JobRequestRequest
     {
-        public string SystemUUID { get; set; }
         public string RequestorSystemUUID { get; set; }
         public string ImagePath { get; set; }
         public string Title { get; set; }
@@ -20,11 +19,10 @@ namespace CallAladdin.Model
         public bool ContractorSystemUUID { get; set; }
         public string Category { get; set; }
         public string Status { get; set; }
-        public float Rating { get; set; }
+       
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
-        public DateTime CreatedDateTime { get; set; }
-        public DateTime ModifiedDateTime { get; set; }
+
         public string Comment { get; set; }
     }
 }

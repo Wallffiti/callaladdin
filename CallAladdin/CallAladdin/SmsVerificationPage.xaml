@@ -16,7 +16,6 @@
             <Label Text="{Binding MobileNumber}" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Center"/>
             <Label Text="Have not received it?" FontSize="Small" HorizontalOptions="Center"/>
             <Label Text="Tap here to resend" FontSize="Small" HorizontalOptions="Center" TextColor="Purple">
-                <!--todo-->
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding SmsCodeResendCmd}" />
                 </Label.GestureRecognizers>
@@ -27,7 +26,6 @@
                     <TapGestureRecognizer Command="{Binding ChangePhoneNumberCmd}" />
                 </Label.GestureRecognizers>
             </Label>
-            <!--todo-->
         </StackLayout>
         <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Text="SUBMIT" Margin="100,20" Command="{Binding GoToHomeCmd}" CommandParameter="{Binding SmsCode}"/>
     </Grid>
