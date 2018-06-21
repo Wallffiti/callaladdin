@@ -10,7 +10,7 @@ namespace CallAladdin.Services.Interfaces
         Task<UserLoginResponse> LoginUserToAuthServer(UserLogin userLogin);
         Task<UserRegistrationOnServerResponse> CreateUser(UserRegistration userRegistration, string localId);
         Task<UserProfile> GetUserProfile(string localId);
-        Task<bool> UpdateUserProfile(UserProfile userProfile);
+        Task<bool> UpdateUserProfile(UserProfile userProfile, string localId);
         Task<bool> SendForgottenPasswordLink(string email);
     }
 }

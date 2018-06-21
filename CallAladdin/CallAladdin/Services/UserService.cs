@@ -316,10 +316,79 @@ namespace CallAladdin.Services
             return result;
         }
 
-        public async Task<bool> UpdateUserProfile(UserProfile userProfile)
+        public async Task<bool> UpdateUserProfile(UserProfile userProfile, string localId)
         {
-            //TODO
-            return true;
+            IRestResponse response = null;
+            var result = false;
+
+            if (userProfile != null && !string.IsNullOrEmpty(localId))
+            {
+                var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+                var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+                if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+                {
+                    var fullUrl = baseUrl + "/user_profiles/" + userProfile.SystemUUID + "/";
+
+                    var name = userProfile.Name;
+                    var city = userProfile.City;
+                    var phone = userProfile.Mobile;
+                    var address = string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress) ? "Unspecified" : userProfile.CompanyRegisteredAddress;
+                    var country = userProfile.Country;
+                    var email = userProfile.Email;
+                    var isContractor = userProfile.IsContractor;
+                    var category = string.IsNullOrEmpty(userProfile.Category) ? "" : userProfile.Category;
+                    var companyName = string.IsNullOrEmpty(userProfile.CompanyName) ? "Unspecified" : userProfile.CompanyName;
+                    var companyAddress = string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress) ? "Unspecified" : userProfile.CompanyRegisteredAddress;
+
+                    var client = new RestClient(fullUrl);
+                    var request = new RestRequest(Method.PATCH);
+
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "Basic " + apiKey);
+                    request.AddParameter("name", name);
+                    request.AddParameter("city", city);
+                    request.AddParameter("phone", phone);
+                    request.AddParameter("address", address);
+                    request.AddParameter("country", country);
+                    request.AddParameter("email", email);
+                    request.AddParameter("identifier_for_vendor", localId);
+                    request.AddParameter("is_contractor", isContractor);
+                    request.AddParameter("work_categories", category);
+                    request.AddParameter("company_name", companyName);
+                    request.AddParameter("company_address", companyAddress);
+
+                    try
+                    {
+                        //if it is not email, then assume that it is path for a file locally
+                        if (!Validators.ValidateUrl(userProfile.PathToProfileImage))
+                        {
+                            if (File.Exists(userProfile.PathToProfileImage))
+                            {
+                                using (var fs = File.OpenRead(userProfile.PathToProfileImage))
+                                {
+                                    var bytes = Utilities.StreamToBytes(fs);
+                                    request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
+
+                                    response = client.Execute(request);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            response = client.Execute(request);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+
+            result = response != null && response.IsSuccessful;
+
+            return result;
         }
     }
 }
