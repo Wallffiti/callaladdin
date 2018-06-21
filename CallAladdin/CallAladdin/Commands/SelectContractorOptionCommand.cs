@@ -27,7 +27,7 @@ namespace CallAladdin.Commands
                 return;
 
             var category = (string)parameter;
-            homeUserControlViewModel.NavigateToJobRequestAsync(category);
+            homeUserControlViewModel.NavigateToJobRequest(category);
         }
     }
 }

@@ -8,11 +8,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Windows.Input;
+using CallAladdin.Helper;
 
 namespace CallAladdin.ViewModel
 {
     public class JobRequestViewModel : BaseViewModel
     {
+        private const string CHOOSE_PHOTO_FROM_CAMERA = "Choose photo from camera";
+        private const string BROWSE_PHOTO_FROM_FOLDER = "Browse photo from folder";
+
         private string contractorIcon;
         private string jobRequestType;
         private string jobRequestImage;
@@ -24,6 +29,8 @@ namespace CallAladdin.ViewModel
         private string location;
         private int contractorsAvailable;
         private IList<string> cities;
+        private IList<string> photoOptionSelections;
+        private string selectedPhotoOption;
         private bool isBusy;
         private ILocationService locationService;
         private IUserProfileRepository userProfileRepository;
@@ -94,11 +101,26 @@ namespace CallAladdin.ViewModel
             set { cities = value; OnPropertyChanged("Cities"); }
         }
 
+        public IList<string> PhotoOptionSelections
+        {
+            get { return photoOptionSelections; }
+            set { photoOptionSelections = value; OnPropertyChanged("PhotoOptionSelections"); }
+        }
+
+        public string SelectedPhotoOption
+        {
+            get { return selectedPhotoOption; }
+            set { selectedPhotoOption = value; OnPropertyChanged("SelectedPhotoOption"); }
+        }
+
         public bool IsBusy
         {
             get { return isBusy; }
             set { isBusy = value; OnPropertyChanged("IsBusy"); }
         }
+
+        public ICommand SearchLocationCmd { get; set; }
+        public ICommand ChangeProfileImageCmd { get; set; }
 
         private string userSystemUUID;
         private IJobService jobService;
@@ -116,8 +138,56 @@ namespace CallAladdin.ViewModel
             locationService = new LocationService();
             userProfileRepository = new UserProfileRepository();
             PopulateLocations();
-            JobRequestImage = "CallAladdin.Assets.Images.default_avatar_image.jpeg";
+            //JobRequestImage = "CallAladdin.Assets.Images.default_avatar_image.jpeg";
             ContractorsAvailable = 0;   //TODO: call api
+            SearchLocationCmd = new Xamarin.Forms.Command(e =>
+            {
+                //TODO: navigate to location page
+            }, (param) =>
+            {
+                return true;
+            });
+            ChangeProfileImageCmd = new Xamarin.Forms.Command(e =>
+            {
+                ChangeProfileImageAsync();
+            }, (param) =>
+            {
+                return true;
+            });
+            LoadImageUploaderOptions();
+        }
+
+        private async void ChangeProfileImageAsync()
+        {
+            string filePath = "";
+
+            try
+            {
+                if (this.selectedPhotoOption == CHOOSE_PHOTO_FROM_CAMERA)
+                {
+                    filePath = await Utilities.TakePhoto(new Guid().ToString());
+                }
+                else if (this.selectedPhotoOption == BROWSE_PHOTO_FROM_FOLDER)
+                {
+                    filePath = await Utilities.PickPhoto();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            JobRequestImage = filePath;
+        }
+
+        private void LoadImageUploaderOptions()
+        {
+            PhotoOptionSelections = new List<string>
+            {
+                CHOOSE_PHOTO_FROM_CAMERA,
+                BROWSE_PHOTO_FROM_FOLDER
+            };
+            SelectedPhotoOption = BROWSE_PHOTO_FROM_FOLDER;
         }
 
         private void PopulateLocations()

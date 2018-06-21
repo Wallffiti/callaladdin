@@ -30,8 +30,6 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ActivityIndicator x:Name="ProgressIndicator" Grid.Row="3" Grid.Column="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" />
-
             <!--row 1-->
             <Grid Grid.Row="0" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}">
                 <Grid.GestureRecognizers>
@@ -138,6 +136,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" /> <!--TEST-->
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.PLASTERED_CEILING.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.PLASTERED_CEILING}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>

@@ -36,7 +36,20 @@ namespace CallAladdin.ViewModel
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
 
-        public async void NavigateToJobRequestAsync(string category)
+        public void NavigateToJobRequest(string category)
+        {
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Request a job under the category of " + category + "?", "Yes", "No", async () =>
+            {
+                //For android
+                await GoToJobRequestAsync(category);
+            }, async () =>
+            {
+                //For ios
+                await GoToJobRequestAsync(category);
+            });
+        }
+
+        private async Task GoToJobRequestAsync(string category)
         {
             if (IsBusy)
             {
