@@ -10,10 +10,11 @@ using CallAladdin.Model.Responses;
 using RestSharp;
 using System.IO;
 using CallAladdin.Helper;
+using CallAladdin.Services.Interfaces;
 
 namespace CallAladdin.Services
 {
-    public class JobService
+    public class JobService : IJobService
     {
         public async Task<JobRequestResponse> CreateRequest(JobRequestRequest jobRequest)
         {

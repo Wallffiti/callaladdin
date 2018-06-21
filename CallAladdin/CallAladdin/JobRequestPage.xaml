@@ -48,11 +48,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Text="Preferred Start and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
-            <DatePicker Grid.Row="1" Grid.Column="0" x:Name="StartDatePicker"/>
-            <TimePicker Grid.Row="1" Grid.Column="1" x:Name="StartTimePicker"/>
+            <DatePicker Grid.Row="1" Grid.Column="0" x:Name="StartDatePicker" FontSize="Small" TextColor="Green"/>
+            <TimePicker Grid.Row="1" Grid.Column="1" x:Name="StartTimePicker" FontSize="Small" TextColor="Green"/>
             <Label Text="Preferred End and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
-            <DatePicker Grid.Row="3" Grid.Column="0" x:Name="EndDatePicker"/>
-            <TimePicker Grid.Row="3" Grid.Column="1" x:Name="EndTimePicker"/>
+            <DatePicker Grid.Row="3" Grid.Column="0" x:Name="EndDatePicker" FontSize="Small" TextColor="Red"/>
+            <TimePicker Grid.Row="3" Grid.Column="1" x:Name="EndTimePicker" FontSize="Small" TextColor="Red"/>
         </Grid>
         <Grid Margin="20,0">
             <Grid.ColumnDefinitions>

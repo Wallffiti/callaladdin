@@ -16,7 +16,7 @@ namespace CallAladdin
 		public JobRequestPage(object owner)
 		{
 			InitializeComponent ();
-            BindingContext = new JobRequestViewModel();
+            BindingContext = new JobRequestViewModel(owner);
 		}
 	}
 }

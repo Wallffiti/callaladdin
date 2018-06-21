@@ -23,7 +23,11 @@ namespace CallAladdin.Commands
 
         public void Execute(object parameter)
         {
-            homeUserControlViewModel.NavigateToJobRequestAsync();
+            if (parameter == null)
+                return;
+
+            var category = (string)parameter;
+            homeUserControlViewModel.NavigateToJobRequestAsync(category);
         }
     }
 }

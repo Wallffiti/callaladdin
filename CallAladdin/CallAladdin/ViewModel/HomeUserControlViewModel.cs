@@ -1,28 +1,110 @@
 ﻿using CallAladdin.Commands;
 using CallAladdin.Model;
+using CallAladdin.Services;
+using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Linq;
 
 namespace CallAladdin.ViewModel
 {
     public class HomeUserControlViewModel : BaseViewModel
     {
         //private UserProfile userProfile;
+        private IJobService jobService;
         private string userSystemUUID;
+        private bool isBusy;
         public ICommand SelectOptionCmd { get; set; }
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged("IsBusy");
+            }
+        }
 
         public HomeUserControlViewModel(UserProfile userProfile)
         {
             //this.userProfile = userProfile;
+            jobService = new JobService();
             this.userSystemUUID = userProfile?.SystemUUID;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
 
-        public async System.Threading.Tasks.Task NavigateToJobRequestAsync()
+        public async void NavigateToJobRequestAsync(string category)
         {
-            await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST);
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+
+            var isEligible = await IsEligibleForRequest();
+
+            if (isEligible == null)
+            {
+                Navigator.Instance.OkAlert("Error", "There is a problem contacting the server to request for jobs. Please try again later.", "OK");
+                IsBusy = false;
+                return;
+            }
+
+            if (isEligible == true)
+            {
+                await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, new JobRequestParameters
+                {
+                    UserSystemUUID = userSystemUUID,
+                    JobCategoryType = category
+                });
+            }
+            else
+            {
+                Navigator.Instance.OkAlert("LIMIT REACHED", "Sorry you can't request anymore job in this category as you have reached this monthly limit (" + Constants.ALLOWABLE_JOB_REQUESTS_PER_MONTH + " per month). If you still want to raise, please call " + Constants.ADMIN_NUMBER, "OK");
+            }
+
+            IsBusy = false;
+        }
+
+        public async Task<bool?> IsEligibleForRequest()
+        {
+            bool? result = null;
+
+            var jobs = await jobService.GetJobs(userSystemUUID);
+
+            if (jobs != null)
+            {
+                var now = DateTime.Now;
+                var monthStart = new DateTime(now.Year, now.Month, 1);
+                int daysPerMonth = 30;
+
+                if (now.Month == 2)
+                {
+                    if (now.Year % 4 == 0)
+                    {
+                        daysPerMonth = 29;
+                    }
+                    else
+                    {
+                        daysPerMonth = 28;
+                    }
+                }
+                else if (now.Month == 1 || now.Month == 3 || now.Month == 5 || now.Month == 7 || now.Month == 8 || now.Month == 10 || now.Month == 12)
+                {
+                    daysPerMonth = 31;
+                }
+
+                var monthEnd = new DateTime(now.Year, now.Month, daysPerMonth);
+                var requestsThisMonth = jobs.Where(p => p.CreatedDateTime > monthStart && p.CreatedDateTime < monthEnd).Count();
+                result = requestsThisMonth <= Constants.ALLOWABLE_JOB_REQUESTS_PER_MONTH;
+            }
+
+            return result;
         }
     }
 }

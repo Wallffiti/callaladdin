@@ -9,6 +9,8 @@ namespace CallAladdin
         // GENERAL
 
         public const string PRINCIPAL = "PRINCIPAL";
+        public const string ADMIN_NUMBER = "+601235678";
+        public const int ALLOWABLE_JOB_REQUESTS_PER_MONTH = 3;
 
         //HOME ICONS
 
