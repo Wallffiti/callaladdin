@@ -17,6 +17,7 @@ namespace CallAladdin.ViewModel
         private ILocationService locationService;
         private IUserService userService;
         private IUserProfileRepository userProfileRepository;
+        private IUserIdentityRepository userIdentityRepository;
         private ICommand submitProfileChangeCmd;
         private ICommand changeProfileImageCmd;
         private bool isBusy;
@@ -234,6 +235,7 @@ namespace CallAladdin.ViewModel
         }
 
         private UserProfileUserControlViewModel parentViewModel;
+        private string userSystemUUID;
 
         public EditRequestorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
         {
@@ -241,6 +243,7 @@ namespace CallAladdin.ViewModel
             locationService = new LocationService();
             userService = new UserService();
             userProfileRepository = new UserProfileRepository();
+            userIdentityRepository = new UserIdentityRepository();
             SubmitProfileChangeCmd = new Xamarin.Forms.Command((e) =>
             {
                 Navigator.Instance.ConfirmationAlert("Confirmation", "Submit your profile now?", "OK", "Cancel", () =>
@@ -383,6 +386,7 @@ namespace CallAladdin.ViewModel
                 SelectedCity = userProfile.City;
                 SelectedCountry = userProfile.Country;
                 ImagePath = userProfile.PathToProfileImage;
+                userSystemUUID = userProfile.SystemUUID;
             }
 
             UpdateUserProfile();
@@ -424,7 +428,8 @@ namespace CallAladdin.ViewModel
                 PathToProfileImage = imagePath,
                 Category = selectedCategory,
                 CompanyName = company,
-                CompanyRegisteredAddress = companyAddress
+                CompanyRegisteredAddress = companyAddress,
+                SystemUUID = userSystemUUID
             };
         }
 
@@ -468,7 +473,8 @@ namespace CallAladdin.ViewModel
                 return;
 
             IsBusy = true;
-            var response = await userService.UpdateUserProfile(this.userProfile);
+            var userIdentity = userIdentityRepository.GetUserIdentity();
+            var response = await userService.UpdateUserProfile(this.userProfile, userIdentity?.LocalId);
 
             if (response)
             {

@@ -10,7 +10,7 @@ namespace CallAladdin.Helper
 {
     public class Utilities
     {
-        public static byte[] ReadFully(Stream input)
+        public static byte[] StreamToBytes(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
             using (MemoryStream ms = new MemoryStream())

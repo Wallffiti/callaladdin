@@ -89,6 +89,8 @@ namespace CallAladdin.ViewModel
             set { imagePath = value; OnPropertyChanged("ImagePath"); }
         }
 
+        private string userSystemUUID;
+
         public ICommand LogoutCmd { get; set; }
         public ICommand EditProfileCmd { get; set; }
 
@@ -122,6 +124,7 @@ namespace CallAladdin.ViewModel
                 }
 
                 ImagePath = userProfile.PathToProfileImage;
+                userSystemUUID = userProfile.SystemUUID;
             }
         }
 

@@ -20,5 +20,6 @@ namespace CallAladdin.Model.Entities
         public string CompanyRegisteredAddress { get; set; }
         public string PathToProfileImage { get; set; }
         public bool IsContractor { get; set; }
+        public string SystemGeneratedId { get; set; }
     }
 }

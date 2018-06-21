@@ -9,7 +9,7 @@ namespace CallAladdin.ViewModel
 {
     public class HomeViewModel : BaseViewModel
     {
-        private UserProfile userProfile;
+        //private UserProfile userProfile;
         public DummyCommand dummyCmd { get; set; }
         public Dummy2Command dummy2Cmd { get; set; }
 
@@ -31,7 +31,7 @@ namespace CallAladdin.ViewModel
 
         public HomeViewModel(UserProfile userProfile)
         {
-            this.userProfile = userProfile;
+            //this.userProfile = userProfile;
             dummyCmd = new DummyCommand(this);
             dummy2Cmd = new Dummy2Command(this);
             HomeUserControlViewModel = new HomeUserControlViewModel(userProfile);

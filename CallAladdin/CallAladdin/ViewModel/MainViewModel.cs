@@ -106,7 +106,8 @@ namespace CallAladdin.ViewModel
                 IsContractor = userProfile.IsContractor,
                 Mobile = userProfile.Mobile,
                 Name = userProfile.Name,
-                PathToProfileImage = userProfile.PathToProfileImage
+                PathToProfileImage = userProfile.PathToProfileImage,
+                SystemGeneratedId = userProfile.SystemUUID
             };
         }
 
@@ -128,6 +129,7 @@ namespace CallAladdin.ViewModel
                     Mobile = userProfileEntity.Mobile,
                     Name = userProfileEntity.Name,
                     PathToProfileImage = userProfileEntity.PathToProfileImage,
+                    SystemUUID = userProfileEntity.SystemGeneratedId
                     //TODO: fill in review data
                 };
             }

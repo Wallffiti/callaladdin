@@ -10,6 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http.Headers;
+using RestSharp;
+using CallAladdin.Helper;
+using Newtonsoft.Json.Linq;
 
 namespace CallAladdin.Services
 {
@@ -20,94 +23,76 @@ namespace CallAladdin.Services
             if (string.IsNullOrEmpty(localId) || userRegistration == null)
                 return null;
 
-            //TODO: add logic to fill in UserRegistrationOnServerResponse
             var result = new UserRegistrationOnServerResponse();
-            result.IsSuccess = true;    //DEBUG
+            //result.IsSuccess = true;    //DEBUG
             var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
             var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
-            HttpResponseMessage response = null;
+            IRestResponse response = null;
 
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
-                var fullUrl = baseUrl + "/user_profiles";
-                using (var httpClient = new HttpClient())
+                var fullUrl = baseUrl + "/user_profiles/";
+                var name = userRegistration.Name;
+                var city = userRegistration.City;
+                var phone = userRegistration.Mobile;
+                var address = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
+                var country = userRegistration.Country;
+                var email = userRegistration.Email;
+                var isContractor = userRegistration.IsRegisteredAsContractor;
+                var category = string.IsNullOrEmpty(userRegistration.Category) ? "" : userRegistration.Category;
+                var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "Unspecified" : userRegistration.CompanyName;
+                var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
+
+
+                var client = new RestClient(fullUrl);
+                var request = new RestRequest(Method.POST);
+                //request.AddHeader("postman-token", "c51b5943-db03-a887-372e-79ef32cb03c1");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "Basic " + apiKey);
+                request.AddParameter("name", name);
+                request.AddParameter("city", city);
+                request.AddParameter("phone", phone);
+                request.AddParameter("address", address);
+                request.AddParameter("country", country);
+                request.AddParameter("email", email);
+                request.AddParameter("identifier_for_vendor", localId);
+                request.AddParameter("is_contractor", isContractor);
+                request.AddParameter("work_categories", category);
+                request.AddParameter("company_name", companyName);
+                request.AddParameter("company_address", companyAddress);
+
+                try
                 {
-                    //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", apiKey);
-                    httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + apiKey);
-                    var boundary = "Upload----" + DateTime.Now.Ticks.ToString();
-
-                    using (var content = new MultipartFormDataContent(boundary))
+                    if (File.Exists(userRegistration.ProfileImagePath))
                     {
-                        try
+                        using (var fs = File.OpenRead(userRegistration.ProfileImagePath))
                         {
-                            var name = string.IsNullOrEmpty(userRegistration.Name) ? "" : userRegistration.Name;
-                            var city = string.IsNullOrEmpty(userRegistration.City) ? "" : userRegistration.City.ToUpper();
-                            var phone = string.IsNullOrEmpty(userRegistration.Mobile) ? "" : userRegistration.Mobile;
-                            phone = phone.Replace(" ", ""); //remove empty string in between and at edges
-                            phone = phone.StartsWith("+") ? phone : "+" + phone;
-                            var address = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
-                            var country = string.IsNullOrEmpty(userRegistration.Country) ? "" : userRegistration.Country.ToUpper();
-                            var email = string.IsNullOrEmpty(userRegistration.Email) ? "" : userRegistration.Email;
-                            var isContractor = userRegistration.IsRegisteredAsContractor.ToString();
-                            var category = string.IsNullOrEmpty(userRegistration.Category) ? "" : userRegistration.Category;
-                            var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "" : userRegistration.CompanyName;
-                            var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "" : userRegistration.CompanyAddress;
+                            var bytes = Utilities.StreamToBytes(fs);
+                            request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
 
-                            //TEST
-                            //var body = new
-                            //{
-                            //    city,
-                            //    phone,
-                            //    address,
-                            //    country,
-                            //    email,
-                            //    name,
-                            //    identifier_for_vendor = localId,
-                            //    is_contractor = isContractor,
-                            //    work_categories = category,
-                            //    company_name = companyName,
-                            //    company_address = companyAddress
-                            //};
-
-                            //var bodyStr = JsonConvert.SerializeObject(body);
-                            //var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
-
-                            //content.Add(stringContent);
-                            //response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
-                            //TEST
-
-                            content.Add(new StringContent(name, Encoding.UTF8, "text/plain"), "name");
-                            content.Add(new StringContent(city, Encoding.UTF8, "text/plain"), "city");
-                            content.Add(new StringContent(phone, Encoding.UTF8, "text/plain"), "phone");
-                            content.Add(new StringContent(companyAddress, Encoding.UTF8, "text/plain"), "address");
-                            content.Add(new StringContent(country, Encoding.UTF8, "text/plain"), "country");
-                            content.Add(new StringContent(email, Encoding.UTF8, "text/plain"), "email");
-                            content.Add(new StringContent(localId, Encoding.UTF8, "text/plain"), "identifier_for_vendor");
-                            content.Add(new StringContent(isContractor, Encoding.UTF8, "text/plain"), "is_contractor");
-                            content.Add(new StringContent(category, Encoding.UTF8, "text/plain"), "work_categories");
-                            content.Add(new StringContent(companyName, Encoding.UTF8, "text/plain"), "company_name");
-                            content.Add(new StringContent(companyAddress, Encoding.UTF8, "text/plain"), "company_address");
-
-                            if (!string.IsNullOrEmpty(userRegistration.ProfileImagePath) && File.Exists(userRegistration.ProfileImagePath))
-                            {
-                                using (var stream = File.OpenRead(userRegistration.ProfileImagePath))
-                                {
-                                    //stream.Seek(0, SeekOrigin.Begin);
-                                    var fileName = Guid.NewGuid().ToString() + ".jpg";
-                                    content.Add(new StreamContent(stream), "image", fileName);
-                                    response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
-                                }
-                            }
-                            else
-                            {
-                                response = await httpClient.PostAsync(fullUrl, content).ConfigureAwait(false);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-
+                            response = client.Execute(request);
                         }
                     }
+                    else
+                    {
+                        response = client.Execute(request); 
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            if (response != null && response.IsSuccessful)
+            {
+                var strResponse = response?.Content;
+                dynamic responseData = string.IsNullOrEmpty(strResponse) ? "" : JsonConvert.DeserializeObject(strResponse);
+
+                if (responseData != null)
+                {
+                    result.SystemGeneratedId = responseData.uuid;
+                    result.IsSuccess = true;
                 }
             }
 
@@ -135,7 +120,7 @@ namespace CallAladdin.Services
                         {
                             dynamic responseData = JsonConvert.DeserializeObject(content);
                             dynamic item = responseData?[0];
-                           if (item != null)
+                            if (item != null)
                             {
                                 result = new UserProfile
                                 {
@@ -158,40 +143,24 @@ namespace CallAladdin.Services
                     }
                     catch (Exception ex)
                     {
-                        result = new UserProfile()    //DEBUG
-                        {
-                            Name = "Jackson",
-                            Mobile = "012 345 678",
-                            Email = "dimensionconcept@yahoo.com",
-                            City = "Miri",
-                            Country = "Malaysia",
-                            Category = Constants.INTERIOR_DESIGN_CARPENTERS,
-                            CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
-                            CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
-                            OverallRating = 4,
-                            TotalReviewers = 102,
-                            LastReviewedDate = new DateTime(2018, 5, 1),
-                            IsContractor = localId == "contractor"
-                        };
+                        //result = new UserProfile()    //DEBUG
+                        //{
+                        //    Name = "Jackson",
+                        //    Mobile = "012 345 678",
+                        //    Email = "dimensionconcept@yahoo.com",
+                        //    City = "Miri",
+                        //    Country = "Malaysia",
+                        //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
+                        //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
+                        //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
+                        //    OverallRating = 4,
+                        //    TotalReviewers = 102,
+                        //    LastReviewedDate = new DateTime(2018, 5, 1),
+                        //    IsContractor = localId == "contractor"
+                        //};
                     }
                 }
             }
-
-            //return new UserProfile()    //DEBUG
-            //{
-            //    Name = "Jackson",
-            //    Mobile = "012 345 678",
-            //    Email = "dimensionconcept@yahoo.com",
-            //    City = "Miri",
-            //    Country = "Malaysia",
-            //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
-            //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
-            //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
-            //    OverallRating = 4,
-            //    TotalReviewers = 102,
-            //    LastReviewedDate = new DateTime(2018, 5, 1),
-            //    IsContractor = localId == "contractor"
-            //};
 
             return result;
         }
@@ -347,10 +316,79 @@ namespace CallAladdin.Services
             return result;
         }
 
-        public async Task<bool> UpdateUserProfile(UserProfile userProfile)
+        public async Task<bool> UpdateUserProfile(UserProfile userProfile, string localId)
         {
-            //TODO
-            return true;
+            IRestResponse response = null;
+            var result = false;
+
+            if (userProfile != null && !string.IsNullOrEmpty(localId))
+            {
+                var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+                var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+                if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+                {
+                    var fullUrl = baseUrl + "/user_profiles/" + userProfile.SystemUUID + "/";
+
+                    var name = userProfile.Name;
+                    var city = userProfile.City;
+                    var phone = userProfile.Mobile;
+                    var address = string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress) ? "Unspecified" : userProfile.CompanyRegisteredAddress;
+                    var country = userProfile.Country;
+                    var email = userProfile.Email;
+                    var isContractor = userProfile.IsContractor;
+                    var category = string.IsNullOrEmpty(userProfile.Category) ? "" : userProfile.Category;
+                    var companyName = string.IsNullOrEmpty(userProfile.CompanyName) ? "Unspecified" : userProfile.CompanyName;
+                    var companyAddress = string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress) ? "Unspecified" : userProfile.CompanyRegisteredAddress;
+
+                    var client = new RestClient(fullUrl);
+                    var request = new RestRequest(Method.PATCH);
+
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "Basic " + apiKey);
+                    request.AddParameter("name", name);
+                    request.AddParameter("city", city);
+                    request.AddParameter("phone", phone);
+                    request.AddParameter("address", address);
+                    request.AddParameter("country", country);
+                    request.AddParameter("email", email);
+                    request.AddParameter("identifier_for_vendor", localId);
+                    request.AddParameter("is_contractor", isContractor);
+                    request.AddParameter("work_categories", category);
+                    request.AddParameter("company_name", companyName);
+                    request.AddParameter("company_address", companyAddress);
+
+                    try
+                    {
+                        //if it is not email, then assume that it is path for a file locally
+                        if (!Validators.ValidateUrl(userProfile.PathToProfileImage))
+                        {
+                            if (File.Exists(userProfile.PathToProfileImage))
+                            {
+                                using (var fs = File.OpenRead(userProfile.PathToProfileImage))
+                                {
+                                    var bytes = Utilities.StreamToBytes(fs);
+                                    request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
+
+                                    response = client.Execute(request);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            response = client.Execute(request);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+
+            result = response != null && response.IsSuccessful;
+
+            return result;
         }
     }
 }
