@@ -10,5 +10,6 @@ namespace CallAladdin.Model.Responses
     public class UserRegistrationOnServerResponse
     {
         public bool IsSuccess { get; set; }
+        public string SystemGeneratedId { get; set; }
     }
 }

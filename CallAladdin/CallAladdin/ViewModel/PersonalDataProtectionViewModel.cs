@@ -23,16 +23,6 @@ namespace CallAladdin.ViewModel
         private string personalDataProtectionText;
         private bool isBusy;
 
-        //public UserRegistration UserRegistration
-        //{
-        //    get { return userRegistration; }
-        //    set
-        //    {
-        //        userRegistration = value;
-        //        OnPropertyChanged("UserRegistration");
-        //    }
-        //}
-
         public string PersonalDataProtectionText
         {
             get { return personalDataProtectionText; }
@@ -192,9 +182,12 @@ namespace CallAladdin.ViewModel
 
                 if (createUserResponse != null && createUserResponse.IsSuccess)
                 {
+                    //3. Get a copy and store locally on device for identity and user profile
                     var userIdentityRowsAffected = userIdentityRepository.CreateOrUpdate(GetUserIdentityEntity(signupUserResponse));
 
-                    var userProfileRowsAffected = userProfileRepository.CreateOrUpdate(GetUserProfileEntity());
+                    var userProfileEntity = GetUserProfileEntity();
+                    userProfileEntity.SystemGeneratedId = createUserResponse.SystemGeneratedId;
+                    var userProfileRowsAffected = userProfileRepository.CreateOrUpdate(userProfileEntity);
 
                     if (userIdentityRowsAffected < 0 || userProfileRowsAffected < 0)
                     {
@@ -210,6 +203,7 @@ namespace CallAladdin.ViewModel
                         return;
                     }
                     UserProfile userProfile = GetUserProfile();
+                    userProfile.SystemUUID = createUserResponse.SystemGeneratedId;
 
                     //4. Navigate to home page
                     Navigator.Instance.OkAlert("Successful", "Thank you for registrating with us. You can now use Call Aladdin.", "OK", async () =>

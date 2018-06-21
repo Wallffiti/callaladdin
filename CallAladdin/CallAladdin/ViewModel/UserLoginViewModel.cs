@@ -221,7 +221,8 @@ namespace CallAladdin.ViewModel
                     IsContractor = userProfile.IsContractor,
                     Mobile = userProfile.Mobile,
                     Name = userProfile.Name,
-                    PathToProfileImage = userProfile.PathToProfileImage
+                    PathToProfileImage = userProfile.PathToProfileImage,
+                    SystemGeneratedId = userProfile.SystemUUID
                 };
             }
 

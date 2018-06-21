@@ -219,7 +219,8 @@ namespace CallAladdin.ViewModel
                 PathToProfileImage = imagePath,
                 Category = selectedCategory,
                 CompanyName = company,
-                CompanyRegisteredAddress = companyAddress
+                CompanyRegisteredAddress = companyAddress,
+                SystemUUID = userSystemUUID
             };
         }
 
@@ -239,6 +240,7 @@ namespace CallAladdin.ViewModel
                 SelectedCategory = userProfile.Category;
                 Company = userProfile.CompanyName;
                 CompanyAddress = userProfile.CompanyRegisteredAddress;
+                userSystemUUID = userProfile.SystemUUID;
             }
 
             UpdateUserProfile();
@@ -271,6 +273,7 @@ namespace CallAladdin.ViewModel
         }
 
         private UserProfileUserControlViewModel parentViewModel;
+        private string userSystemUUID;
 
         public EditContractorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
         {

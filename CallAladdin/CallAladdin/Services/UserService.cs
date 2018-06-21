@@ -39,7 +39,7 @@ namespace CallAladdin.Services
                 var country = userRegistration.Country;
                 var email = userRegistration.Email;
                 var isContractor = userRegistration.IsRegisteredAsContractor;
-                var category = userRegistration.Category;
+                var category = string.IsNullOrEmpty(userRegistration.Category) ? "" : userRegistration.Category;
                 var companyName = string.IsNullOrEmpty(userRegistration.CompanyName) ? "Unspecified" : userRegistration.CompanyName;
                 var companyAddress = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
 
@@ -75,7 +75,7 @@ namespace CallAladdin.Services
                     }
                     else
                     {
-                        response = client.Execute(request);
+                        response = client.Execute(request); 
                     }
                 }
                 catch (Exception ex)
@@ -86,7 +86,14 @@ namespace CallAladdin.Services
 
             if (response != null && response.IsSuccessful)
             {
-                result.IsSuccess = true;
+                var strResponse = response?.Content;
+                dynamic responseData = string.IsNullOrEmpty(strResponse) ? "" : JsonConvert.DeserializeObject(strResponse);
+
+                if (responseData != null)
+                {
+                    result.SystemGeneratedId = responseData.uuid;
+                    result.IsSuccess = true;
+                }
             }
 
             return result;

@@ -9,12 +9,14 @@ namespace CallAladdin.ViewModel
 {
     public class HomeUserControlViewModel : BaseViewModel
     {
-        private UserProfile userProfile;
+        //private UserProfile userProfile;
+        private string userSystemUUID;
         public ICommand SelectOptionCmd { get; set; }
 
         public HomeUserControlViewModel(UserProfile userProfile)
         {
-            this.userProfile = userProfile;
+            //this.userProfile = userProfile;
+            this.userSystemUUID = userProfile?.SystemUUID;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
 

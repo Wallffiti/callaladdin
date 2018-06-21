@@ -234,6 +234,7 @@ namespace CallAladdin.ViewModel
         }
 
         private UserProfileUserControlViewModel parentViewModel;
+        private string userSystemUUID;
 
         public EditRequestorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
         {
@@ -383,6 +384,7 @@ namespace CallAladdin.ViewModel
                 SelectedCity = userProfile.City;
                 SelectedCountry = userProfile.Country;
                 ImagePath = userProfile.PathToProfileImage;
+                userSystemUUID = userProfile.SystemUUID;
             }
 
             UpdateUserProfile();
@@ -424,7 +426,8 @@ namespace CallAladdin.ViewModel
                 PathToProfileImage = imagePath,
                 Category = selectedCategory,
                 CompanyName = company,
-                CompanyRegisteredAddress = companyAddress
+                CompanyRegisteredAddress = companyAddress,
+                SystemUUID = userSystemUUID
             };
         }
 
