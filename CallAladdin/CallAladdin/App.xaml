@@ -12,7 +12,9 @@
             <Color x:Key="lightgrey">#EAECF5</Color>
             <Color x:Key="mediumgrey">#BDBEC2</Color>
             <Color x:Key="darkgrey">#9F9FA1</Color>
+            <Color x:Key="darkergrey">#757576</Color>
             <Color x:Key="homeIconBackground">#E7E8EA</Color>
+            <Color x:Key="lightOrange">#FFE9A3</Color>
             <Style x:Key="defaultBackground" TargetType="ContentPage" >
                 <Setter Property="BackgroundColor" Value="{StaticResource yellow}" />
             </Style>

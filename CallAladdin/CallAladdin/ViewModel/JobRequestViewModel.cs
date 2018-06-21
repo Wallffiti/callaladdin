@@ -1,9 +1,13 @@
 ﻿using CallAladdin.Model;
+using CallAladdin.Repositories;
+using CallAladdin.Repositories.Interfaces;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace CallAladdin.ViewModel
 {
@@ -17,7 +21,12 @@ namespace CallAladdin.ViewModel
         private string selectedStartDate;
         private string selectedStartTime;
         private string selectedCity;
+        private string location;
+        private int contractorsAvailable;
         private IList<string> cities;
+        private bool isBusy;
+        private ILocationService locationService;
+        private IUserProfileRepository userProfileRepository;
 
         public string ContractorIcon
         {
@@ -67,10 +76,28 @@ namespace CallAladdin.ViewModel
             set { selectedCity = value; OnPropertyChanged("SelectedCity"); }
         }
 
+        public string Location
+        {
+            get { return location; }
+            set { location = value; OnPropertyChanged("Location"); }
+        }
+
+        public int ContractorsAvailable
+        {
+            get { return contractorsAvailable; }
+            set { contractorsAvailable = value; OnPropertyChanged("ContractorsAvailable"); }
+        }
+
         public IList<string> Cities
         {
             get { return cities; }
             set { cities = value; OnPropertyChanged("Cities"); }
+        }
+
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set { isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
         private string userSystemUUID;
@@ -86,7 +113,25 @@ namespace CallAladdin.ViewModel
                 userSystemUUID = parameters.UserSystemUUID;
             }
             jobService = new JobService();
+            locationService = new LocationService();
+            userProfileRepository = new UserProfileRepository();
+            PopulateLocations();
             JobRequestImage = "CallAladdin.Assets.Images.default_avatar_image.jpeg";
+            ContractorsAvailable = 0;   //TODO: call api
+        }
+
+        private void PopulateLocations()
+        {
+            Task.Run(async () =>
+            {
+                //Long processes below
+                IsBusy = true;
+                Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
+                var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
+                await Task.Delay(1500);
+                SelectedCity = userProfile?.City;
+                IsBusy = false;
+            });
         }
 
         private string GetIconByCategory(string category)

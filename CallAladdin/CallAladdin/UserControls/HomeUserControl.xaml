@@ -3,7 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
              xmlns:const="clr-namespace:CallAladdin"
+             xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Class="CallAladdin.UserControls.HomeUserControl">
+    <Grid.Resources>
+        <conv:BooleanInverserConverter x:Key="BoolInverser"/>
+    </Grid.Resources>
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
@@ -11,7 +15,7 @@
     <!--<Label x:Name="HeaderLabel" BackgroundColor="{StaticResource yellow}" TextColor="Black" HeightRequest="55" Text="HOME" FontAttributes="Bold" FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="0" />-->
     <Label Style="{StaticResource defaultHeader}" Text="HOME" Grid.Row="0" />
     <Frame OutlineColor="Transparent" BackgroundColor="Transparent" Grid.Row="1">
-        <Grid>
+        <Grid x:Name="HomeGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*"/>
@@ -26,7 +30,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ActivityIndicator x:Name="ProgressIndicator" Grid.Row="3" Grid.Column="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60"/>
+            <ActivityIndicator x:Name="ProgressIndicator" Grid.Row="3" Grid.Column="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" />
 
             <!--row 1-->
             <Grid Grid.Row="0" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}">
@@ -178,7 +182,7 @@
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.CLEANING_SERVICES.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.CLEANING_SERVICES}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>
-            <Grid Grid.Row="3" Grid.Column="2" BackgroundColor="{StaticResource homeIconBackground}">
+            <Grid Grid.Row="3" Grid.Column="2" BackgroundColor="{StaticResource homeIconBackground}"> 
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="{Binding Source={x:Static const:Constants.LANDSCAPING_POND}}" />
                 </Grid.GestureRecognizers>
