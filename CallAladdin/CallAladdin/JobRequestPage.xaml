@@ -52,7 +52,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Editor HeightRequest="60" Text="{Binding ScopeOfWork}" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" FontSize="Small"/>
-                    <Image HorizontalOptions="End" VerticalOptions="Start" Grid.Row="0" Grid.Column="1"/>
+                    <Button Image="baseline_mic_black_36.png" Grid.Row="0" Grid.Column="1" WidthRequest="50" HeightRequest="50" Command="{Binding RecordVoiceCommand}" CommandParameter="{Binding IsBusy}" />
                     <ActivityIndicator Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="IsBusyIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="Center" />
                 </Grid>
             </Grid>
@@ -70,20 +70,20 @@
                 <Label Text="Preferred Start and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
                     <Image Source="ic_shortcut_perm_contact_calendar.png" WidthRequest="50" HeightRequest="50"/>
-                    <DatePicker  x:Name="StartDatePicker" FontSize="Small" TextColor="Green"/>
+                    <DatePicker  x:Name="StartDatePicker" FontSize="Small" TextColor="Green"  MaximumDate="2050-12-31" MinimumDate="2018-01-01" Date="{Binding SelectedStartDate}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <Image Source="ic_shortcut_access_time.png" WidthRequest="50" HeightRequest="50"/>
-                    <TimePicker x:Name="StartTimePicker" FontSize="Small" TextColor="Green"/>
+                    <TimePicker x:Name="StartTimePicker" FontSize="Small" TextColor="Green" Time="{Binding SelectedStartTime}"/>
                 </StackLayout>
                 <Label Text="Preferred End and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
                 <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
                     <Image Source="ic_shortcut_perm_contact_calendar.png" WidthRequest="50" HeightRequest="50"/>
-                    <DatePicker x:Name="EndDatePicker" FontSize="Small" TextColor="Red"/>
+                    <DatePicker x:Name="EndDatePicker" FontSize="Small" TextColor="Red" MaximumDate="2050-12-31" MinimumDate="2018-01-01" Date="{Binding SelectedEndDate}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
                     <Image Source="ic_shortcut_access_time.png" WidthRequest="50" HeightRequest="50"/>
-                    <TimePicker x:Name="EndTimePicker" FontSize="Small" TextColor="Red"/>
+                    <TimePicker x:Name="EndTimePicker" FontSize="Small" TextColor="Red" Time="{Binding SelectedEndTime}"/>
                 </StackLayout>
             </Grid>
             <Grid Margin="20,10">
@@ -91,8 +91,15 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="City" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
-                <Picker x:Name="CityPicker" Title="City" ItemsSource="{Binding Cities}" Grid.Row="0" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCity}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Text="Country" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                <Picker x:Name="CountryPicker" Title="Country" ItemsSource="{Binding Countries}" Grid.Row="0" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCountry}">
+                </Picker>
+                <Label Text="City" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                <Picker x:Name="CityPicker" Title="City" ItemsSource="{Binding Cities}" Grid.Row="1" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCity}">
                 </Picker>
             </Grid>
             <!--<Grid Margin="20,10">

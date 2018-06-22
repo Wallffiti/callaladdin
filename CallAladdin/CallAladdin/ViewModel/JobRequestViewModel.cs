@@ -23,17 +23,22 @@ namespace CallAladdin.ViewModel
         private string jobRequestImage;
         private string title;
         private string scopeOfWork;
-        private string selectedStartDate;
-        private string selectedStartTime;
+        private DateTime selectedStartDate;
+        private DateTime selectedEndDate;
+        private TimeSpan selectedStartTime;
+        private TimeSpan selectedEndTime;
+        private string selectedCountry;
         private string selectedCity;
         private string location;
         private int contractorsAvailable;
+        private IList<string> countries;
         private IList<string> cities;
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
         private bool isBusy;
         private ILocationService locationService;
         private IUserProfileRepository userProfileRepository;
+        private Job jobRequest;
 
         public string ContractorIcon
         {
@@ -50,49 +55,73 @@ namespace CallAladdin.ViewModel
         public string JobRequestImage
         {
             get { return jobRequestImage; }
-            set { jobRequestImage = value; OnPropertyChanged("JobRequestImage"); }
+            set { jobRequestImage = value; UpdateJobRequest(); OnPropertyChanged("JobRequestImage"); }
         }
 
         public string Title
         {
             get { return title; }
-            set { title = value; OnPropertyChanged("Title"); }
+            set { title = value; UpdateJobRequest(); OnPropertyChanged("Title"); }
         }
 
         public string ScopeOfWork
         {
             get { return scopeOfWork; }
-            set { scopeOfWork = value; OnPropertyChanged("ScopeOfWork"); }
+            set { scopeOfWork = value; UpdateJobRequest(); OnPropertyChanged("ScopeOfWork"); }
         }
 
-        public string SelectedStartDate
+        public DateTime SelectedStartDate
         {
             get { return selectedStartDate; }
-            set { selectedStartDate = value; OnPropertyChanged("SelectedStartDate"); }
+            set { selectedStartDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartDate"); }
         }
 
-        public string SelectedStartTime
+        public DateTime SelectedEndDate
+        {
+            get { return selectedEndDate; }
+            set { selectedEndDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedEndDate"); }
+        }
+
+        public TimeSpan SelectedStartTime
         {
             get { return selectedStartTime; }
-            set { selectedStartTime = value; OnPropertyChanged("SelectedStartTime"); }
+            set { selectedStartTime = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartTime"); }
+        }
+
+        public TimeSpan SelectedEndTime
+        {
+            get { return selectedEndTime; }
+            set { selectedEndTime = value; UpdateJobRequest(); OnPropertyChanged("SelectedEndTime"); }
+        }
+
+        public string SelectedCountry
+        {
+            get { return selectedCountry; }
+            set { selectedCountry = value; UpdateJobRequest(); OnPropertyChanged("SelectedCountry"); }
         }
 
         public string SelectedCity
         {
             get { return selectedCity; }
-            set { selectedCity = value; OnPropertyChanged("SelectedCity"); }
+            set { selectedCity = value; UpdateJobRequest(); OnPropertyChanged("SelectedCity"); }
         }
 
         public string Location
         {
             get { return location; }
-            set { location = value; OnPropertyChanged("Location"); }
+            set { location = value; UpdateJobRequest(); OnPropertyChanged("Location"); }
         }
 
         public int ContractorsAvailable
         {
             get { return contractorsAvailable; }
             set { contractorsAvailable = value; OnPropertyChanged("ContractorsAvailable"); }
+        }
+
+        public IList<string> Countries
+        {
+            get { return countries; }
+            set { countries = value; OnPropertyChanged("Countries"); }
         }
 
         public IList<string> Cities
@@ -119,8 +148,15 @@ namespace CallAladdin.ViewModel
             set { isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
+        public Job JobRequest
+        {
+            get { return jobRequest; }
+            set { jobRequest = value; OnPropertyChanged("JobRequest"); }
+        }
+
         public ICommand SearchLocationCmd { get; set; }
         public ICommand ChangeProfileImageCmd { get; set; }
+        public ICommand SubmitJobRequestCmd { get; set; }
 
         private string userSystemUUID;
         private IJobService jobService;
@@ -138,6 +174,7 @@ namespace CallAladdin.ViewModel
             locationService = new LocationService();
             userProfileRepository = new UserProfileRepository();
             PopulateLocations();
+            SetInitialTimes();
             //JobRequestImage = "CallAladdin.Assets.Images.default_avatar_image.jpeg";
             ContractorsAvailable = 0;   //TODO: call api
             SearchLocationCmd = new Xamarin.Forms.Command(e =>
@@ -154,7 +191,131 @@ namespace CallAladdin.ViewModel
             {
                 return true;
             });
+            SubmitJobRequestCmd = new Xamarin.Forms.Command(e =>
+            {
+                //Navigator.Instance.ConfirmationAlert("Confirmation", "Create this job request now?", "OK", "Cancel", async () =>
+                //{
+                //    //For android
+                //    await CreateJobRequest();
+                //},
+                //async () =>
+                //{
+                //    //For ios
+                //    await CreateJobRequest();
+                //});
+                CreateJobRequest();
+            }, param =>
+            {
+                //TODO
+                var jobRequest = (Job)param;
+
+                if (param == null)
+                    return false;
+
+                bool timeIsValid = TimeSelectionIsValid();
+
+                if (!timeIsValid)
+                    return false;
+
+                return !string.IsNullOrEmpty(title)
+                && !string.IsNullOrEmpty(scopeOfWork)
+                && !string.IsNullOrEmpty(selectedCity)
+                && !string.IsNullOrEmpty(selectedCountry)
+                && !string.IsNullOrEmpty(location);
+            });
             LoadImageUploaderOptions();
+        }
+
+        //private void ValidateTime()
+        //{
+        //    if (!TimeSelectionIsValid())
+        //    {
+        //        Navigator.Instance.OkAlert("Error", "Selected end time must be later than selected start time", "OK");
+        //    }
+        //}
+
+        private bool TimeSelectionIsValid()
+        {
+            if (selectedStartDate == null || selectedStartTime == null || selectedEndDate == null || selectedEndTime == null)
+                return false;
+
+            var start = new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds);
+            var end = new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds);
+            var timeIsValid = end > start;
+            return timeIsValid;
+        }
+
+        private void SetInitialTimes()
+        {
+            var now = DateTime.Now;
+            SelectedStartDate = now;
+            SelectedEndDate = now;
+            SelectedStartTime = new TimeSpan(now.Hour, now.Minute, now.Second);
+            SelectedEndTime = new TimeSpan(now.Hour + 1, now.Minute, now.Second);
+        }
+
+        private async void CreateJobRequest()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+            var response = await jobService.CreateRequest(new Model.Requests.JobRequestRequest
+            {
+                Address = jobRequest.Address,
+                Category = jobRequest.Category,
+                City = jobRequest.City,
+                Country = jobRequest.Country,
+                StartDateTime = jobRequest.StartDateTime,
+                EndDateTime = jobRequest.EndDateTime,
+                ImagePath = jobRequest.ImagePath,
+                RequestorSystemUUID = jobRequest.RequestorSystemUUID,
+                ScopeOfWork = jobRequest.ScopeOfWork,
+                Title = JobRequest.Title,
+                //TODO: to complete remaining fields
+            });
+
+            if (response.IsSuccess)
+            {
+                try
+                {
+                    Navigator.Instance.OkAlert("Success", "A job has been created!", "OK");
+                    IsBusy = false;
+                    await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    return;
+                }
+                catch (Exception ex)
+                {
+
+                }
+                return;
+            }
+
+            Navigator.Instance.OkAlert("Error", "There is a problem attempting to create a job. Please try again later.", "OK");
+            IsBusy = false;
+        }
+
+        private void UpdateJobRequest()
+        {
+            JobRequest = new Job
+            {
+                Address = location,
+                Category = jobRequestType,
+                City = selectedCity,
+                Country = selectedCountry,
+                StartDateTime = new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds),
+                EndDateTime = new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds),
+                CreatedDateTime = DateTime.Now,
+                ModifiedDateTime = DateTime.Now,
+                ImagePath = jobRequestImage,
+                ScopeOfWork = scopeOfWork,
+                Title = title,
+                RequestorSystemUUID = userSystemUUID
+                //TODO: to complete remaining fields
+            };
         }
 
         private async void ChangeProfileImageAsync()
@@ -196,9 +357,11 @@ namespace CallAladdin.ViewModel
             {
                 //Long processes below
                 IsBusy = true;
+                Countries = await locationService.GetCountries();
                 Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
                 var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
                 await Task.Delay(1500);
+                SelectedCountry = userProfile?.Country;
                 SelectedCity = userProfile?.City;
                 IsBusy = false;
             });
