@@ -1,4 +1,5 @@
-﻿using CallAladdin.Helper;
+﻿using CallAladdin.Commands;
+using CallAladdin.Helper;
 using CallAladdin.Model;
 using CallAladdin.Repositories;
 using CallAladdin.Repositories.Interfaces;
@@ -283,50 +284,7 @@ namespace CallAladdin.ViewModel
             userService = new UserService();
             userProfileRepository = new UserProfileRepository();
             userIdentityRepository = new UserIdentityRepository();
-            SubmitProfileChangeCmd = new Xamarin.Forms.Command((e) =>
-            {
-                Navigator.Instance.ConfirmationAlert("Confirmation", "Submit your profile now?", "OK", "Cancel", () =>
-                {
-                    //For android
-                    SubmitProfileChanges();
-                }, () =>
-                {
-                    //For ios
-                    SubmitProfileChanges();
-                });
-            },
-           (param) =>
-           {
-               if (param != null)
-               {
-                   var userProfile = (UserProfile)param;
-
-                   if (userProfile != null)
-                   {
-                       bool hasMandatoryInfo = !string.IsNullOrEmpty(userProfile.Name)
-                       && !string.IsNullOrEmpty(userProfile.City)
-                       && !string.IsNullOrEmpty(userProfile.Country);
-
-                       bool hasContractorInfo = !string.IsNullOrEmpty(userProfile.Category)
-                       && !string.IsNullOrEmpty(userProfile.CompanyName)
-                       && !string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress)
-                       && !string.IsNullOrEmpty(userProfile.PathToProfileImage);
-
-                       //if (userProfile.IsContractor)
-                       //{
-                       //    return hasMandatoryInfo && hasContractorInfo;
-                       //}
-                       //else
-                       //{
-                       //    return hasMandatoryInfo;
-                       //}
-
-                       return hasMandatoryInfo && hasContractorInfo;    //this is contractor page, therefore all fields are mandatory
-                   }
-               }
-
-               return false;
-           });
+            SubmitProfileChangeCmd = new SubmitProfileChangeContractorCommand(this);
 
             ChangeProfileImageCmd = new Xamarin.Forms.Command((e) =>
             {
@@ -380,7 +338,24 @@ namespace CallAladdin.ViewModel
             return true;
         }
 
-        private void SubmitProfileChanges()
+        public void SubmitProfileChanges()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Submit your profile changes now?", "Yes", "No", async () =>
+            {
+                await DoSubmitProfileChanges();
+            }, async () =>
+            {
+                await DoSubmitProfileChanges();
+            });
+        }
+
+        private async Task DoSubmitProfileChanges()
         {
             if (IsBusy)
             {
@@ -392,13 +367,13 @@ namespace CallAladdin.ViewModel
 
             if (FormIsValid())
             {
-                SendToServer();
+                await SendToServer();
             }
 
             IsBusy = false;
         }
 
-        private async void SendToServer()
+        private async Task SendToServer()
         {
             if (this.userProfile == null)
                 return;
