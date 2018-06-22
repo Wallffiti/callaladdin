@@ -28,6 +28,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!--row 1-->
@@ -111,7 +112,7 @@
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.SIGNBOARD.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.SIGNBOARD}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>
-            
+
             <!--row 3-->
             <Grid Grid.Row="2" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}">
                 <Grid.GestureRecognizers>
@@ -136,7 +137,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" /> <!--TEST-->
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.PLASTERED_CEILING.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.PLASTERED_CEILING}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>
@@ -181,7 +181,7 @@
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.CLEANING_SERVICES.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.CLEANING_SERVICES}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>
-            <Grid Grid.Row="3" Grid.Column="2" BackgroundColor="{StaticResource homeIconBackground}"> 
+            <Grid Grid.Row="3" Grid.Column="2" BackgroundColor="{StaticResource homeIconBackground}">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding SelectOptionCmd}" CommandParameter="{Binding Source={x:Static const:Constants.LANDSCAPING_POND}}" />
                 </Grid.GestureRecognizers>
@@ -194,7 +194,7 @@
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.LANDSCAPING_N_POND.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.LANDSCAPING_POND}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>
-            
+
             <!--row 5-->
             <Grid Grid.Row="4" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}">
                 <Grid.GestureRecognizers>
@@ -235,7 +235,7 @@
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.PEST_CONTROL.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.PEST_CONTROL}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
             </Grid>
-            
+
             <!--row 6-->
             <Grid Grid.Row="5" Grid.Column="0" BackgroundColor="{StaticResource homeIconBackground}">
                 <Grid.GestureRecognizers>
@@ -275,6 +275,14 @@
                 </Grid.ColumnDefinitions>
                 <Image Source="{ext:ImageResource CallAladdin.Assets.Images.Contractors.HOUSE_MOVERS.png}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" />
                 <Label  Text="{Binding Source={x:Static const:Constants.HOUSE_MOVERS}}" FontSize="8" FontAttributes="Bold" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" />
+            </Grid>
+
+            <!--footer-->
+            <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Transparent" IsVisible="{Binding IsBusy}">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}">
+                    <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" />
+                    <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
+                </StackLayout>
             </Grid>
         </Grid>
     </Frame>

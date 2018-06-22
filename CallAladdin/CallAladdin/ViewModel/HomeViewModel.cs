@@ -47,13 +47,5 @@ namespace CallAladdin.ViewModel
         {
             await Navigator.Instance.NavigateTo(PageType.DUMMY, uIPageType: UIPageType.MODAL);
         }
-
-        //public void ChangeProfilePhoto(object sender, ProfilePhotoChangedEventArgs eventArgs)
-        //{
-        //    if (!string.IsNullOrEmpty(eventArgs?.FilePath))
-        //    {
-
-        //    }
-        //}
     }
 }
