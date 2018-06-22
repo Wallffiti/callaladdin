@@ -16,6 +16,8 @@ namespace CallAladdin
         public const string USER_PROFILE_UPDATE = "USER_PROFILE_UPDATE";
         public const string REQUESTOR = "REQUESTOR";
         public const string CONTRACTOR = "CONTRACTOR";
+        public const string TAB_SWITCH = "TAB_SWITCH";
+        public const string DASHBOARD = "DASHBOARD";
 
         //HOME ICONS
 

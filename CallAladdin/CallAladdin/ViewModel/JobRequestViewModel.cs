@@ -160,6 +160,7 @@ namespace CallAladdin.ViewModel
         public ICommand SubmitJobRequestCmd { get; set; }
 
         private string userSystemUUID;
+        private HomeUserControlViewModel parentViewModel;
         private IJobService jobService;
 
         public JobRequestViewModel(object owner)
@@ -169,7 +170,8 @@ namespace CallAladdin.ViewModel
             {
                 ContractorIcon = GetIconByCategory(parameters.JobCategoryType);
                 JobRequestType = parameters.JobCategoryType;
-                userSystemUUID = parameters?.UserProfile?.SystemUUID;
+                userSystemUUID = parameters.UserProfile?.SystemUUID;
+                parentViewModel = parameters.ParentViewModel;
             }
             jobService = new JobService();
             locationService = new LocationService();
@@ -253,6 +255,7 @@ namespace CallAladdin.ViewModel
                 {
                     Navigator.Instance.OkAlert("Success", "A job has been created!", "OK");
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    parentViewModel?.SetDashboardTab();
                     return;
                 }
                 catch (Exception ex)

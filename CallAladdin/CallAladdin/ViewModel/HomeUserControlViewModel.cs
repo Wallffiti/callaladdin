@@ -79,7 +79,8 @@ namespace CallAladdin.ViewModel
                 {
                     //UserSystemUUID = this.userProfile?.SystemUUID, //userSystemUUID,
                     UserProfile = userProfile,
-                    JobCategoryType = category
+                    JobCategoryType = category,
+                    ParentViewModel = this
                 });
             }
             else
@@ -88,6 +89,11 @@ namespace CallAladdin.ViewModel
             }
 
             IsBusy = false;
+        }
+
+        public void SetDashboardTab()
+        {
+            base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
         }
 
         public async Task<bool?> IsEligibleForRequest()

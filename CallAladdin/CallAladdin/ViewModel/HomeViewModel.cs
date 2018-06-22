@@ -60,6 +60,8 @@ namespace CallAladdin.ViewModel
                     homeUserControlViewModel.UpdateUserProfile(eventArgs.Parameters as UserProfile);
                 }
             }
+
+            base.NotifyCompletion(this, eventArgs);
         }
 
         public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
