@@ -13,9 +13,9 @@ namespace CallAladdin.ViewModel
 {
     public class HomeUserControlViewModel : BaseViewModel
     {
-        //private UserProfile userProfile;
+        private UserProfile userProfile;
         private IJobService jobService;
-        private string userSystemUUID;
+        //private string userSystemUUID;
         private bool isBusy;
         public ICommand SelectOptionCmd { get; set; }
         public bool IsBusy
@@ -30,10 +30,15 @@ namespace CallAladdin.ViewModel
 
         public HomeUserControlViewModel(UserProfile userProfile)
         {
-            //this.userProfile = userProfile;
+            this.userProfile = userProfile;
             jobService = new JobService();
-            this.userSystemUUID = userProfile?.SystemUUID;
+            //this.userSystemUUID = userProfile?.SystemUUID;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
+        }
+
+        public void UpdateUserProfile(UserProfile userProfile)
+        {
+            this.userProfile = userProfile;
         }
 
         public void NavigateToJobRequest(string category)
@@ -72,7 +77,8 @@ namespace CallAladdin.ViewModel
             {
                 await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, new JobRequestParameters
                 {
-                    UserSystemUUID = userSystemUUID,
+                    //UserSystemUUID = this.userProfile?.SystemUUID, //userSystemUUID,
+                    UserProfile = userProfile,
                     JobCategoryType = category
                 });
             }
@@ -88,7 +94,7 @@ namespace CallAladdin.ViewModel
         {
             bool? result = null;
 
-            var jobs = await jobService.GetJobs(userSystemUUID);
+            var jobs = await jobService.GetJobs(/*userSystemUUID*/ userProfile?.SystemUUID);
 
             if (jobs != null)
             {

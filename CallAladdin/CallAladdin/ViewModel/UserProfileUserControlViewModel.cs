@@ -2,6 +2,7 @@
 using CallAladdin.EventArgs;
 using CallAladdin.Helper;
 using CallAladdin.Model;
+using CallAladdin.Observers.Interfaces;
 using CallAladdin.Repositories;
 using CallAladdin.Repositories.Interfaces;
 using CallAladdin.Services;
@@ -89,7 +90,7 @@ namespace CallAladdin.ViewModel
             set { imagePath = value; OnPropertyChanged("ImagePath"); }
         }
 
-        private string userSystemUUID;
+        //private string userSystemUUID;
 
         public ICommand LogoutCmd { get; set; }
         public ICommand EditProfileCmd { get; set; }
@@ -124,8 +125,10 @@ namespace CallAladdin.ViewModel
                 }
 
                 ImagePath = userProfile.PathToProfileImage;
-                userSystemUUID = userProfile.SystemUUID;
+                //userSystemUUID = userProfile.SystemUUID;
             }
+
+            base.NotifyCompletion(this, new ObserverEventArgs(Constants.USER_PROFILE_UPDATE, string.Empty, userProfile));
         }
 
         public async void NavigateToEditUserProfile()

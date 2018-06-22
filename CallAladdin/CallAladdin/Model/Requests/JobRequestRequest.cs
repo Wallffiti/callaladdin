@@ -14,8 +14,8 @@ namespace CallAladdin.Model.Requests
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-        public float Longitude { get; set; }
-        public float Latitude { get; set; }
+        public float Longitude { get; set; } = 101.97576600000002f;
+        public float Latitude { get; set; } = 4.210484f;
         public bool ContractorSystemUUID { get; set; }
         public string Category { get; set; }
         public string Status { get; set; }

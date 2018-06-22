@@ -10,7 +10,12 @@ namespace CallAladdin
 
         public const string PRINCIPAL = "PRINCIPAL";
         public const string ADMIN_NUMBER = "+601235678";
-        public const int ALLOWABLE_JOB_REQUESTS_PER_MONTH = 3;
+        public const int ALLOWABLE_JOB_REQUESTS_PER_MONTH = 33333;  //DEBUG: please change it before go live
+
+        // EVENT ARGS
+        public const string USER_PROFILE_UPDATE = "USER_PROFILE_UPDATE";
+        public const string REQUESTOR = "REQUESTOR";
+        public const string CONTRACTOR = "CONTRACTOR";
 
         //HOME ICONS
 

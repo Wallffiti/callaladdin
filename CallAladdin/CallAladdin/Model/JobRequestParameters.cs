@@ -6,7 +6,8 @@ namespace CallAladdin.Model
 {
     public class JobRequestParameters
     {
-        public string UserSystemUUID { get; set; }
+        //public string UserSystemUUID { get; set; }
+        public UserProfile UserProfile { get; set; }
         public string JobCategoryType { get; set; }
     }
 }

@@ -169,7 +169,7 @@ namespace CallAladdin.ViewModel
             {
                 ContractorIcon = GetIconByCategory(parameters.JobCategoryType);
                 JobRequestType = parameters.JobCategoryType;
-                userSystemUUID = parameters.UserSystemUUID;
+                userSystemUUID = parameters?.UserProfile?.SystemUUID;
             }
             jobService = new JobService();
             locationService = new LocationService();
