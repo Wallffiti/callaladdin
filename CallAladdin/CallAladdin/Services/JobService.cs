@@ -78,7 +78,7 @@ namespace CallAladdin.Services
                             }
                         }
 
-                        response = client.Execute(request);
+                        response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {

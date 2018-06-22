@@ -18,10 +18,5 @@ namespace CallAladdin
 			InitializeComponent ();
             BindingContext = new JobRequestViewModel(owner);
 		}
-
-        private void StartDatePicker_DateSelected(object sender, DateChangedEventArgs e)
-        {
-
-        }
     }
 }

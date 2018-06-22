@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Windows.Input;
 using CallAladdin.Helper;
+using CallAladdin.Commands;
 
 namespace CallAladdin.ViewModel
 {
@@ -175,53 +176,15 @@ namespace CallAladdin.ViewModel
             userProfileRepository = new UserProfileRepository();
             PopulateLocations();
             SetInitialTimes();
-            //JobRequestImage = "CallAladdin.Assets.Images.default_avatar_image.jpeg";
             ContractorsAvailable = 0;   //TODO: call api
-            SearchLocationCmd = new Xamarin.Forms.Command(e =>
-            {
-                //TODO: navigate to location page
-            }, (param) =>
-            {
-                return true;
-            });
+            SearchLocationCmd = new SearchLocationCommand(this);
+            SubmitJobRequestCmd = new SubmitJobCommand(this);
             ChangeProfileImageCmd = new Xamarin.Forms.Command(e =>
             {
                 ChangeProfileImageAsync();
             }, (param) =>
             {
                 return true;
-            });
-            SubmitJobRequestCmd = new Xamarin.Forms.Command(e =>
-            {
-                //Navigator.Instance.ConfirmationAlert("Confirmation", "Create this job request now?", "OK", "Cancel", async () =>
-                //{
-                //    //For android
-                //    await CreateJobRequest();
-                //},
-                //async () =>
-                //{
-                //    //For ios
-                //    await CreateJobRequest();
-                //});
-                CreateJobRequest();
-            }, param =>
-            {
-                //TODO
-                var jobRequest = (Job)param;
-
-                if (param == null)
-                    return false;
-
-                bool timeIsValid = TimeSelectionIsValid();
-
-                if (!timeIsValid)
-                    return false;
-
-                return !string.IsNullOrEmpty(title)
-                && !string.IsNullOrEmpty(scopeOfWork)
-                && !string.IsNullOrEmpty(selectedCity)
-                && !string.IsNullOrEmpty(selectedCountry)
-                && !string.IsNullOrEmpty(location);
             });
             LoadImageUploaderOptions();
         }
@@ -234,17 +197,6 @@ namespace CallAladdin.ViewModel
         //    }
         //}
 
-        private bool TimeSelectionIsValid()
-        {
-            if (selectedStartDate == null || selectedStartTime == null || selectedEndDate == null || selectedEndTime == null)
-                return false;
-
-            var start = new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds);
-            var end = new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds);
-            var timeIsValid = end > start;
-            return timeIsValid;
-        }
-
         private void SetInitialTimes()
         {
             var now = DateTime.Now;
@@ -254,7 +206,24 @@ namespace CallAladdin.ViewModel
             SelectedEndTime = new TimeSpan(now.Hour + 1, now.Minute, now.Second);
         }
 
-        private async void CreateJobRequest()
+        public /*async*/ void CreateJobRequest()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Create a job now?", "Yes", "No", async () =>
+            {
+                await DoCreateJob();
+            }, async () =>
+            {
+                await DoCreateJob();
+            });
+        }
+
+        private async Task DoCreateJob()
         {
             if (IsBusy)
             {
@@ -283,13 +252,16 @@ namespace CallAladdin.ViewModel
                 try
                 {
                     Navigator.Instance.OkAlert("Success", "A job has been created!", "OK");
-                    IsBusy = false;
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
                     return;
                 }
                 catch (Exception ex)
                 {
 
+                }
+                finally
+                {
+                    IsBusy = false;
                 }
                 return;
             }
@@ -360,7 +332,7 @@ namespace CallAladdin.ViewModel
                 Countries = await locationService.GetCountries();
                 Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
                 var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
-                await Task.Delay(1500);
+                await Task.Delay(1000);
                 SelectedCountry = userProfile?.Country;
                 SelectedCity = userProfile?.City;
                 IsBusy = false;
