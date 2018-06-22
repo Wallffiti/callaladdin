@@ -13,7 +13,7 @@
     </ContentPage>
     <ContentPage Title="Dashboard" Icon="dashboard_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}">
         <ContentPage.Content>
-            <Grid>
+            <!--<Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -25,7 +25,8 @@
                         <Button Text="Move to dummy page" Style="{StaticResource defaultButton}" Margin="100,20" Command="{Binding dummyCmd}" />
                     </StackLayout>
                 </Frame>
-            </Grid>
+            </Grid>-->
+            <uc:DashboardUserControl BindingContext="{Binding DashboardUserControlViewModel}" />
         </ContentPage.Content>
     </ContentPage>
     <ContentPage Title="Contractor" Icon="contractor_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}">

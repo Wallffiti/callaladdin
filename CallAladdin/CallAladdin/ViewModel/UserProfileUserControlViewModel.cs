@@ -129,6 +129,7 @@ namespace CallAladdin.ViewModel
             }
 
             base.NotifyCompletion(this, new ObserverEventArgs(Constants.USER_PROFILE_UPDATE, string.Empty, userProfile));
+            base.NotifyCompletion(this, new ObserverEventArgs(Constants.TAB_SWITCH, Constants.USER_PROFILE, userProfile));
         }
 
         public async void NavigateToEditUserProfile()

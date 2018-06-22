@@ -13,10 +13,19 @@ namespace CallAladdin
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class JobRequestPage : CustomPage
 	{
+        JobRequestViewModel jobRequestViewModel;
+
 		public JobRequestPage(object owner)
 		{
 			InitializeComponent ();
-            BindingContext = new JobRequestViewModel(owner);
+            jobRequestViewModel = new JobRequestViewModel(owner);
+            BindingContext = jobRequestViewModel;
 		}
+
+        protected override bool OnBackButtonPressed()
+        {
+            jobRequestViewModel.RefreshRootPage();
+            return base.OnBackButtonPressed();
+        }
     }
 }

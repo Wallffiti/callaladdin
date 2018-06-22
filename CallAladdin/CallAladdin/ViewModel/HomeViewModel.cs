@@ -15,6 +15,7 @@ namespace CallAladdin.ViewModel
 
         private HomeUserControlViewModel homeUserControlViewModel;
         private UserProfileUserControlViewModel userProfileUserControlViewModel;
+        private DashboardUserControlViewModel dashboardUserControlViewModel;
 
         public HomeUserControlViewModel HomeUserControlViewModel
         {
@@ -28,6 +29,12 @@ namespace CallAladdin.ViewModel
             set { userProfileUserControlViewModel = value; OnPropertyChanged("UserProfileUserControlViewModel"); }
         }
 
+        public DashboardUserControlViewModel DashboardUserControlViewModel
+        {
+            get { return dashboardUserControlViewModel; }
+            set { dashboardUserControlViewModel = value; OnPropertyChanged("DashboardUserControlViewModel"); }
+        }
+
 
         public HomeViewModel(UserProfile userProfile)
         {
@@ -35,9 +42,11 @@ namespace CallAladdin.ViewModel
             dummy2Cmd = new Dummy2Command(this);
             HomeUserControlViewModel = new HomeUserControlViewModel(userProfile);
             UserProfileUserControlViewModel = new UserProfileUserControlViewModel(userProfile);
+            DashboardUserControlViewModel = new DashboardUserControlViewModel(userProfile);
 
             homeUserControlViewModel.SubscribeMeToThis(this);
             userProfileUserControlViewModel.SubscribeMeToThis(this);
+            dashboardUserControlViewModel.SubscribeMeToThis(this);
         }
 
         public async void NavigateToDummyPage()

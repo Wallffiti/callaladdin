@@ -191,6 +191,11 @@ namespace CallAladdin.ViewModel
             LoadImageUploaderOptions();
         }
 
+        public void RefreshRootPage()
+        {
+            parentViewModel.NotifyCompletion(parentViewModel, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.HOME));
+        }
+
         //private void ValidateTime()
         //{
         //    if (!TimeSelectionIsValid())

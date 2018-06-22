@@ -36,13 +36,41 @@ namespace CallAladdin
         {
             if (sender is HomeViewModel)
             {
-                if (eventArgs != null && eventArgs.EventName == Constants.TAB_SWITCH && eventArgs.EventType == Constants.DASHBOARD)
+                if (eventArgs != null && eventArgs.EventName == Constants.TAB_SWITCH)
                 {
                     var tabbedPage = this as TabbedPage;
+
                     if (tabbedPage != null && tabbedPage.Children.Count > 0)
                     {
-                        var currentPage = tabbedPage.Children[1] as ContentPage;
+                        //trick to fix some ui bug on bottom bar navigation tab
+                        var currentPage = tabbedPage.Children[0] as ContentPage;
                         tabbedPage.CurrentPage = currentPage;
+                        System.Threading.Thread.Sleep(500);
+
+                        switch (eventArgs.EventType)
+                        {
+                            case Constants.DASHBOARD:
+                                {
+                                    currentPage = tabbedPage.Children[1] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                }
+                                break;
+                            case Constants.USER_PROFILE:
+                                {
+                                    currentPage = tabbedPage.Children[4] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                }
+                                break;
+                            case Constants.HOME:
+                                {
+                                    currentPage = tabbedPage.Children[4] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                    System.Threading.Thread.Sleep(500);
+                                    currentPage = tabbedPage.Children[0] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                }
+                                break;
+                        }
                     }
                 }
             }
