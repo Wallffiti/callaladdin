@@ -19,10 +19,10 @@ namespace CallAladdin
 	{
         private HomeViewModel homeViewModel;
 
-		public HomePage (UserProfile userProfile)
+		public HomePage (/*UserProfile userProfile*/ object owner)
 		{
 			InitializeComponent ();
-            homeViewModel = new HomeViewModel(userProfile);
+            homeViewModel = new HomeViewModel(/*userProfile*/ owner);
             BindingContext = homeViewModel;
             homeViewModel.SubscribeMeToThis(this);
 		}

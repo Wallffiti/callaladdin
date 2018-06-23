@@ -34,10 +34,12 @@ namespace CallAladdin
             {
                 //For android
                 await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                editRequestorProfileViewModel.RefreshRootPage();
             }, async () =>
             {
                 //For IOS
                 await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                editRequestorProfileViewModel.RefreshRootPage();
             });
             return true;
         }

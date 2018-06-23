@@ -53,6 +53,8 @@ namespace CallAladdin.ViewModel
             set { jobRequestType = value; OnPropertyChanged("JobRequestType"); }
         }
 
+        public UserProfile UserProfile { get; set; }
+
         public string JobRequestImage
         {
             get { return jobRequestImage; }
@@ -159,19 +161,28 @@ namespace CallAladdin.ViewModel
         public ICommand ChangeProfileImageCmd { get; set; }
         public ICommand SubmitJobRequestCmd { get; set; }
 
-        private string userSystemUUID;
+        //private string userSystemUUID;
         private HomeUserControlViewModel parentViewModel;
         private IJobService jobService;
 
         public JobRequestViewModel(object owner)
         {
-            var parameters = (JobRequestParameters)owner;
-            if (parameters != null)
+            //var parameters = (JobRequestParameters)owner;
+            //if (parameters != null)
+            //{
+            //    ContractorIcon = GetIconByCategory(parameters.JobCategoryType);
+            //    JobRequestType = parameters.JobCategoryType;
+            //    userSystemUUID = parameters.UserProfile?.SystemUUID;
+            //    parentViewModel = parameters.ParentViewModel;
+            //}
+            var parentViewModel = (HomeUserControlViewModel)owner;
+            this.parentViewModel = parentViewModel;
+            if (parentViewModel != null)
             {
-                ContractorIcon = GetIconByCategory(parameters.JobCategoryType);
-                JobRequestType = parameters.JobCategoryType;
-                userSystemUUID = parameters.UserProfile?.SystemUUID;
-                parentViewModel = parameters.ParentViewModel;
+                ContractorIcon = GetIconByCategory(parentViewModel.CurrentSelectedCategory);
+                JobRequestType = parentViewModel.CurrentSelectedCategory;
+                UserProfile = parentViewModel.UserProfile;
+                this.SubscribeMeToThis(parentViewModel);
             }
             jobService = new JobService();
             locationService = new LocationService();
@@ -260,7 +271,8 @@ namespace CallAladdin.ViewModel
                 {
                     Navigator.Instance.OkAlert("Success", "A job has been created!", "OK");
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    parentViewModel?.SetDashboardTab();
+                    //parentViewModel?.SetDashboardTab();
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
                     return;
                 }
                 catch (Exception ex)
@@ -293,7 +305,7 @@ namespace CallAladdin.ViewModel
                 ImagePath = jobRequestImage,
                 ScopeOfWork = scopeOfWork,
                 Title = title,
-                RequestorSystemUUID = userSystemUUID
+                RequestorSystemUUID = UserProfile?.SystemUUID  //userSystemUUID
                 //TODO: to complete remaining fields
             };
         }

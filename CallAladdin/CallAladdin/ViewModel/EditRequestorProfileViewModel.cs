@@ -243,8 +243,9 @@ namespace CallAladdin.ViewModel
         private UserProfileUserControlViewModel parentViewModel;
         private string userSystemUUID;
 
-        public EditRequestorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
+        public EditRequestorProfileViewModel(/*UserProfileUserControlViewModel parentViewModel*/ object owner)
         {
+            var parentViewModel = (UserProfileUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
             locationService = new LocationService();
             userService = new UserService();
@@ -266,6 +267,8 @@ namespace CallAladdin.ViewModel
             });
 
             LoadContractorOptions();
+
+            this.SubscribeMeToThis(parentViewModel);
         }
 
         public async void ChangeProfileImageAsync()
@@ -380,6 +383,11 @@ namespace CallAladdin.ViewModel
             return true;
         }
 
+        public void RefreshRootPage()
+        {
+            parentViewModel.NotifyCompletion(parentViewModel, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.USER_PROFILE));
+        }
+
         private void UpdateUserProfile()
         {
             UserProfile = new UserProfile
@@ -490,13 +498,15 @@ namespace CallAladdin.ViewModel
                 Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", async ()=> {
                     //For android
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    this.parentViewModel.UpdateUserProfile(this.userProfile);
+                    //this.parentViewModel.UpdateUserProfile(this.userProfile);
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.REQUESTOR, this.UserProfile));
                     IsBusy = false;
                 }, async () => 
                 {
                     //For ios
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    this.parentViewModel.UpdateUserProfile(this.userProfile);
+                    //this.parentViewModel.UpdateUserProfile(this.userProfile);
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.REQUESTOR, this.UserProfile));
                     IsBusy = false;
                 });
                 return;

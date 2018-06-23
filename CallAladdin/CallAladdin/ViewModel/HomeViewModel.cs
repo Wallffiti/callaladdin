@@ -13,6 +13,7 @@ namespace CallAladdin.ViewModel
         public DummyCommand dummyCmd { get; set; }
         public Dummy2Command dummy2Cmd { get; set; }
 
+        public UserProfile UserProfile { get; set; }
         private HomeUserControlViewModel homeUserControlViewModel;
         private UserProfileUserControlViewModel userProfileUserControlViewModel;
         private DashboardUserControlViewModel dashboardUserControlViewModel;
@@ -36,13 +37,14 @@ namespace CallAladdin.ViewModel
         }
 
 
-        public HomeViewModel(UserProfile userProfile)
+        public HomeViewModel(/*UserProfile userProfile*/ object owner)
         {
             dummyCmd = new DummyCommand(this);
             dummy2Cmd = new Dummy2Command(this);
-            HomeUserControlViewModel = new HomeUserControlViewModel(userProfile);
-            UserProfileUserControlViewModel = new UserProfileUserControlViewModel(userProfile);
-            DashboardUserControlViewModel = new DashboardUserControlViewModel(userProfile);
+            this.UserProfile = (UserProfile)owner; //userProfile;
+            HomeUserControlViewModel = new HomeUserControlViewModel(/*userProfile*/ this);
+            UserProfileUserControlViewModel = new UserProfileUserControlViewModel(/*this.UserProfile*/ this);
+            DashboardUserControlViewModel = new DashboardUserControlViewModel(this.UserProfile);
 
             homeUserControlViewModel.SubscribeMeToThis(this);
             userProfileUserControlViewModel.SubscribeMeToThis(this);
@@ -66,7 +68,11 @@ namespace CallAladdin.ViewModel
                 if (eventArgs != null && eventArgs.EventName == Constants.USER_PROFILE_UPDATE)
                 {
                     //Notify related view models on profile updates
-                    homeUserControlViewModel.UpdateUserProfile(eventArgs.Parameters as UserProfile);
+                    //homeUserControlViewModel.UpdateUserProfile(eventArgs.Parameters as UserProfile);
+
+                    //Update user profile for related user controls here
+                    this.UserProfile = eventArgs.Parameters as UserProfile;
+                    HomeUserControlViewModel.UserProfile = this.UserProfile;
                 }
             }
 

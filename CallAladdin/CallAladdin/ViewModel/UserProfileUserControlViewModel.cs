@@ -15,10 +15,9 @@ using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
-    public class UserProfileUserControlViewModel : BaseViewModel
+    public class UserProfileUserControlViewModel : BaseViewModel, ISubscriber
     {
         private bool isBusy;
-        private UserProfile userProfile;
         private IUserIdentityRepository userIdentityRepository;
         private IUserProfileRepository userProfileRepository;
         private bool isContractor;
@@ -31,8 +30,9 @@ namespace CallAladdin.ViewModel
         private string companyName;
         private string companyRegisteredAddress;
         private string imagePath;
+        private HomeViewModel parentViewModel;
 
-        public UserProfile UserProfile { get { return userProfile; } }
+        public UserProfile UserProfile { get; set; }
 
         public bool IsContractor
         {
@@ -95,19 +95,23 @@ namespace CallAladdin.ViewModel
         public ICommand LogoutCmd { get; set; }
         public ICommand EditProfileCmd { get; set; }
 
-        public UserProfileUserControlViewModel(UserProfile userProfile)
+        public UserProfileUserControlViewModel(/*UserProfile userProfile*/ HomeViewModel homeViewModel)
         {
-            UpdateUserProfile(userProfile);
+            this.parentViewModel = homeViewModel;
+            this.UserProfile = parentViewModel.UserProfile;
+            UpdateUserProfile(UserProfile);
 
             userIdentityRepository = new UserIdentityRepository();
             userProfileRepository = new UserProfileRepository();
             LogoutCmd = new LogoutCommand(this);
             EditProfileCmd = new EditProfileCommand(this);
+
+            this.SubscribeMeToThis(parentViewModel);
         }
 
-        public void UpdateUserProfile(UserProfile userProfile)
+        private void UpdateUserProfile(UserProfile userProfile)
         {
-            this.userProfile = userProfile;
+            this.UserProfile = userProfile;
             if (userProfile != null)
             {
                 Name = userProfile.Name;
@@ -128,13 +132,13 @@ namespace CallAladdin.ViewModel
                 //userSystemUUID = userProfile.SystemUUID;
             }
 
-            base.NotifyCompletion(this, new ObserverEventArgs(Constants.USER_PROFILE_UPDATE, string.Empty, userProfile));
-            base.NotifyCompletion(this, new ObserverEventArgs(Constants.TAB_SWITCH, Constants.USER_PROFILE, userProfile));
+            //base.NotifyCompletion(this, new ObserverEventArgs(Constants.USER_PROFILE_UPDATE, string.Empty, userProfile));
+            //base.NotifyCompletion(this, new ObserverEventArgs(Constants.TAB_SWITCH, Constants.USER_PROFILE, userProfile));
         }
 
         public async void NavigateToEditUserProfile()
         {
-            if (userProfile == null)
+            if (UserProfile == null)
                 return;
 
             if (isBusy)
@@ -145,7 +149,7 @@ namespace CallAladdin.ViewModel
 
             isBusy = true;
 
-            if (userProfile.IsContractor)
+            if (UserProfile.IsContractor)
             {
                 await Navigator.Instance.NavigateTo(PageType.EDIT_CONTRACTOR_PROFILE, this);
             }
@@ -184,6 +188,24 @@ namespace CallAladdin.ViewModel
 
             await Task.Delay(1500);
             isBusy = false;
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            if (eventArgs != null && eventArgs.EventName == Constants.USER_PROFILE_UPDATE)
+            {
+                var userProfile = (UserProfile)eventArgs.Parameters;
+                UpdateUserProfile(userProfile);
+                base.NotifyCompletion(this, new ObserverEventArgs(Constants.USER_PROFILE_UPDATE, string.Empty, userProfile));
+                base.NotifyCompletion(this, new ObserverEventArgs(Constants.TAB_SWITCH, Constants.USER_PROFILE, userProfile));
+            }
+
+            //base.NotifyCompletion(this, eventArgs);
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+            //if needed
         }
     }
 }

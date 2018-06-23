@@ -8,12 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Linq;
+using CallAladdin.Observers.Interfaces;
+using CallAladdin.EventArgs;
 
 namespace CallAladdin.ViewModel
 {
-    public class HomeUserControlViewModel : BaseViewModel
+    public class HomeUserControlViewModel : BaseViewModel, ISubscriber
     {
-        private UserProfile userProfile;
+        public string CurrentSelectedCategory { get; set; }
+        private HomeViewModel parentViewModel;
+
+        public UserProfile UserProfile { get; set; }
         private IJobService jobService;
         //private string userSystemUUID;
         private bool isBusy;
@@ -28,18 +33,19 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public HomeUserControlViewModel(UserProfile userProfile)
+        public HomeUserControlViewModel(/*UserProfile userProfile*/ HomeViewModel homeViewModel)
         {
-            this.userProfile = userProfile;
+            this.parentViewModel = homeViewModel;
+            this.UserProfile = homeViewModel.UserProfile; //userProfile;
             jobService = new JobService();
             //this.userSystemUUID = userProfile?.SystemUUID;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
 
-        public void UpdateUserProfile(UserProfile userProfile)
-        {
-            this.userProfile = userProfile;
-        }
+        //public void UpdateUserProfile(UserProfile userProfile)
+        //{
+        //    this.UserProfile = userProfile;
+        //}
 
         public void NavigateToJobRequest(string category)
         {
@@ -75,13 +81,15 @@ namespace CallAladdin.ViewModel
 
             if (isEligible == true)
             {
-                await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, new JobRequestParameters
-                {
-                    //UserSystemUUID = this.userProfile?.SystemUUID, //userSystemUUID,
-                    UserProfile = userProfile,
-                    JobCategoryType = category,
-                    ParentViewModel = this
-                });
+                //await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, new JobRequestParameters
+                //{
+                //    UserProfile = userProfile,
+                //    JobCategoryType = category,
+                //    ParentViewModel = this
+                //});
+
+                CurrentSelectedCategory = category;
+                await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, this);
             }
             else
             {
@@ -91,16 +99,16 @@ namespace CallAladdin.ViewModel
             IsBusy = false;
         }
 
-        public void SetDashboardTab()
-        {
-            base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
-        }
+        //public void SetDashboardTab()
+        //{
+        //    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
+        //}
 
         public async Task<bool?> IsEligibleForRequest()
         {
             bool? result = null;
 
-            var jobs = await jobService.GetJobs(/*userSystemUUID*/ userProfile?.SystemUUID);
+            var jobs = await jobService.GetJobs(/*userSystemUUID*/ UserProfile?.SystemUUID);
 
             if (jobs != null)
             {
@@ -130,6 +138,16 @@ namespace CallAladdin.ViewModel
             }
 
             return result;
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            base.NotifyCompletion(this, eventArgs);
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+           //if needed
         }
     }
 }
