@@ -18,7 +18,7 @@
             <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
         </StackLayout>
     </Grid>
-    <ListView Grid.Row="2" x:Name="JobRequestListView" ItemsSource="{Binding JobRequestList}" RowHeight="80" SeparatorColor="Black">
+    <ListView Grid.Row="2" x:Name="JobRequestListView" ItemsSource="{Binding JobRequestList}" RowHeight="80" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>

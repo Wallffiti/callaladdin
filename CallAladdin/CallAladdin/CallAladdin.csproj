@@ -31,6 +31,26 @@
     <None Remove="Assets\Images\Contractors\PLUMBER.png" />
     <None Remove="Assets\Images\Contractors\SIGNBOARD.png" />
     <None Remove="Assets\Images\Contractors\WIRING_N_LIGHTING.png" />
+    <None Remove="Assets\Images\Contractors\Worded\air-conditioner.png" />
+    <None Remove="Assets\Images\Contractors\Worded\alarmncctv.png" />
+    <None Remove="Assets\Images\Contractors\Worded\aluminiumnglass.png" />
+    <None Remove="Assets\Images\Contractors\Worded\cleaningservices.png" />
+    <None Remove="Assets\Images\Contractors\Worded\construction-tilingnpainting.png" />
+    <None Remove="Assets\Images\Contractors\Worded\curtain-carpetnwallpaper.png" />
+    <None Remove="Assets\Images\Contractors\Worded\fengshuiconsultation2.png" />
+    <None Remove="Assets\Images\Contractors\Worded\gatensteelworks.png" />
+    <None Remove="Assets\Images\Contractors\Worded\generalworkers.png" />
+    <None Remove="Assets\Images\Contractors\Worded\housemovers.png" />
+    <None Remove="Assets\Images\Contractors\Worded\ID and carpenters.png" />
+    <None Remove="Assets\Images\Contractors\Worded\IDandcarpenters.png" />
+    <None Remove="Assets\Images\Contractors\Worded\laminated timber and flooring.png" />
+    <None Remove="Assets\Images\Contractors\Worded\laminatedtimberandflooring.png" />
+    <None Remove="Assets\Images\Contractors\Worded\landscapingnpond.png" />
+    <None Remove="Assets\Images\Contractors\Worded\pestcontrol.png" />
+    <None Remove="Assets\Images\Contractors\Worded\plasteredceiling.png" />
+    <None Remove="Assets\Images\Contractors\Worded\plumber.png" />
+    <None Remove="Assets\Images\Contractors\Worded\signboard.png" />
+    <None Remove="Assets\Images\Contractors\Worded\wiringnlighting.png" />
     <None Remove="Assets\Images\curtain.png" />
     <None Remove="Assets\Images\default_avatar_image.jpeg" />
     <None Remove="Assets\Images\flooring.png" />
@@ -75,6 +95,24 @@
     <EmbeddedResource Include="Assets\Images\Contractors\PLUMBER.png" />
     <EmbeddedResource Include="Assets\Images\Contractors\SIGNBOARD.png" />
     <EmbeddedResource Include="Assets\Images\Contractors\WIRING_N_LIGHTING.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\air-conditioner.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\alarmncctv.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\aluminiumnglass.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\cleaningservices.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\construction-tilingnpainting.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\curtain-carpetnwallpaper.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\fengshuiconsultation2.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\gatensteelworks.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\generalworkers.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\housemovers.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\IDandcarpenters.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\laminatedtimberandflooring.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\landscapingnpond.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\pestcontrol.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\plasteredceiling.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\plumber.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\signboard.png" />
+    <EmbeddedResource Include="Assets\Images\Contractors\Worded\wiringnlighting.png" />
     <EmbeddedResource Include="Assets\Images\curtain.png" />
     <EmbeddedResource Include="Assets\Images\default_avatar_image.jpeg" />
     <EmbeddedResource Include="Assets\Images\flooring.png" />
@@ -153,6 +191,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="UserControls\HomeUserControl.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UserControls\LegacyHomeUserControl.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="UserControls\UserProfileUserControl.xaml">

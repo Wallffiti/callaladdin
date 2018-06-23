@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
@@ -28,6 +29,8 @@ namespace CallAladdin.ViewModel
             set { isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
+        public ICommand RefreshJobList { get; set; }
+
         public DashboardUserControlViewModel(object owner)
         {
             var parentViewModel = (HomeViewModel)owner;
@@ -36,12 +39,16 @@ namespace CallAladdin.ViewModel
                 this.UserProfile = parentViewModel.UserProfile;
             }
             jobService = new JobService();
+            RefreshJobList = new Xamarin.Forms.Command(async (e) =>
+            {
+                await RefreshListAsync();
+            }, (param) =>
+            {
+                if (IsBusy)
+                    return false;
 
-            //TODO: run this only when dashboard tab is selected
-            //Task.Run(async () =>
-            //{
-            //    await RefreshListAsync();
-            //});
+                return true;
+            });
         }
 
         public async System.Threading.Tasks.Task RefreshListAsync()

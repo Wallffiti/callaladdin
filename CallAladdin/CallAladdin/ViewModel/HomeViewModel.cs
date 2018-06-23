@@ -96,14 +96,6 @@ namespace CallAladdin.ViewModel
             base.NotifyCompletion(this, eventArgs);
         }
 
-        //private void UpdateDashboardView()
-        //{
-        //    Task.Run(async () =>
-        //    {
-        //        await dashboardUserControlViewModel.RefreshListAsync();
-        //    });
-        //}
-
         public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
         {
             //if needed
