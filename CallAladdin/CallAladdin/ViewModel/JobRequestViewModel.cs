@@ -269,10 +269,12 @@ namespace CallAladdin.ViewModel
             {
                 try
                 {
-                    Navigator.Instance.OkAlert("Success", "A job has been created!", "OK");
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.JOB_REQUEST_LIST_UPDATE));
+                    Navigator.Instance.OkAlert("Job Submited", "Your job has been posted to available contractors in town. Please verify contractors quality of work before finalising.", "OK");
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
                     //parentViewModel?.SetDashboardTab();
                     base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
+                    Navigator.Instance.OkAlert("Disclaimer", "Call Aladdin bears no responsibility on the outcome of the work by the contractor.", "OK");
                     return;
                 }
                 catch (Exception ex)

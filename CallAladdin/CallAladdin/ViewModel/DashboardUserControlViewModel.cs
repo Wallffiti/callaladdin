@@ -10,5 +10,10 @@ namespace CallAladdin.ViewModel
         {
 
         }
+
+        public void RefreshList()
+        {
+
+        }
     }
 }

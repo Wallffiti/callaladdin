@@ -63,16 +63,26 @@ namespace CallAladdin.ViewModel
 
         public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
         {
-            if (sender is UserProfileUserControlViewModel)
+            if (eventArgs != null)
             {
-                if (eventArgs != null && eventArgs.EventName == Constants.USER_PROFILE_UPDATE)
+                if (sender is UserProfileUserControlViewModel)
                 {
-                    //Notify related view models on profile updates
-                    //homeUserControlViewModel.UpdateUserProfile(eventArgs.Parameters as UserProfile);
+                    if (eventArgs.EventName == Constants.USER_PROFILE_UPDATE)
+                    {
+                        //Notify related view models on profile updates
+                        //homeUserControlViewModel.UpdateUserProfile(eventArgs.Parameters as UserProfile);
 
-                    //Update user profile for related user controls here
-                    this.UserProfile = eventArgs.Parameters as UserProfile;
-                    HomeUserControlViewModel.UserProfile = this.UserProfile;
+                        //Update user profile for related user controls here
+                        this.UserProfile = eventArgs.Parameters as UserProfile;
+                        HomeUserControlViewModel.UserProfile = this.UserProfile;
+                    }
+                }
+                else if (sender is HomeUserControlViewModel)
+                {
+                    if (eventArgs.EventName == Constants.JOB_REQUEST_LIST_UPDATE)
+                    {
+                        dashboardUserControlViewModel.RefreshList();
+                    }
                 }
             }
 
