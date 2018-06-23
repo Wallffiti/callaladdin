@@ -20,12 +20,37 @@ namespace CallAladdin
         private HomeViewModel homeViewModel;
 
 		public HomePage (/*UserProfile userProfile*/ object owner)
-		{
-			InitializeComponent ();
+        {
+            InitializeComponent();
             homeViewModel = new HomeViewModel(/*userProfile*/ owner);
             BindingContext = homeViewModel;
             homeViewModel.SubscribeMeToThis(this);
-		}
+            TabbedPage tabbedPage = GetTabbedPage();
+            if (tabbedPage != null)
+            {
+                tabbedPage.CurrentPageChanged += TabbedPage_CurrentPageChanged;
+            }
+        }
+
+        private TabbedPage GetTabbedPage()
+        {
+            return this as TabbedPage;
+        }
+
+        private void TabbedPage_CurrentPageChanged(object sender, System.EventArgs e)
+        {
+            var tabbedPage = GetTabbedPage();
+            if (tabbedPage != null)
+            {
+                if (tabbedPage.CurrentPage == tabbedPage.Children[1])
+                {
+                    Task.Run(async () =>
+                    {
+                        await homeViewModel.RefreshDashboardViewAsync();
+                    });
+                }
+            }
+        }
 
         public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
         {
@@ -38,7 +63,7 @@ namespace CallAladdin
             {
                 if (eventArgs != null && eventArgs.EventName == Constants.TAB_SWITCH)
                 {
-                    var tabbedPage = this as TabbedPage;
+                    var tabbedPage = GetTabbedPage();
 
                     if (tabbedPage != null && tabbedPage.Children.Count > 0)
                     {

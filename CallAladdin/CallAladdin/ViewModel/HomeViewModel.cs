@@ -5,6 +5,7 @@ using CallAladdin.Observers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CallAladdin.ViewModel
 {
@@ -44,7 +45,7 @@ namespace CallAladdin.ViewModel
             this.UserProfile = (UserProfile)owner; //userProfile;
             HomeUserControlViewModel = new HomeUserControlViewModel(/*userProfile*/ this);
             UserProfileUserControlViewModel = new UserProfileUserControlViewModel(/*this.UserProfile*/ this);
-            DashboardUserControlViewModel = new DashboardUserControlViewModel(this.UserProfile);
+            DashboardUserControlViewModel = new DashboardUserControlViewModel(/*this.UserProfile*/ this);
 
             homeUserControlViewModel.SubscribeMeToThis(this);
             userProfileUserControlViewModel.SubscribeMeToThis(this);
@@ -61,6 +62,11 @@ namespace CallAladdin.ViewModel
             await Navigator.Instance.NavigateTo(PageType.DUMMY, uIPageType: UIPageType.MODAL);
         }
 
+        public async System.Threading.Tasks.Task RefreshDashboardViewAsync()
+        {
+            await dashboardUserControlViewModel.RefreshListAsync();
+        }
+
         public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
         {
             if (eventArgs != null)
@@ -75,19 +81,28 @@ namespace CallAladdin.ViewModel
                         //Update user profile for related user controls here
                         this.UserProfile = eventArgs.Parameters as UserProfile;
                         HomeUserControlViewModel.UserProfile = this.UserProfile;
+                        dashboardUserControlViewModel.UserProfile = this.UserProfile;
                     }
                 }
-                else if (sender is HomeUserControlViewModel)
-                {
-                    if (eventArgs.EventName == Constants.JOB_REQUEST_LIST_UPDATE)
-                    {
-                        dashboardUserControlViewModel.RefreshList();
-                    }
-                }
+                //else if (sender is HomeUserControlViewModel)
+                //{
+                //    if (eventArgs.EventName == Constants.JOB_REQUEST_LIST_UPDATE)
+                //    {
+                //        UpdateDashboardView();
+                //    }
+                //}
             }
 
             base.NotifyCompletion(this, eventArgs);
         }
+
+        //private void UpdateDashboardView()
+        //{
+        //    Task.Run(async () =>
+        //    {
+        //        await dashboardUserControlViewModel.RefreshListAsync();
+        //    });
+        //}
 
         public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
         {

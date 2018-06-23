@@ -5,7 +5,7 @@
              xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
              xmlns:uc="clr-namespace:CallAladdin.UserControls"
              xmlns:local="clr-namespace:CallAladdin"
-             x:Class="CallAladdin.HomePage" Title="HOME" NavigationPage.HasNavigationBar="False" Style="{StaticResource tertiaryBackground}" >
+             x:Class="CallAladdin.HomePage" Title="HOME" NavigationPage.HasNavigationBar="False" Style="{StaticResource tertiaryBackground}">
     <ContentPage Title="Home" Icon="home_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >
         <ContentPage.Content>
             <uc:HomeUserControl BindingContext="{Binding HomeUserControlViewModel}" />
