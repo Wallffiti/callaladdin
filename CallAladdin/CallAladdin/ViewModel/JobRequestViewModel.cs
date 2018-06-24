@@ -353,10 +353,10 @@ namespace CallAladdin.ViewModel
                 IsBusy = true;
                 Countries = await locationService.GetCountries();
                 Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
-                var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
+                //var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
                 await Task.Delay(1000);
-                SelectedCountry = userProfile?.Country;
-                SelectedCity = userProfile?.City;
+                SelectedCountry = UserProfile?.Country;// userProfile?.Country;
+                SelectedCity = UserProfile?.City; //userProfile?.City;
                 IsBusy = false;
             });
         }

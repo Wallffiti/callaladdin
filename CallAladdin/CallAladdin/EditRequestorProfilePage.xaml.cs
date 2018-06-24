@@ -24,7 +24,7 @@ namespace CallAladdin
             var parentViewModel = sender as UserProfileUserControlViewModel;
             editRequestorProfileViewModel = new EditRequestorProfileViewModel(parentViewModel);
             BindingContext = editRequestorProfileViewModel;
-            editRequestorProfileViewModel.PopulateData(parentViewModel.UserProfile);
+            //editRequestorProfileViewModel.PopulateData(parentViewModel.UserProfile);
         }
 
         protected override bool OnBackButtonPressed()

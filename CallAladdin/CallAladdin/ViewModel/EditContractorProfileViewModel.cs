@@ -231,27 +231,27 @@ namespace CallAladdin.ViewModel
             };
         }
 
-        public void PopulateData(UserProfile userProfile)
-        {
-            PopulateLocations();
-            LoadImageUploaderOptions();
+        //public void PopulateData(UserProfile userProfile)
+        //{
+        //    PopulateLocations();
+        //    LoadImageUploaderOptions();
 
-            if (userProfile != null)
-            {
-                Name = userProfile.Name;
-                Mobile = userProfile.Mobile;
-                Email = userProfile.Email;
-                SelectedCity = userProfile.City;
-                SelectedCountry = userProfile.Country;
-                ImagePath = userProfile.PathToProfileImage;
-                SelectedCategory = userProfile.Category;
-                Company = userProfile.CompanyName;
-                CompanyAddress = userProfile.CompanyRegisteredAddress;
-                userSystemUUID = userProfile.SystemUUID;
-            }
+        //    if (userProfile != null)
+        //    {
+        //        Name = userProfile.Name;
+        //        Mobile = userProfile.Mobile;
+        //        Email = userProfile.Email;
+        //        SelectedCity = userProfile.City;
+        //        SelectedCountry = userProfile.Country;
+        //        ImagePath = userProfile.PathToProfileImage;
+        //        SelectedCategory = userProfile.Category;
+        //        Company = userProfile.CompanyName;
+        //        CompanyAddress = userProfile.CompanyRegisteredAddress;
+        //        userSystemUUID = userProfile.SystemUUID;
+        //    }
 
-            UpdateUserProfile();
-        }
+        //    UpdateUserProfile();
+        //}
 
         private void PopulateLocations()
         {
@@ -259,11 +259,14 @@ namespace CallAladdin.ViewModel
             {
                 //Long processes below
                 this.IsBusy = true;
+                //this is a hack to avoid country and city info being overwritten
+                var tempCountry = userProfile?.Country;
+                var tempCity = userProfile?.City;
                 this.Countries = await locationService.GetCountries();
                 this.Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
-
-                this.SelectedCountry = userProfile?.Country;
-                this.SelectedCity = userProfile?.City;
+                await Task.Delay(1000);
+                this.SelectedCountry = tempCountry; //userProfile?.Country;
+                this.SelectedCity = tempCity;// //userProfile?.City;
 
                 this.IsBusy = false;
             });
@@ -286,6 +289,23 @@ namespace CallAladdin.ViewModel
         {
             var parentViewModel = (UserProfileUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
+            if (parentViewModel != null)
+            {
+                var tempUserProfile = parentViewModel.UserProfile;
+                if (tempUserProfile != null)
+                {
+                    Name = tempUserProfile.Name;
+                    Mobile = tempUserProfile.Mobile;
+                    Email = tempUserProfile.Email;
+                    SelectedCity = tempUserProfile.City;
+                    SelectedCountry = tempUserProfile.Country;
+                    ImagePath = tempUserProfile.PathToProfileImage;
+                    SelectedCategory = tempUserProfile.Category;
+                    Company = tempUserProfile.CompanyName;
+                    CompanyAddress = tempUserProfile.CompanyRegisteredAddress;
+                    userSystemUUID = tempUserProfile.SystemUUID;
+                }
+            }
             locationService = new LocationService();
             userService = new UserService();
             userProfileRepository = new UserProfileRepository();
@@ -306,6 +326,8 @@ namespace CallAladdin.ViewModel
             });
 
             this.SubscribeMeToThis(parentViewModel);
+            PopulateLocations();
+            LoadImageUploaderOptions();
         }
 
         public async void ChangeProfileImageAsync()
