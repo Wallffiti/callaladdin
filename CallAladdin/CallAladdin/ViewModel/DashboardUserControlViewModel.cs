@@ -16,7 +16,7 @@ namespace CallAladdin.ViewModel
         private IJobService jobService;
         private bool isBusy;
         private string descriptionLabel;
-        private const string DESCRIPTION_MESSAGE = "You currently have {0} jobs requested";
+        private const string DESCRIPTION_MESSAGE = "You have recently requested for {0} new jobs";
         public ICommand EditJobRequestCmd { get; set; }
         public ICommand DeleteJobRequestCmd { get; set; }
 
@@ -87,11 +87,11 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshListAsync()
         {
             IsBusy = true;
-            var data = await jobService.GetJobs(UserProfile?.SystemUUID);
+            var data = await jobService.GetJobs(UserProfile?.SystemUUID);   //TODO: need backend to do proper filtering
             if (data != null)
             {
                 JobRequestList = data
-                    .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days < Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS))
+                    .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days < Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS) && p.Status.ToLower() == "pending")
                     .ToList();
             }
             UpdateDescriptionLabel();

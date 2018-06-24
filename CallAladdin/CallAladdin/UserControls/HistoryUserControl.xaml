@@ -2,6 +2,7 @@
 <Grid xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
+             x:Name="HistoryUserControl"
              x:Class="CallAladdin.UserControls.HistoryUserControl">
     <Grid.Resources>
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
@@ -9,6 +10,7 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <Label Style="{StaticResource defaultHeader}" Text="HISTORY" Grid.Row="0" />
@@ -18,10 +20,17 @@
             <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
         </StackLayout>
     </Grid>
-    <ListView Grid.Row="2" x:Name="JobRequestListView" ItemsSource="{Binding JobRequestList}" RowHeight="80" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
+    <StackLayout Grid.Row="2" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" HeightRequest="40">
+        <Label Text="{Binding DescriptionLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+    </StackLayout>
+    <ListView Grid.Row="3" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="80" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Text="Edit" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference HistoryUserControl}, Path=BindingContext.EditJobRequestHistoryCmd}" />
+                        <MenuItem Text="Delete" IsDestructive="True" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference DashboardUserControl}, Path=BindingContext.DeleteJobRequestHistoryCmd}" />
+                    </ViewCell.ContextActions>
                     <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="{StaticResource lightgrey}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -32,8 +41,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Image Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" HeightRequest="50" WidthRequest="50" Margin="20" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" />
-                        <Label Text="{Binding Category}" FontSize="Medium" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1"/>
-                        <Label Text="{Binding Title}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="Small" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" />
+                        <Label Text="{Binding Category}" FontSize="14" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1"/>
+                        <Label Text="{Binding Title}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" />
                     </Grid>
                 </ViewCell>
             </DataTemplate>

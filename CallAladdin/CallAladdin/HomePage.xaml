@@ -48,7 +48,7 @@
     </ContentPage>
     <ContentPage Title="History" Icon="history_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >
         <ContentPage.Content>
-            <Grid>
+            <!--<Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -59,7 +59,8 @@
                         <Label Text="This is history page." />
                     </StackLayout>
                 </Frame>
-            </Grid>
+            </Grid>-->
+            <uc:HistoryUserControl BindingContext="{Binding HistoryUserControlViewModel}" />
         </ContentPage.Content>
     </ContentPage>
     <ContentPage Title="Profile" Icon="profile_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >

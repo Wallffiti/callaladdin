@@ -18,6 +18,7 @@ namespace CallAladdin.ViewModel
         private HomeUserControlViewModel homeUserControlViewModel;
         private UserProfileUserControlViewModel userProfileUserControlViewModel;
         private DashboardUserControlViewModel dashboardUserControlViewModel;
+        private HistoryUserControlViewModel historyUserControlViewModel;
 
         public HomeUserControlViewModel HomeUserControlViewModel
         {
@@ -37,6 +38,12 @@ namespace CallAladdin.ViewModel
             set { dashboardUserControlViewModel = value; OnPropertyChanged("DashboardUserControlViewModel"); }
         }
 
+        public HistoryUserControlViewModel HistoryUserControlViewModel
+        {
+            get { return historyUserControlViewModel; }
+            set { historyUserControlViewModel = value; OnPropertyChanged("HistoryUserControlViewModel"); }
+        }
+
 
         public HomeViewModel(/*UserProfile userProfile*/ object owner)
         {
@@ -46,10 +53,12 @@ namespace CallAladdin.ViewModel
             HomeUserControlViewModel = new HomeUserControlViewModel(this);
             UserProfileUserControlViewModel = new UserProfileUserControlViewModel(this);
             DashboardUserControlViewModel = new DashboardUserControlViewModel(this);
+            HistoryUserControlViewModel = new HistoryUserControlViewModel(this);
 
             homeUserControlViewModel.SubscribeMeToThis(this);
             userProfileUserControlViewModel.SubscribeMeToThis(this);
             dashboardUserControlViewModel.SubscribeMeToThis(this);
+            historyUserControlViewModel.SubscribeMeToThis(this);
         }
 
         public async void NavigateToDummyPage()
