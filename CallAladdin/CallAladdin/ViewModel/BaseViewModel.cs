@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using CallAladdin.Observers;
 
 namespace CallAladdin.ViewModel
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : BasePublisher, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

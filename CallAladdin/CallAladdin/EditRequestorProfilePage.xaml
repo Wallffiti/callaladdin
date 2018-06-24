@@ -14,7 +14,6 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--<Label Style="{StaticResource defaultHeader}" Text="EDIT USER PROFILE" Grid.Row="0" />-->
             <StackLayout Margin="20,0" Grid.Row="0">
                 <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,20" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
                     <Image.GestureRecognizers>
@@ -101,7 +100,6 @@
                 <Label Grid.Row="0" FontSize="Micro" Text="Photo is mandatory for contractor" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding IsRegisteredAsContractor}"/>
                 <Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Margin="100,0" Text="SUBMIT" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding UserProfile}"/>
             </Grid>
-            <!--<Button Grid.Row="1" x:Name="SubmitButton" Style="{StaticResource defaultButton}" Text="SUBMIT" Margin="100,20" Command="{Binding SubmitProfileChangeCmd}" CommandParameter="{Binding IsBusy}"/>-->
         </Grid>
     </ScrollView>
 </local:CustomPage>

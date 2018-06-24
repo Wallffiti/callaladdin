@@ -8,14 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Linq;
+using CallAladdin.Observers.Interfaces;
+using CallAladdin.EventArgs;
 
 namespace CallAladdin.ViewModel
 {
-    public class HomeUserControlViewModel : BaseViewModel
+    public class HomeUserControlViewModel : BaseViewModel, ISubscriber
     {
-        //private UserProfile userProfile;
+        public string CurrentSelectedCategory { get; set; }
+        private HomeViewModel parentViewModel;
+
+        public UserProfile UserProfile { get; set; }
         private IJobService jobService;
-        private string userSystemUUID;
         private bool isBusy;
         public ICommand SelectOptionCmd { get; set; }
         public bool IsBusy
@@ -28,11 +32,11 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public HomeUserControlViewModel(UserProfile userProfile)
+        public HomeUserControlViewModel(HomeViewModel homeViewModel)
         {
-            //this.userProfile = userProfile;
+            this.parentViewModel = homeViewModel;
+            this.UserProfile = homeViewModel.UserProfile; //userProfile;
             jobService = new JobService();
-            this.userSystemUUID = userProfile?.SystemUUID;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
 
@@ -70,11 +74,8 @@ namespace CallAladdin.ViewModel
 
             if (isEligible == true)
             {
-                await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, new JobRequestParameters
-                {
-                    UserSystemUUID = userSystemUUID,
-                    JobCategoryType = category
-                });
+                CurrentSelectedCategory = category;
+                await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, this);
             }
             else
             {
@@ -88,7 +89,7 @@ namespace CallAladdin.ViewModel
         {
             bool? result = null;
 
-            var jobs = await jobService.GetJobs(userSystemUUID);
+            var jobs = await jobService.GetJobs(/*userSystemUUID*/ UserProfile?.SystemUUID);
 
             if (jobs != null)
             {
@@ -118,6 +119,16 @@ namespace CallAladdin.ViewModel
             }
 
             return result;
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            base.NotifyCompletion(this, eventArgs);
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+           //if needed
         }
     }
 }

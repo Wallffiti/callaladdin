@@ -17,7 +17,7 @@ namespace CallAladdin.Model
         public string Country { get; set; }
         public float Longitude { get; set; }
         public float Latitude { get; set; }
-        public bool ContractorSystemUUID { get; set; }
+        public string ContractorSystemUUID { get; set; }
         public string Category { get; set; }
         public string Status { get; set; }
         public float Rating { get; set; }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Windows.Input;
 using CallAladdin.Helper;
+using CallAladdin.Commands;
 
 namespace CallAladdin.ViewModel
 {
@@ -23,17 +24,22 @@ namespace CallAladdin.ViewModel
         private string jobRequestImage;
         private string title;
         private string scopeOfWork;
-        private string selectedStartDate;
-        private string selectedStartTime;
+        private DateTime selectedStartDate;
+        private DateTime selectedEndDate;
+        private TimeSpan selectedStartTime;
+        private TimeSpan selectedEndTime;
+        private string selectedCountry;
         private string selectedCity;
         private string location;
         private int contractorsAvailable;
+        private IList<string> countries;
         private IList<string> cities;
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
         private bool isBusy;
         private ILocationService locationService;
         private IUserProfileRepository userProfileRepository;
+        private Job jobRequest;
 
         public string ContractorIcon
         {
@@ -47,52 +53,78 @@ namespace CallAladdin.ViewModel
             set { jobRequestType = value; OnPropertyChanged("JobRequestType"); }
         }
 
+        public UserProfile UserProfile { get; set; }
+
         public string JobRequestImage
         {
             get { return jobRequestImage; }
-            set { jobRequestImage = value; OnPropertyChanged("JobRequestImage"); }
+            set { jobRequestImage = value; UpdateJobRequest(); OnPropertyChanged("JobRequestImage"); }
         }
 
         public string Title
         {
             get { return title; }
-            set { title = value; OnPropertyChanged("Title"); }
+            set { title = value; UpdateJobRequest(); OnPropertyChanged("Title"); }
         }
 
         public string ScopeOfWork
         {
             get { return scopeOfWork; }
-            set { scopeOfWork = value; OnPropertyChanged("ScopeOfWork"); }
+            set { scopeOfWork = value; UpdateJobRequest(); OnPropertyChanged("ScopeOfWork"); }
         }
 
-        public string SelectedStartDate
+        public DateTime SelectedStartDate
         {
             get { return selectedStartDate; }
-            set { selectedStartDate = value; OnPropertyChanged("SelectedStartDate"); }
+            set { selectedStartDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartDate"); }
         }
 
-        public string SelectedStartTime
+        public DateTime SelectedEndDate
+        {
+            get { return selectedEndDate; }
+            set { selectedEndDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedEndDate"); }
+        }
+
+        public TimeSpan SelectedStartTime
         {
             get { return selectedStartTime; }
-            set { selectedStartTime = value; OnPropertyChanged("SelectedStartTime"); }
+            set { selectedStartTime = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartTime"); }
+        }
+
+        public TimeSpan SelectedEndTime
+        {
+            get { return selectedEndTime; }
+            set { selectedEndTime = value; UpdateJobRequest(); OnPropertyChanged("SelectedEndTime"); }
+        }
+
+        public string SelectedCountry
+        {
+            get { return selectedCountry; }
+            set { selectedCountry = value; UpdateJobRequest(); OnPropertyChanged("SelectedCountry"); }
         }
 
         public string SelectedCity
         {
             get { return selectedCity; }
-            set { selectedCity = value; OnPropertyChanged("SelectedCity"); }
+            set { selectedCity = value; UpdateJobRequest(); OnPropertyChanged("SelectedCity"); }
         }
 
         public string Location
         {
             get { return location; }
-            set { location = value; OnPropertyChanged("Location"); }
+            set { location = value; UpdateJobRequest(); OnPropertyChanged("Location"); }
         }
 
         public int ContractorsAvailable
         {
             get { return contractorsAvailable; }
             set { contractorsAvailable = value; OnPropertyChanged("ContractorsAvailable"); }
+        }
+
+        public IList<string> Countries
+        {
+            get { return countries; }
+            set { countries = value; OnPropertyChanged("Countries"); }
         }
 
         public IList<string> Cities
@@ -119,34 +151,39 @@ namespace CallAladdin.ViewModel
             set { isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
+        public Job JobRequest
+        {
+            get { return jobRequest; }
+            set { jobRequest = value; OnPropertyChanged("JobRequest"); }
+        }
+
         public ICommand SearchLocationCmd { get; set; }
         public ICommand ChangeProfileImageCmd { get; set; }
+        public ICommand SubmitJobRequestCmd { get; set; }
 
-        private string userSystemUUID;
+        //private string userSystemUUID;
+        private HomeUserControlViewModel parentViewModel;
         private IJobService jobService;
 
         public JobRequestViewModel(object owner)
         {
-            var parameters = (JobRequestParameters)owner;
-            if (parameters != null)
+            var parentViewModel = (HomeUserControlViewModel)owner;
+            this.parentViewModel = parentViewModel;
+            if (parentViewModel != null)
             {
-                ContractorIcon = GetIconByCategory(parameters.JobCategoryType);
-                JobRequestType = parameters.JobCategoryType;
-                userSystemUUID = parameters.UserSystemUUID;
+                ContractorIcon = GetIconByCategory(parentViewModel.CurrentSelectedCategory);
+                JobRequestType = parentViewModel.CurrentSelectedCategory;
+                UserProfile = parentViewModel.UserProfile;
+                this.SubscribeMeToThis(parentViewModel);
             }
             jobService = new JobService();
             locationService = new LocationService();
             userProfileRepository = new UserProfileRepository();
             PopulateLocations();
-            //JobRequestImage = "CallAladdin.Assets.Images.default_avatar_image.jpeg";
+            SetInitialTimes();
             ContractorsAvailable = 0;   //TODO: call api
-            SearchLocationCmd = new Xamarin.Forms.Command(e =>
-            {
-                //TODO: navigate to location page
-            }, (param) =>
-            {
-                return true;
-            });
+            SearchLocationCmd = new SearchLocationCommand(this);
+            SubmitJobRequestCmd = new SubmitJobCommand(this);
             ChangeProfileImageCmd = new Xamarin.Forms.Command(e =>
             {
                 ChangeProfileImageAsync();
@@ -155,6 +192,108 @@ namespace CallAladdin.ViewModel
                 return true;
             });
             LoadImageUploaderOptions();
+        }
+
+        public void RefreshRootPage()
+        {
+            parentViewModel.NotifyCompletion(parentViewModel, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.HOME));
+        }
+
+        private void SetInitialTimes()
+        {
+            var now = DateTime.Now;
+            SelectedStartDate = now;
+            SelectedEndDate = now;
+            SelectedStartTime = new TimeSpan(now.Hour, now.Minute, now.Second);
+            SelectedEndTime = new TimeSpan(now.Hour + 1, now.Minute, now.Second);
+        }
+
+        public /*async*/ void CreateJobRequest()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Create a job now?", "Yes", "No", async () =>
+            {
+                await DoCreateJob();
+            }, async () =>
+            {
+                await DoCreateJob();
+            });
+        }
+
+        private async Task DoCreateJob()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+            var response = await jobService.CreateRequest(new Model.Requests.JobRequestRequest
+            {
+                Address = jobRequest.Address,
+                Category = jobRequest.Category,
+                City = jobRequest.City,
+                Country = jobRequest.Country,
+                StartDateTime = jobRequest.StartDateTime,
+                EndDateTime = jobRequest.EndDateTime,
+                ImagePath = jobRequest.ImagePath,
+                RequestorSystemUUID = jobRequest.RequestorSystemUUID,
+                ScopeOfWork = jobRequest.ScopeOfWork,
+                Title = JobRequest.Title,
+                //TODO: to complete remaining fields
+            });
+
+            if (response.IsSuccess)
+            {
+                try
+                {
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.JOB_REQUEST_LIST_UPDATE));
+                    Navigator.Instance.OkAlert("Job Submited", "Your job has been posted to available contractors in town. Please verify contractors quality of work before finalising.", "OK");
+                    await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    //parentViewModel?.SetDashboardTab();
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
+                    Navigator.Instance.OkAlert("Disclaimer", "Call Aladdin bears no responsibility on the outcome of the work by the contractor.", "OK");
+                    return;
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+                return;
+            }
+
+            Navigator.Instance.OkAlert("Error", "There is a problem attempting to create a job. Please try again later.", "OK");
+            IsBusy = false;
+        }
+
+        private void UpdateJobRequest()
+        {
+            JobRequest = new Job
+            {
+                Address = location,
+                Category = jobRequestType,
+                City = selectedCity,
+                Country = selectedCountry,
+                StartDateTime = new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds),
+                EndDateTime = new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds),
+                CreatedDateTime = DateTime.Now,
+                ModifiedDateTime = DateTime.Now,
+                ImagePath = jobRequestImage,
+                ScopeOfWork = scopeOfWork,
+                Title = title,
+                RequestorSystemUUID = UserProfile?.SystemUUID  //userSystemUUID
+                //TODO: to complete remaining fields
+            };
         }
 
         private async void ChangeProfileImageAsync()
@@ -196,10 +335,12 @@ namespace CallAladdin.ViewModel
             {
                 //Long processes below
                 IsBusy = true;
+                Countries = await locationService.GetCountries();
                 Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
-                var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
-                await Task.Delay(1500);
-                SelectedCity = userProfile?.City;
+                //var userProfile = userProfileRepository.GetAll()?.LastOrDefault();
+                await Task.Delay(1000);
+                SelectedCountry = UserProfile?.Country;// userProfile?.Country;
+                SelectedCity = UserProfile?.City; //userProfile?.City;
                 IsBusy = false;
             });
         }

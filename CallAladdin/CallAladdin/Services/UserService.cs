@@ -70,12 +70,12 @@ namespace CallAladdin.Services
                             var bytes = Utilities.StreamToBytes(fs);
                             request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
 
-                            response = client.Execute(request);
+                            response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                         }
                     }
                     else
                     {
-                        response = client.Execute(request); 
+                        response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                     }
                 }
                 catch (Exception ex)
@@ -370,13 +370,13 @@ namespace CallAladdin.Services
                                     var bytes = Utilities.StreamToBytes(fs);
                                     request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
 
-                                    response = client.Execute(request);
+                                    response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                                 }
                             }
                         }
                         else
                         {
-                            response = client.Execute(request);
+                            response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                         }
                     }
                     catch (Exception ex)

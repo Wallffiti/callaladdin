@@ -1,4 +1,7 @@
-﻿using CallAladdin.Model;
+﻿using CallAladdin.EventArgs;
+using CallAladdin.Model;
+using CallAladdin.Observers.Interfaces;
+using CallAladdin.Renderers;
 using CallAladdin.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -12,13 +15,91 @@ using Xamarin.Forms.Xaml;
 namespace CallAladdin
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class HomePage //: CustomPage
+	public partial class HomePage : ISubscriber //: CustomPage
 	{
-		public HomePage (UserProfile userProfile)
-		{
-			InitializeComponent ();
-            BindingContext = new HomeViewModel(userProfile);
-		} 
+        private HomeViewModel homeViewModel;
+
+		public HomePage (/*UserProfile userProfile*/ object owner)
+        {
+            InitializeComponent();
+            homeViewModel = new HomeViewModel(/*userProfile*/ owner);
+            BindingContext = homeViewModel;
+            homeViewModel.SubscribeMeToThis(this);
+            TabbedPage tabbedPage = GetTabbedPage();
+            if (tabbedPage != null)
+            {
+                tabbedPage.CurrentPageChanged += TabbedPage_CurrentPageChanged;
+            }
+        }
+
+        private TabbedPage GetTabbedPage()
+        {
+            return this as TabbedPage;
+        }
+
+        private void TabbedPage_CurrentPageChanged(object sender, System.EventArgs e)
+        {
+            var tabbedPage = GetTabbedPage();
+            if (tabbedPage != null)
+            {
+                if (tabbedPage.CurrentPage == tabbedPage.Children[1])
+                {
+                    Task.Run(async () =>
+                    {
+                        await homeViewModel.RefreshDashboardViewAsync();
+                    });
+                }
+            }
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+            //if needed
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            if (sender is HomeViewModel)
+            {
+                if (eventArgs != null && eventArgs.EventName == Constants.TAB_SWITCH)
+                {
+                    var tabbedPage = GetTabbedPage();
+
+                    if (tabbedPage != null && tabbedPage.Children.Count > 0)
+                    {
+                        //trick to fix some ui bug on bottom bar navigation tab
+                        var currentPage = tabbedPage.Children[0] as ContentPage;
+                        tabbedPage.CurrentPage = currentPage;
+                        System.Threading.Thread.Sleep(500);
+
+                        switch (eventArgs.EventType)
+                        {
+                            case Constants.DASHBOARD:
+                                {
+                                    currentPage = tabbedPage.Children[1] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                }
+                                break;
+                            case Constants.USER_PROFILE:
+                                {
+                                    currentPage = tabbedPage.Children[4] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                }
+                                break;
+                            case Constants.HOME:
+                                {
+                                    currentPage = tabbedPage.Children[4] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                    System.Threading.Thread.Sleep(500);
+                                    currentPage = tabbedPage.Children[0] as ContentPage;
+                                    tabbedPage.CurrentPage = currentPage;
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
         protected override bool OnBackButtonPressed()
         {

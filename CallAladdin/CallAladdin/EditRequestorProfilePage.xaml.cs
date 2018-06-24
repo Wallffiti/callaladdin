@@ -18,13 +18,12 @@ namespace CallAladdin
 	{
         private EditRequestorProfileViewModel editRequestorProfileViewModel;
 
-        public EditRequestorProfilePage (/*UserProfile userProfile*/ object sender)
+        public EditRequestorProfilePage (object sender)
 		{
 			InitializeComponent ();
             var parentViewModel = sender as UserProfileUserControlViewModel;
             editRequestorProfileViewModel = new EditRequestorProfileViewModel(parentViewModel);
             BindingContext = editRequestorProfileViewModel;
-            editRequestorProfileViewModel.PopulateData(parentViewModel.UserProfile);
         }
 
         protected override bool OnBackButtonPressed()
@@ -34,10 +33,12 @@ namespace CallAladdin
             {
                 //For android
                 await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                editRequestorProfileViewModel.RefreshRootPage();
             }, async () =>
             {
                 //For IOS
                 await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                editRequestorProfileViewModel.RefreshRootPage();
             });
             return true;
         }

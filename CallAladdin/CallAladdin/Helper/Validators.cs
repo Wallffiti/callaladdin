@@ -50,5 +50,16 @@ namespace CallAladdin.Helper
 
             return result;
         }
+
+        public static bool TimeSelectionIsValid(DateTime selectedStartDate, TimeSpan selectedStartTime, DateTime selectedEndDate, TimeSpan selectedEndTime)
+        {
+            if (selectedStartDate == null || selectedStartTime == null || selectedEndDate == null || selectedEndTime == null)
+                return false;
+
+            var start = new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds);
+            var end = new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds);
+            var timeIsValid = end > start;
+            return timeIsValid;
+        }
     }
 }

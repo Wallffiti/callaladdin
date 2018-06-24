@@ -1,4 +1,5 @@
-﻿using CallAladdin.Helper;
+﻿using CallAladdin.Commands;
+using CallAladdin.Helper;
 using CallAladdin.Model;
 using CallAladdin.Repositories;
 using CallAladdin.Repositories.Interfaces;
@@ -78,6 +79,11 @@ namespace CallAladdin.ViewModel
                 isRegisteredAsContractor = value;
                 UpdateUserProfile();
                 //ValidateForm();
+
+                if (isRegisteredAsContractor)
+                {
+                    Navigator.Instance.OkAlert("Warning", "Once you have switched to CONTRACTOR, you can no longer switch back to REQUESTOR", "OK");
+                }
                 OnPropertyChanged("IsRegisteredAsContractor");
             }
         }
@@ -237,55 +243,33 @@ namespace CallAladdin.ViewModel
         private UserProfileUserControlViewModel parentViewModel;
         private string userSystemUUID;
 
-        public EditRequestorProfileViewModel(UserProfileUserControlViewModel parentViewModel)
+        public EditRequestorProfileViewModel(object owner)
         {
+            var parentViewModel = (UserProfileUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
+            if (parentViewModel != null)
+            {
+                var tempUserProfile = parentViewModel.UserProfile;
+                if (tempUserProfile != null)
+                {
+                    Name = tempUserProfile.Name;
+                    Mobile = tempUserProfile.Mobile;
+                    Email = tempUserProfile.Email;
+                    SelectedCity = tempUserProfile.City;
+                    SelectedCountry = tempUserProfile.Country;
+                    ImagePath = tempUserProfile.PathToProfileImage;
+                    SelectedCategory = tempUserProfile.Category;
+                    Company = tempUserProfile.CompanyName;
+                    CompanyAddress = tempUserProfile.CompanyRegisteredAddress;
+                    userSystemUUID = tempUserProfile.SystemUUID;
+                }
+            }
+
             locationService = new LocationService();
             userService = new UserService();
             userProfileRepository = new UserProfileRepository();
             userIdentityRepository = new UserIdentityRepository();
-            SubmitProfileChangeCmd = new Xamarin.Forms.Command((e) =>
-            {
-                Navigator.Instance.ConfirmationAlert("Confirmation", "Submit your profile now?", "OK", "Cancel", () =>
-                {
-                    //For android
-                    SubmitProfileChanges();
-                }, () =>
-                {
-                    //For ios
-                    SubmitProfileChanges();
-                });
-            },
-            (param) =>
-            {
-                if (param != null)
-                {
-                    var userProfile = (UserProfile)param;
-
-                    if (userProfile != null)
-                    {
-                        bool hasMandatoryInfo = !string.IsNullOrEmpty(userProfile.Name)
-                        && !string.IsNullOrEmpty(userProfile.City)
-                        && !string.IsNullOrEmpty(userProfile.Country);
-
-                        bool hasContractorInfo = !string.IsNullOrEmpty(userProfile.Category)
-                        && !string.IsNullOrEmpty(userProfile.CompanyName)
-                        && !string.IsNullOrEmpty(userProfile.CompanyRegisteredAddress)
-                        && !string.IsNullOrEmpty(userProfile.PathToProfileImage);
-
-                        if (userProfile.IsContractor)
-                        {
-                            return hasMandatoryInfo && hasContractorInfo;
-                        }
-                        else
-                        {
-                            return hasMandatoryInfo;
-                        }
-                    }
-                }
-
-                return false;
-            });
+            SubmitProfileChangeCmd = new SubmitProfileChangeRequestorCommand(this);
 
             ChangeProfileImageCmd = new Xamarin.Forms.Command((e) =>
             {
@@ -301,6 +285,11 @@ namespace CallAladdin.ViewModel
             });
 
             LoadContractorOptions();
+
+            this.SubscribeMeToThis(parentViewModel);
+            PopulateLocations();
+            LoadImageUploaderOptions();
+
         }
 
         public async void ChangeProfileImageAsync()
@@ -332,11 +321,14 @@ namespace CallAladdin.ViewModel
             {
                 //Long processes below
                 this.IsBusy = true;
+                //this is a hack to avoid country and city info being overwritten
+                var tempCountry = userProfile?.Country;
+                var tempCity = userProfile?.City;
                 this.Countries = await locationService.GetCountries();
                 this.Cities = await locationService.GetCities("all");  //right now no parameter needed to filter cities
-
-                this.SelectedCountry = userProfile?.Country;
-                this.SelectedCity = userProfile?.City;
+                await Task.Delay(1000);
+                this.SelectedCountry = tempCountry;
+                this.SelectedCity = tempCity;
 
                 this.IsBusy = false;
             });
@@ -372,29 +364,6 @@ namespace CallAladdin.ViewModel
             };
         }
 
-        public void PopulateData(UserProfile userProfile)
-        {
-            PopulateLocations();
-            LoadImageUploaderOptions();
-
-            if (userProfile != null)
-            {
-                Name = userProfile.Name;
-                Mobile = userProfile.Mobile;
-                Email = userProfile.Email;
-                IsRegisteredAsContractor = userProfile.IsContractor;
-                SelectedCity = userProfile.City;
-                SelectedCountry = userProfile.Country;
-                ImagePath = userProfile.PathToProfileImage;
-                userSystemUUID = userProfile.SystemUUID;
-            }
-
-            UpdateUserProfile();
-
-            //UserProfile = userProfile;
-
-        }
-
         private void LoadImageUploaderOptions()
         {
             PhotoOptionSelections = new List<string>
@@ -413,6 +382,11 @@ namespace CallAladdin.ViewModel
             }
 
             return true;
+        }
+
+        public void RefreshRootPage()
+        {
+            parentViewModel.NotifyCompletion(parentViewModel, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.USER_PROFILE));
         }
 
         private void UpdateUserProfile()
@@ -441,33 +415,34 @@ namespace CallAladdin.ViewModel
                 return;
             }
 
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Submit your profile changes now?", "Yes", "No", async () =>
+            {
+                await DoSubmitProfileChanges();
+            }, async () =>
+            {
+                await DoSubmitProfileChanges();
+            });
+        }
+
+        private async Task DoSubmitProfileChanges()
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
             IsBusy = true;
 
             if (FormIsValid())
             {
-                if (IsRegisteredAsContractor)
-                {
-                    Navigator.Instance.ConfirmationAlert("Warning", "Once you have switched to CONTRACTOR, you can no longer switch back to REQUESTOR. Continue?", "Yes", "No", () =>
-                    {
-                        //For android
-                        SendToServer();
-                    },
-                    () =>
-                    {
-                        //For ios
-                        SendToServer();
-                    });
-                    IsBusy = false;
-                    return;
-                }
-
-                SendToServer();
+                await SendToServer();
             }
 
             IsBusy = false;
         }
 
-        public async void SendToServer()
+        public async Task SendToServer()
         {
             if (this.userProfile == null)
                 return;
@@ -503,16 +478,18 @@ namespace CallAladdin.ViewModel
                 }
 
                 
-                this.parentViewModel.UpdateUserProfile(this.userProfile);
+                //this.parentViewModel.UpdateUserProfile(this.userProfile);
 
                 Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", async ()=> {
                     //For android
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.REQUESTOR, this.UserProfile));
                     IsBusy = false;
                 }, async () => 
                 {
                     //For ios
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.REQUESTOR, this.UserProfile));
                     IsBusy = false;
                 });
                 return;
