@@ -24,8 +24,21 @@ namespace CallAladdin
 
         protected override bool OnBackButtonPressed()
         {
-            jobRequestViewModel.RefreshRootPage();
-            return base.OnBackButtonPressed();
+            //jobRequestViewModel.RefreshRootPage();
+            //return base.OnBackButtonPressed();
+
+            Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to exit from creating job request? All changes will be lost.", "Yes", "No", async () =>
+            {
+                //For android
+                await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                jobRequestViewModel.RefreshRootPage();
+            }, async () =>
+            {
+                //For IOS
+                await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                jobRequestViewModel.RefreshRootPage();
+            });
+            return true;
         }
     }
 }

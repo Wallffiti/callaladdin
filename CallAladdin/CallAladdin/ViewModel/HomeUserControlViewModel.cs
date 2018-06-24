@@ -20,7 +20,6 @@ namespace CallAladdin.ViewModel
 
         public UserProfile UserProfile { get; set; }
         private IJobService jobService;
-        //private string userSystemUUID;
         private bool isBusy;
         public ICommand SelectOptionCmd { get; set; }
         public bool IsBusy
@@ -33,19 +32,13 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public HomeUserControlViewModel(/*UserProfile userProfile*/ HomeViewModel homeViewModel)
+        public HomeUserControlViewModel(HomeViewModel homeViewModel)
         {
             this.parentViewModel = homeViewModel;
             this.UserProfile = homeViewModel.UserProfile; //userProfile;
             jobService = new JobService();
-            //this.userSystemUUID = userProfile?.SystemUUID;
             SelectOptionCmd = new SelectContractorOptionCommand(this);
         }
-
-        //public void UpdateUserProfile(UserProfile userProfile)
-        //{
-        //    this.UserProfile = userProfile;
-        //}
 
         public void NavigateToJobRequest(string category)
         {
@@ -81,13 +74,6 @@ namespace CallAladdin.ViewModel
 
             if (isEligible == true)
             {
-                //await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, new JobRequestParameters
-                //{
-                //    UserProfile = userProfile,
-                //    JobCategoryType = category,
-                //    ParentViewModel = this
-                //});
-
                 CurrentSelectedCategory = category;
                 await Navigator.Instance.NavigateTo(PageType.JOB_REQUEST, this);
             }
@@ -98,11 +84,6 @@ namespace CallAladdin.ViewModel
 
             IsBusy = false;
         }
-
-        //public void SetDashboardTab()
-        //{
-        //    base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.DASHBOARD));
-        //}
 
         public async Task<bool?> IsEligibleForRequest()
         {

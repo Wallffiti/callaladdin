@@ -167,14 +167,6 @@ namespace CallAladdin.ViewModel
 
         public JobRequestViewModel(object owner)
         {
-            //var parameters = (JobRequestParameters)owner;
-            //if (parameters != null)
-            //{
-            //    ContractorIcon = GetIconByCategory(parameters.JobCategoryType);
-            //    JobRequestType = parameters.JobCategoryType;
-            //    userSystemUUID = parameters.UserProfile?.SystemUUID;
-            //    parentViewModel = parameters.ParentViewModel;
-            //}
             var parentViewModel = (HomeUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
             if (parentViewModel != null)
@@ -206,14 +198,6 @@ namespace CallAladdin.ViewModel
         {
             parentViewModel.NotifyCompletion(parentViewModel, new EventArgs.ObserverEventArgs(Constants.TAB_SWITCH, Constants.HOME));
         }
-
-        //private void ValidateTime()
-        //{
-        //    if (!TimeSelectionIsValid())
-        //    {
-        //        Navigator.Instance.OkAlert("Error", "Selected end time must be later than selected start time", "OK");
-        //    }
-        //}
 
         private void SetInitialTimes()
         {

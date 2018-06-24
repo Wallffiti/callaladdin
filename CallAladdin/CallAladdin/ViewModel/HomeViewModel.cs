@@ -42,10 +42,10 @@ namespace CallAladdin.ViewModel
         {
             dummyCmd = new DummyCommand(this);
             dummy2Cmd = new Dummy2Command(this);
-            this.UserProfile = (UserProfile)owner; //userProfile;
-            HomeUserControlViewModel = new HomeUserControlViewModel(/*userProfile*/ this);
-            UserProfileUserControlViewModel = new UserProfileUserControlViewModel(/*this.UserProfile*/ this);
-            DashboardUserControlViewModel = new DashboardUserControlViewModel(/*this.UserProfile*/ this);
+            this.UserProfile = (UserProfile)owner;
+            HomeUserControlViewModel = new HomeUserControlViewModel(this);
+            UserProfileUserControlViewModel = new UserProfileUserControlViewModel(this);
+            DashboardUserControlViewModel = new DashboardUserControlViewModel(this);
 
             homeUserControlViewModel.SubscribeMeToThis(this);
             userProfileUserControlViewModel.SubscribeMeToThis(this);
@@ -76,21 +76,12 @@ namespace CallAladdin.ViewModel
                     if (eventArgs.EventName == Constants.USER_PROFILE_UPDATE)
                     {
                         //Notify related view models on profile updates
-                        //homeUserControlViewModel.UpdateUserProfile(eventArgs.Parameters as UserProfile);
-
                         //Update user profile for related user controls here
                         this.UserProfile = eventArgs.Parameters as UserProfile;
                         HomeUserControlViewModel.UserProfile = this.UserProfile;
                         dashboardUserControlViewModel.UserProfile = this.UserProfile;
                     }
                 }
-                //else if (sender is HomeUserControlViewModel)
-                //{
-                //    if (eventArgs.EventName == Constants.JOB_REQUEST_LIST_UPDATE)
-                //    {
-                //        UpdateDashboardView();
-                //    }
-                //}
             }
 
             base.NotifyCompletion(this, eventArgs);

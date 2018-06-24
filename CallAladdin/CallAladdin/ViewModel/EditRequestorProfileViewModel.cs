@@ -243,7 +243,7 @@ namespace CallAladdin.ViewModel
         private UserProfileUserControlViewModel parentViewModel;
         private string userSystemUUID;
 
-        public EditRequestorProfileViewModel(/*UserProfileUserControlViewModel parentViewModel*/ object owner)
+        public EditRequestorProfileViewModel(object owner)
         {
             var parentViewModel = (UserProfileUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
@@ -364,26 +364,6 @@ namespace CallAladdin.ViewModel
             };
         }
 
-        //public void PopulateData(UserProfile userProfile)
-        //{
-        //    PopulateLocations();
-        //    LoadImageUploaderOptions();
-
-        //    if (userProfile != null)
-        //    {
-        //        Name = userProfile.Name;
-        //        Mobile = userProfile.Mobile;
-        //        Email = userProfile.Email;
-        //        IsRegisteredAsContractor = userProfile.IsContractor;
-        //        SelectedCity = userProfile.City;
-        //        SelectedCountry = userProfile.Country;
-        //        ImagePath = userProfile.PathToProfileImage;
-        //        userSystemUUID = userProfile.SystemUUID;
-        //    }
-
-        //    UpdateUserProfile();
-        //}
-
         private void LoadImageUploaderOptions()
         {
             PhotoOptionSelections = new List<string>
@@ -456,22 +436,6 @@ namespace CallAladdin.ViewModel
 
             if (FormIsValid())
             {
-                //if (IsRegisteredAsContractor)
-                //{
-                //    Navigator.Instance.ConfirmationAlert("Warning", "Once you have switched to CONTRACTOR, you can no longer switch back to REQUESTOR. Continue?", "Yes", "No", () =>
-                //    {
-                //        //For android
-                //        SendToServer();
-                //    },
-                //    () =>
-                //    {
-                //        //For ios
-                //        SendToServer();
-                //    });
-                //    IsBusy = false;
-                //    return;
-                //}
-
                 await SendToServer();
             }
 
@@ -519,14 +483,12 @@ namespace CallAladdin.ViewModel
                 Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", async ()=> {
                     //For android
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    //this.parentViewModel.UpdateUserProfile(this.userProfile);
                     base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.REQUESTOR, this.UserProfile));
                     IsBusy = false;
                 }, async () => 
                 {
                     //For ios
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    //this.parentViewModel.UpdateUserProfile(this.userProfile);
                     base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.REQUESTOR, this.UserProfile));
                     IsBusy = false;
                 });

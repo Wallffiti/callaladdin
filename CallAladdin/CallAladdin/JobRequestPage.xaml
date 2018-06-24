@@ -102,14 +102,6 @@
                 <Picker x:Name="CityPicker" Title="City" ItemsSource="{Binding Cities}" Grid.Row="1" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCity}">
                 </Picker>
             </Grid>
-            <!--<Grid Margin="20,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Source="baseline_room_black_24.png" Grid.Column="0" VerticalOptions="Center" />
-                <Entry Placeholder="Set Your Location Here" x:Name="LocationEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Column="1" VerticalOptions="Center" Text="{Binding Location}" FontSize="Small"/>
-            </Grid>-->
             <SearchBar Margin="20,10" SearchCommand="{Binding SearchLocationCmd}" SearchCommandParameter="{Binding Location}"  Placeholder="Set Your Location Here" x:Name="LocationSearchBar" TextColor="Black" PlaceholderColor="{StaticResource darkergrey}" HorizontalOptions="Fill" Grid.Column="1" VerticalOptions="Center" Text="{Binding Location}" FontSize="Small"/>
             <StackLayout Margin="20,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource lightOrange}" Padding="20, 0" HeightRequest="40">
                 <Label TextColor="Red" FontSize="10" Text="{Binding ContractorsAvailable}" VerticalOptions="Center" VerticalTextAlignment="Center" BackgroundColor="{StaticResource lightOrange}"/>

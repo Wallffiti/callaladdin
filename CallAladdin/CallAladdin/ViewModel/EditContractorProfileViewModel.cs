@@ -231,28 +231,6 @@ namespace CallAladdin.ViewModel
             };
         }
 
-        //public void PopulateData(UserProfile userProfile)
-        //{
-        //    PopulateLocations();
-        //    LoadImageUploaderOptions();
-
-        //    if (userProfile != null)
-        //    {
-        //        Name = userProfile.Name;
-        //        Mobile = userProfile.Mobile;
-        //        Email = userProfile.Email;
-        //        SelectedCity = userProfile.City;
-        //        SelectedCountry = userProfile.Country;
-        //        ImagePath = userProfile.PathToProfileImage;
-        //        SelectedCategory = userProfile.Category;
-        //        Company = userProfile.CompanyName;
-        //        CompanyAddress = userProfile.CompanyRegisteredAddress;
-        //        userSystemUUID = userProfile.SystemUUID;
-        //    }
-
-        //    UpdateUserProfile();
-        //}
-
         private void PopulateLocations()
         {
             Task.Run(async () =>
@@ -285,7 +263,7 @@ namespace CallAladdin.ViewModel
         private UserProfileUserControlViewModel parentViewModel;
         private string userSystemUUID;
 
-        public EditContractorProfileViewModel(/*UserProfileUserControlViewModel parentViewModel*/ object owner)
+        public EditContractorProfileViewModel(object owner)
         {
             var parentViewModel = (UserProfileUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
@@ -444,14 +422,12 @@ namespace CallAladdin.ViewModel
                 Navigator.Instance.OkAlert("Alert", "User profile is successfully updated.", "OK", async () => {
                     //For android
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    //this.parentViewModel.UpdateUserProfile(this.userProfile);
                     base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.CONTRACTOR, this.UserProfile));
                     IsBusy = false;
                 }, async () =>
                 {
                     //For ios
                     await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
-                    //this.parentViewModel.UpdateUserProfile(this.userProfile);
                     base.NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.USER_PROFILE_UPDATE, Constants.CONTRACTOR, this.UserProfile));
                     IsBusy = false;
                 });
