@@ -18,7 +18,10 @@ namespace CallAladdin.ViewModel
         private const string DESCRIPTION_EXPIRED_MESSAGGE = "{0} expired jobs";
         private const string DESCRIPTION_JOB_ACCEPTED = "{0} accepted jobs";
         private IList<Job> jobRequestHistoryList;
-        private string descriptionLabel;
+        private string summaryLabel;
+        private string contractorLabel;
+        private string expiredLabel;
+        private string acceptedLabel;
 
         public UserProfile UserProfile { get; set; }
 
@@ -34,10 +37,28 @@ namespace CallAladdin.ViewModel
             set { jobRequestHistoryList = value; OnPropertyChanged("JobRequestHistoryList"); }
         }
 
-        public string DescriptionLabel
+        public string SummaryLabel
         {
-            get { return descriptionLabel; }
-            set { descriptionLabel = value; OnPropertyChanged("DescriptionLabel"); }
+            get { return summaryLabel; }
+            set { summaryLabel = value; OnPropertyChanged("SummaryLabel"); }
+        }
+
+        public string ContractorFoundLabel
+        {
+            get { return contractorLabel; }
+            set { contractorLabel = value; OnPropertyChanged("ContractorFoundLabel"); }
+        }
+
+        public string ExpiredLabel
+        {
+            get { return expiredLabel; }
+            set { expiredLabel = value; OnPropertyChanged("ExpiredLabel"); }
+        }
+
+        public string AcceptedLabel
+        {
+            get { return acceptedLabel; }
+            set { acceptedLabel = value; OnPropertyChanged("AcceptedLabel"); }
         }
 
         public ICommand RefreshJobList { get; set; }
@@ -88,7 +109,11 @@ namespace CallAladdin.ViewModel
             var pendingTxt = string.Format(DESCRIPTION_EXPIRED_MESSAGGE, expired);
             var jobAcceptedTxt = string.Format(DESCRIPTION_JOB_ACCEPTED, jobAccepted);
 
-            DescriptionLabel = string.Concat(summaryTxt, " with ", contractorFoundTxt, ", ", pendingTxt, ", and ", jobAcceptedTxt);
+            //SummaryLabel = string.Concat(summaryTxt, " with ", contractorFoundTxt, ", ", pendingTxt, ", and ", jobAcceptedTxt);
+            SummaryLabel = summaryTxt;
+            ContractorFoundLabel = contractorFoundTxt;
+            ExpiredLabel = pendingTxt;
+            AcceptedLabel = jobAcceptedTxt;
         }
 
         public async System.Threading.Tasks.Task RefreshListAsync()

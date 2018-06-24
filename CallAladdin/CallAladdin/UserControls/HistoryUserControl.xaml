@@ -20,8 +20,11 @@
             <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
         </StackLayout>
     </Grid>-->
-    <StackLayout Grid.Row="1" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" HeightRequest="40">
-        <Label Text="{Binding DescriptionLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+    <StackLayout Grid.Row="1" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" VerticalOptions="FillAndExpand">
+        <Label Text="{Binding SummaryLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+        <Label Text="{Binding ContractorFoundLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+        <Label Text="{Binding ExpiredLabel}" VerticalOptions="Center" TextColor="DarkRed" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+        <Label Text="{Binding AcceptedLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
     </StackLayout>
     <ListView Grid.Row="2" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="80" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
         <ListView.ItemTemplate>
