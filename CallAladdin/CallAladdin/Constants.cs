@@ -17,10 +17,14 @@ namespace CallAladdin
         public const string USER_PROFILE_UPDATE = "USER_PROFILE_UPDATE";
         public const string JOB_REQUEST_LIST_UPDATE = "JOB_REQUEST_LIST_UPDATE";
         public const string REQUESTOR = "REQUESTOR";
-        public const string CONTRACTOR = "CONTRACTOR";
+        //public const string CONTRACTOR = "CONTRACTOR";
         public const string TAB_SWITCH = "TAB_SWITCH";
+
+        // HOME PAGE USER CONTROLS
         public const string HOME = "HOME";
         public const string DASHBOARD = "DASHBOARD";
+        public const string CONTRACTOR = "CONTRACTOR";
+        public const string HISTORY = "HISTORY";
         public const string USER_PROFILE = "USER_PROFILE";
 
         //HOME ICONS

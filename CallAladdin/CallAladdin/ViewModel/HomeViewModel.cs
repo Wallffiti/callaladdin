@@ -19,6 +19,7 @@ namespace CallAladdin.ViewModel
         private UserProfileUserControlViewModel userProfileUserControlViewModel;
         private DashboardUserControlViewModel dashboardUserControlViewModel;
         private HistoryUserControlViewModel historyUserControlViewModel;
+        private ContractorUserControlViewModel contractorUserControlViewModel;
 
         public HomeUserControlViewModel HomeUserControlViewModel
         {
@@ -44,6 +45,12 @@ namespace CallAladdin.ViewModel
             set { historyUserControlViewModel = value; OnPropertyChanged("HistoryUserControlViewModel"); }
         }
 
+        public ContractorUserControlViewModel ContractorUserControlViewModel
+        {
+            get { return contractorUserControlViewModel; }
+            set { contractorUserControlViewModel = value; OnPropertyChanged("ContractorUserControlViewModel"); }
+        }
+
 
         public HomeViewModel(/*UserProfile userProfile*/ object owner)
         {
@@ -54,11 +61,13 @@ namespace CallAladdin.ViewModel
             UserProfileUserControlViewModel = new UserProfileUserControlViewModel(this);
             DashboardUserControlViewModel = new DashboardUserControlViewModel(this);
             HistoryUserControlViewModel = new HistoryUserControlViewModel(this);
+            ContractorUserControlViewModel = new ContractorUserControlViewModel(this);
 
             homeUserControlViewModel.SubscribeMeToThis(this);
             userProfileUserControlViewModel.SubscribeMeToThis(this);
             dashboardUserControlViewModel.SubscribeMeToThis(this);
             historyUserControlViewModel.SubscribeMeToThis(this);
+            contractorUserControlViewModel.SubscribeMeToThis(this);
         }
 
         public async void NavigateToDummyPage()
@@ -74,6 +83,16 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshDashboardViewAsync()
         {
             await dashboardUserControlViewModel.RefreshListAsync();
+        }
+
+        public async Task RefreshContractorViewAsync()
+        {
+            await contractorUserControlViewModel.RefreshListAsync();
+        }
+
+        public async Task RefreshHistoryViewAsync()
+        {
+            await historyUserControlViewModel.RefreshListAsync();
         }
 
         public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)

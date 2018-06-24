@@ -31,7 +31,7 @@
     </ContentPage>
     <ContentPage Title="Contractor" Icon="contractor_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}">
         <ContentPage.Content>
-            <Grid>
+            <!--<Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -43,7 +43,8 @@
                         <Button Text="Move to dummy modal" Style="{StaticResource defaultButton}" Margin="100,20" Command="{Binding dummy2Cmd}" />
                     </StackLayout>
                 </Frame>
-            </Grid>
+            </Grid>-->
+            <uc:ContractorUserControl BindingContext="{Binding ContractorUserControlViewModel}" />
         </ContentPage.Content>
     </ContentPage>
     <ContentPage Title="History" Icon="history_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >
