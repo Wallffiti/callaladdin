@@ -8,22 +8,22 @@
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
     </Grid.Resources>
     <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
+        <!--<RowDefinition Height="Auto" />-->
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <Label Style="{StaticResource defaultHeader}" Text="HISTORY" Grid.Row="0" />
-    <Grid Grid.Row="1" BackgroundColor="Transparent" IsVisible="{Binding IsBusy}">
+    <!--<Grid Grid.Row="1" BackgroundColor="Transparent" IsVisible="{Binding IsBusy}">
         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}">
             <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" />
             <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
         </StackLayout>
-    </Grid>
-    <StackLayout Grid.Row="2" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" HeightRequest="40">
+    </Grid>-->
+    <StackLayout Grid.Row="1" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" HeightRequest="40">
         <Label Text="{Binding DescriptionLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
     </StackLayout>
-    <ListView Grid.Row="3" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="80" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
+    <ListView Grid.Row="2" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="80" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
