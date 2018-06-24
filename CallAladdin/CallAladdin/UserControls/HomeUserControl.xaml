@@ -273,9 +273,9 @@
             </Grid>
 
             <!--footer-->
-            <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Transparent" IsVisible="{Binding IsBusy}">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}">
-                    <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" />
+            <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Transparent">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" />
                     <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
                 </StackLayout>
             </Grid>
