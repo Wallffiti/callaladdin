@@ -300,7 +300,7 @@ namespace CallAladdin.ViewModel
             {
                 if (this.selectedPhotoOption == CHOOSE_PHOTO_FROM_CAMERA)
                 {
-                    filePath = await Utilities.TakePhoto(new Guid().ToString());
+                    filePath = await Utilities.TakePhoto(Guid.NewGuid().ToString().Replace("-", ""));
                 }
                 else if (this.selectedPhotoOption == BROWSE_PHOTO_FROM_FOLDER)
                 {

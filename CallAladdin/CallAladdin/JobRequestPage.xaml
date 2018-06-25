@@ -52,7 +52,12 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Editor HeightRequest="60" Text="{Binding ScopeOfWork}" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" FontSize="Small"/>
-                    <Button Image="baseline_mic_black_36.png" Grid.Row="0" Grid.Column="1" WidthRequest="50" HeightRequest="50" Command="{Binding RecordVoiceCommand}" CommandParameter="{Binding IsBusy}" />
+                    <StackLayout Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="1" WidthRequest="100">
+                        <Button Image="baseline_mic_black_36.png"  WidthRequest="40" HeightRequest="40" Command="{Binding RecordVoiceCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowRecording}" />
+                        <Button Image="ic_play.png"  WidthRequest="40" HeightRequest="40" Command="{Binding PlayRecordedCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowPlaying}"/>
+                        <Button Image="ic_stop.png"  WidthRequest="40" HeightRequest="40" Command="{Binding StopCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowStopping}"/>
+                        <Button Image="ic_delete.png"  WidthRequest="40" HeightRequest="40" Command="{Binding DeleteCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowDeleting}"/>
+                    </StackLayout>
                     <ActivityIndicator Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="IsBusyIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="Center" />
                 </Grid>
             </Grid>

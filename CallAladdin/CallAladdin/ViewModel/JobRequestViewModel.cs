@@ -11,6 +11,10 @@ using System.Linq;
 using System.Windows.Input;
 using CallAladdin.Helper;
 using CallAladdin.Commands;
+using CallAladdin.Helper.Interfaces;
+using Xamarin.Forms;
+using System.IO;
+using static CallAladdin.Constants;
 
 namespace CallAladdin.ViewModel
 {
@@ -40,6 +44,7 @@ namespace CallAladdin.ViewModel
         private ILocationService locationService;
         private IUserProfileRepository userProfileRepository;
         private Job jobRequest;
+        private IMediaPlayer mediaPlayer;
 
         public string ContractorIcon
         {
@@ -161,12 +166,47 @@ namespace CallAladdin.ViewModel
         public ICommand ChangeProfileImageCmd { get; set; }
         public ICommand SubmitJobRequestCmd { get; set; }
 
+        public ICommand RecordVoiceCmd { get; set; }
+        public ICommand PlayRecordedCmd { get; set; }
+        public ICommand StopCmd { get; set; }
+        public ICommand DeleteCmd { get; set; }
+
+        private bool allowRecording;
+        public bool AllowRecording
+        {
+            get { return allowRecording; }
+            set { allowRecording = value; OnPropertyChanged("AllowRecording"); }
+        }
+        private bool allowPlaying;
+        public bool AllowPlaying
+        {
+            get { return allowPlaying; }
+            set { allowPlaying = value; OnPropertyChanged("AllowPlaying"); }
+        }
+        private bool allowStopping;
+        public bool AllowStopping
+        {
+            get { return allowStopping; }
+            set { allowStopping = value; OnPropertyChanged("AllowStopping"); }
+        }
+
+        private bool allowDeleting;
+        public bool AllowDeleting
+        {
+            get { return allowDeleting; }
+            set { allowDeleting = value; OnPropertyChanged("AllowDeleting"); }
+        }
+
         //private string userSystemUUID;
         private HomeUserControlViewModel parentViewModel;
         private IJobService jobService;
+        private string mediaFilePath;   //unique per session
+        private MediaState mediaState;
 
         public JobRequestViewModel(object owner)
         {
+            var guid = Guid.NewGuid().ToString().Replace("-","");
+            mediaFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), guid + ".3gpp");
             var parentViewModel = (HomeUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
             if (parentViewModel != null)
@@ -191,7 +231,97 @@ namespace CallAladdin.ViewModel
             {
                 return true;
             });
+            RecordVoiceCmd = new Xamarin.Forms.Command(e =>
+            {
+                AllowRecording = false;
+                AllowStopping = true;
+                AllowPlaying = false;
+                AllowDeleting = false;
+                mediaState = MediaState.RECORD;
+                mediaPlayer.Record(mediaFilePath);
+
+            }, param =>
+            {
+                return true;
+            });
+            PlayRecordedCmd = new Xamarin.Forms.Command(e =>
+            {
+                
+                AllowRecording = false;
+                AllowStopping = true;
+                AllowPlaying = false;
+                AllowDeleting = false;
+                mediaState = MediaState.PLAY;
+                mediaPlayer.Play(mediaFilePath);
+            }, param =>
+            {
+                return true;
+            });
+            StopCmd = new Xamarin.Forms.Command(e =>
+            {
+                
+                AllowRecording = false;
+                AllowStopping = false;
+                AllowPlaying = File.Exists(mediaFilePath);   //if there is a recorded file
+                AllowDeleting = File.Exists(mediaFilePath);   //if there is a recorded file
+
+                if (mediaState == MediaState.RECORD)
+                {
+                    mediaPlayer.StopRecording();
+                }
+                else if (mediaState == MediaState.PLAY)
+                {
+                    mediaPlayer.StopPlaying();
+                }
+                
+                mediaState = MediaState.STOP;
+            }, param =>
+            {
+                return true;
+            });
+            DeleteCmd = new Xamarin.Forms.Command(e =>
+            {
+                AllowRecording = true;
+                AllowStopping = false;
+                AllowPlaying = false;
+
+                if (File.Exists(mediaFilePath))
+                {
+                    File.Delete(mediaFilePath);
+                }
+
+                AllowDeleting = false; //if file is successfully deleted
+                mediaState = MediaState.NEUTRAL;
+            }, param =>
+            {
+                return true;
+            });
             LoadImageUploaderOptions();
+            InitializeVoiceButtons();
+            SetupMediaPlayer();
+        }
+
+        private void SetupMediaPlayer()
+        {
+            mediaState = MediaState.NEUTRAL;
+
+            if (Device.OS == TargetPlatform.Android)
+            {
+                //for android
+                mediaPlayer = new AndroidMediaPlayer();
+            }
+            else if (Device.OS == TargetPlatform.iOS)
+            {
+                //for ios
+            }
+        }
+
+        private void InitializeVoiceButtons()
+        {
+            AllowRecording = true;
+            AllowStopping = false;
+            AllowPlaying = false;
+            AllowDeleting = false;
         }
 
         public void RefreshRootPage()
@@ -246,6 +376,7 @@ namespace CallAladdin.ViewModel
                 RequestorSystemUUID = jobRequest.RequestorSystemUUID,
                 ScopeOfWork = jobRequest.ScopeOfWork,
                 Title = JobRequest.Title,
+                VoiceNotePath = mediaFilePath,  //not sure it works?
                 //TODO: to complete remaining fields
             });
 
@@ -304,7 +435,7 @@ namespace CallAladdin.ViewModel
             {
                 if (this.selectedPhotoOption == CHOOSE_PHOTO_FROM_CAMERA)
                 {
-                    filePath = await Utilities.TakePhoto(new Guid().ToString());
+                    filePath = await Utilities.TakePhoto(Guid.NewGuid().ToString().Replace("-", ""));
                 }
                 else if (this.selectedPhotoOption == BROWSE_PHOTO_FROM_FOLDER)
                 {
