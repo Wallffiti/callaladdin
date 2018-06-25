@@ -137,7 +137,7 @@
     <PackageReference Include="RestSharp" Version="106.3.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="ThriveGmbH.BottomNavigationBar.XF" Version="1.0.2" />
-    <PackageReference Include="Xam.Plugin.Media" Version="4.0.0.9" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.1" />
     <PackageReference Include="Xamarin.Forms" Version="3.0.0.530893" />
   </ItemGroup>
 
