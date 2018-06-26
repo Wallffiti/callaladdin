@@ -233,7 +233,7 @@ namespace CallAladdin.ViewModel
             });
             RecordVoiceCmd = new Xamarin.Forms.Command(e =>
             {
-                Navigator.Instance.OkAlert("Alert", "Begin recording your voice once you tapped OK", "OK", () =>
+                Navigator.Instance.OkAlert("Alert", "Begin recording your voice once you tapped OK, and tap on the solid rectangular icon on your right to stop", "OK", () =>
                 {
                     //for android
                     BeginRecording();

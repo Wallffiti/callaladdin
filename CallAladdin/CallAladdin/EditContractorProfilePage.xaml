@@ -23,7 +23,7 @@
                 <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="0,0,0,0">
                     <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
                     <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>
-                    <Image HeightRequest="40" WidthRequest="40" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
+                    <Image HeightRequest="40" WidthRequest="40" Source="baseline_image_black_18.png">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" CommandParameter="{Binding IsBusy}" />
                         </Image.GestureRecognizers>
