@@ -233,12 +233,16 @@ namespace CallAladdin.ViewModel
             });
             RecordVoiceCmd = new Xamarin.Forms.Command(e =>
             {
-                AllowRecording = false;
-                AllowStopping = true;
-                AllowPlaying = false;
-                AllowDeleting = false;
-                mediaState = MediaState.RECORD;
-                mediaPlayer.Record(mediaFilePath);
+                Navigator.Instance.OkAlert("Alert", "Begin recording your voice once you tapped OK", "OK", () =>
+                {
+                    //for android
+                    BeginRecording();
+                },
+                () =>
+                {
+                    //for ios
+                    BeginRecording();
+                });
 
             }, param =>
             {
@@ -246,52 +250,31 @@ namespace CallAladdin.ViewModel
             });
             PlayRecordedCmd = new Xamarin.Forms.Command(e =>
             {
-                
-                AllowRecording = false;
-                AllowStopping = true;
-                AllowPlaying = false;
-                AllowDeleting = false;
-                mediaState = MediaState.PLAY;
-                mediaPlayer.Play(mediaFilePath);
+                PlayRecordedVoice();
             }, param =>
             {
                 return true;
             });
             StopCmd = new Xamarin.Forms.Command(e =>
             {
-                
-                AllowRecording = false;
-                AllowStopping = false;
-                AllowPlaying = File.Exists(mediaFilePath);   //if there is a recorded file
-                AllowDeleting = File.Exists(mediaFilePath);   //if there is a recorded file
-
-                if (mediaState == MediaState.RECORD)
-                {
-                    mediaPlayer.StopRecording();
-                }
-                else if (mediaState == MediaState.PLAY)
-                {
-                    mediaPlayer.StopPlaying();
-                }
-                
-                mediaState = MediaState.STOP;
+                StopMedia();
             }, param =>
             {
                 return true;
             });
             DeleteCmd = new Xamarin.Forms.Command(e =>
             {
-                AllowRecording = true;
-                AllowStopping = false;
-                AllowPlaying = false;
-
-                if (File.Exists(mediaFilePath))
+                Navigator.Instance.ConfirmationAlert("Alert", "Are you sure you want to delete your voice message?", "Yes", "No", () =>
                 {
-                    File.Delete(mediaFilePath);
-                }
-
-                AllowDeleting = false; //if file is successfully deleted
-                mediaState = MediaState.NEUTRAL;
+                    //for android
+                    RemoveRecordedVoice();
+                },
+                () =>
+                {
+                    //for ios
+                    RemoveRecordedVoice();
+                });
+               
             }, param =>
             {
                 return true;
@@ -299,6 +282,60 @@ namespace CallAladdin.ViewModel
             LoadImageUploaderOptions();
             InitializeVoiceButtons();
             SetupMediaPlayer();
+        }
+
+        private void RemoveRecordedVoice()
+        {
+            AllowRecording = true;
+            AllowStopping = false;
+            AllowPlaying = false;
+
+            if (File.Exists(mediaFilePath))
+            {
+                File.Delete(mediaFilePath);
+            }
+
+            AllowDeleting = false; //if file is successfully deleted
+            mediaState = MediaState.NEUTRAL;
+        }
+
+        private void StopMedia()
+        {
+            AllowRecording = false;
+            AllowStopping = false;
+            AllowPlaying = File.Exists(mediaFilePath);   //if there is a recorded file
+            AllowDeleting = File.Exists(mediaFilePath);   //if there is a recorded file
+
+            if (mediaState == MediaState.RECORD)
+            {
+                mediaPlayer.StopRecording();
+            }
+            else if (mediaState == MediaState.PLAY)
+            {
+                mediaPlayer.StopPlaying();
+            }
+
+            mediaState = MediaState.STOP;
+        }
+
+        private void PlayRecordedVoice()
+        {
+            AllowRecording = false;
+            AllowStopping = true;
+            AllowPlaying = false;
+            AllowDeleting = false;
+            mediaState = MediaState.PLAY;
+            mediaPlayer.Play(mediaFilePath);
+        }
+
+        private void BeginRecording()
+        {
+            AllowRecording = false;
+            AllowStopping = true;
+            AllowPlaying = false;
+            AllowDeleting = false;
+            mediaState = MediaState.RECORD;
+            mediaPlayer.Record(mediaFilePath);
         }
 
         private void SetupMediaPlayer()
