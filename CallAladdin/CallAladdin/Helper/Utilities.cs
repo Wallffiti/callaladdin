@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Plugin.Media;
 using System.Threading.Tasks;
 using System.IO;
+using CallAladdin.Helper.Interfaces;
 
 namespace CallAladdin.Helper
 {
@@ -28,28 +29,35 @@ namespace CallAladdin.Helper
         {
             string phoneNumber = "";
 
-            if (Device.RuntimePlatform == Device.Android)
+            //if (Device.RuntimePlatform == Device.Android)
+            //{
+            //    //For android
+
+            //    Android.Telephony.TelephonyManager mgr = null;
+
+            //    try
+            //    {
+            //        mgr = Android.App.Application.Context.GetSystemService(Android.Content.Context.TelephonyService) as Android.Telephony.TelephonyManager;
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //    }
+            //    if (mgr != null)
+            //    {
+            //        phoneNumber = mgr.Line1Number;
+            //    }
+            //}
+            //else if (Device.RuntimePlatform == Device.iOS)
+            //{
+            //    //For IOS
+            //}
+
+            var platformBasicService = DependencyService.Get<IPlatformBasicService>(DependencyFetchTarget.NewInstance);
+
+            if (platformBasicService != null)
             {
-                //For android
-
-                Android.Telephony.TelephonyManager mgr = null;
-
-                try
-                {
-                    mgr = Android.App.Application.Context.GetSystemService(Android.Content.Context.TelephonyService) as Android.Telephony.TelephonyManager;
-                }
-                catch (Exception ex)
-                {
-
-                }
-                if (mgr != null)
-                {
-                    phoneNumber = mgr.Line1Number;
-                }
-            }
-            else if (Device.RuntimePlatform == Device.iOS)
-            {
-                //For IOS
+                phoneNumber = platformBasicService.GetPhoneNumber();
             }
 
             return phoneNumber;

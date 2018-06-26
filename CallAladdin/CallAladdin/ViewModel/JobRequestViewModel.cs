@@ -305,15 +305,17 @@ namespace CallAladdin.ViewModel
         {
             mediaState = MediaState.NEUTRAL;
 
-            if (Device.OS == TargetPlatform.Android)
-            {
-                //for android
-                mediaPlayer = new AndroidMediaPlayer();
-            }
-            else if (Device.OS == TargetPlatform.iOS)
-            {
-                //for ios
-            }
+            //if (Device.OS == TargetPlatform.Android)
+            //{
+            //    //for android
+            //    mediaPlayer = new AndroidMediaPlayer();
+            //}
+            //else if (Device.OS == TargetPlatform.iOS)
+            //{
+            //    //for ios
+            //}
+
+            mediaPlayer = DependencyService.Get<IMediaPlayer>(DependencyFetchTarget.NewInstance);
         }
 
         private void InitializeVoiceButtons()

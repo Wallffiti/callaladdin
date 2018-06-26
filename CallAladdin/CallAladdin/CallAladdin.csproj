@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helper\AndroidMediaPlayer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\aladdin-logo-new-2017.png" />
     <None Remove="Assets\Images\air_conditioner.png" />
     <None Remove="Assets\Images\alarm_cctv.png" />
