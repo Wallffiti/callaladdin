@@ -325,7 +325,12 @@ namespace CallAladdin.ViewModel
             AllowPlaying = false;
             AllowDeleting = false;
             mediaState = MediaState.PLAY;
-            mediaPlayer.Play(mediaFilePath);
+            mediaPlayer.Play(mediaFilePath, (s,e) =>
+            {
+                AllowStopping = false;
+                AllowPlaying = true;
+                AllowDeleting = true;
+            });
         }
 
         private void BeginRecording()

@@ -72,7 +72,7 @@ namespace CallAladdin.Droid
             }
         }
 
-        public void Play(string pathToAudioFile)
+        public void Play(string pathToAudioFile, Action<object, System.EventArgs> OnPlaybackCompleted = null)
         {
             try
             {
@@ -80,7 +80,10 @@ namespace CallAladdin.Droid
                 {
                     player = new MediaPlayer();
                 }
-
+                player.Completion += (s, e) =>
+                {
+                    OnPlaybackCompleted?.Invoke(this, e);
+                };
                 player.Reset();
                 player.SetDataSource(pathToAudioFile);
                 player.Prepare();

@@ -22,7 +22,7 @@ namespace CallAladdin.iOS
             throw new NotImplementedException();
         }
 
-        public void Play(string pathToAudioFile)
+        public void Play(string pathToAudioFile, Action<object, System.EventArgs> OnPlaybackCompleted = null)
         {
             throw new NotImplementedException();
         }
