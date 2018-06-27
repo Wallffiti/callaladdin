@@ -55,7 +55,7 @@ namespace CallAladdin.ViewModel
             .Append("<title>©2017 Call Aladdin Disclaimer</title>")
             .Append("</head>")
             .Append("<body style=\"background-color: #EAECF5\">")
-            .Append("<div style=\"background-color: lightgray; padding: 10px\">")
+            .Append("<div style=\"background-color: lightgray; padding: 10px; text-align:justify\">")
 
             .Append(" <h3><u>PERSONAL DATA PROTECTION</u></h3>")
             .Append(" <p>You agree and consent to the Company using and processing your Personal Data for the Purposes and in the manner as identified hereunder.</p>")
