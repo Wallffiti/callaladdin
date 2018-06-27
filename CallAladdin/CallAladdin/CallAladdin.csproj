@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helper\AndroidMediaPlayer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\aladdin-logo-new-2017.png" />
     <None Remove="Assets\Images\air_conditioner.png" />
     <None Remove="Assets\Images\alarm_cctv.png" />
@@ -134,10 +138,11 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Plugin.AudioRecorder" Version="0.8.0" />
     <PackageReference Include="RestSharp" Version="106.3.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="ThriveGmbH.BottomNavigationBar.XF" Version="1.0.2" />
-    <PackageReference Include="Xam.Plugin.Media" Version="4.0.0.9" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.1" />
     <PackageReference Include="Xamarin.Forms" Version="3.0.0.530893" />
   </ItemGroup>
 

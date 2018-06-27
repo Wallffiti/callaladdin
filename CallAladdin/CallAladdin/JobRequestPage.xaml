@@ -14,7 +14,7 @@
                 <Image Source="{Binding ContractorIcon, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"/>
                 <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
             </FlexLayout>
-            <Image Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}" HorizontalOptions="Center"  VerticalOptions="Center">
+            <Image Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Aspect="AspectFit" WidthRequest="300" HeightRequest="300">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
                 </Image.GestureRecognizers>
@@ -22,7 +22,7 @@
             <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="20, 0">
                 <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
                 <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>
-                <Image HeightRequest="40" WidthRequest="40" Source="{ext:ImageResource CallAladdin.Assets.Images.default_avatar_image.jpeg}">
+                <Image HeightRequest="40" WidthRequest="40" Source="baseline_image_black_18.png">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
                     </Image.GestureRecognizers>
@@ -52,7 +52,12 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Editor HeightRequest="60" Text="{Binding ScopeOfWork}" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" FontSize="Small"/>
-                    <Button Image="baseline_mic_black_36.png" Grid.Row="0" Grid.Column="1" WidthRequest="50" HeightRequest="50" Command="{Binding RecordVoiceCommand}" CommandParameter="{Binding IsBusy}" />
+                    <StackLayout Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="1" WidthRequest="100">
+                        <Button Image="baseline_mic_black_36.png" BackgroundColor="Transparent"  WidthRequest="40" HeightRequest="40" Command="{Binding RecordVoiceCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowRecording}" />
+                        <Button Image="ic_play.png" BackgroundColor="Transparent"  WidthRequest="40" HeightRequest="40" Command="{Binding PlayRecordedCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowPlaying}"/>
+                        <Button Image="ic_stop.png" BackgroundColor="Transparent" WidthRequest="40" HeightRequest="40" Command="{Binding StopCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowStopping}"/>
+                        <Button Image="ic_delete.png" BackgroundColor="Transparent"  WidthRequest="40" HeightRequest="40" Command="{Binding DeleteCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowDeleting}"/>
+                    </StackLayout>
                     <ActivityIndicator Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="IsBusyIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="Center" />
                 </Grid>
             </Grid>

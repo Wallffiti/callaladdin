@@ -1,7 +1,4 @@
-﻿//using Android.Content;
-//using Android.Telephony;
-//using Android.App;
-using CallAladdin.Model;
+﻿using CallAladdin.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;

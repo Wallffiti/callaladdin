@@ -332,11 +332,19 @@ namespace CallAladdin.ViewModel
 
         public void UpdateUserRegistration()
         {
+            var correctedPhone = "";
+
+            if (!string.IsNullOrEmpty(this.mobile))
+            {
+                var tempPhone = this.mobile.Replace(" ", "").Trim();
+                correctedPhone = tempPhone.StartsWith("+") ? tempPhone : "+" + tempPhone;
+            }
+
             UserRegistration = new UserRegistration()
             {
                 Guid = Guid.NewGuid().ToString(),
                 Name = this.name,
-                Mobile = this.mobile,
+                Mobile = correctedPhone, //this.mobile,
                 Email = this.email,
                 City = this.selectedCity,
                 Country = this.selectedCountry,

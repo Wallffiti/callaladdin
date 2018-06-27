@@ -58,5 +58,13 @@ namespace CallAladdin
         public const string FENGSHUI_CONSULTATION = "FENGSHUI CONSULTATION";
         public const string GENERAL_WORKERS = "GENERAL WORKERS";
         public const string HOUSE_MOVERS = "HOUSE MOVERS";
+
+        public enum MediaState
+        {
+            NEUTRAL = 0,
+            PLAY = 1,
+            STOP = 2,
+            RECORD = 3
+        }
     }
 }

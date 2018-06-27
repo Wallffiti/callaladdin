@@ -1,4 +1,5 @@
 ﻿using CallAladdin.EventArgs;
+using CallAladdin.Helper.Interfaces;
 using CallAladdin.Model;
 using CallAladdin.Observers.Interfaces;
 using CallAladdin.Renderers;
@@ -160,23 +161,16 @@ namespace CallAladdin
 
         protected override bool OnBackButtonPressed()
         {
-            //Device.BeginInvokeOnMainThread(async () =>
-            //{
-            //    var result = await DisplayAlert("Confirmation", "Are you sure to exit this application?", "Ok", "Cancel");
-            //    if (result)
-            //    {
-            //        if (Device.OS == TargetPlatform.Android)
-            //        {
-            //            //Do clean up if necessary
-            //            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
-            //        }
-            //    }
-            //});
-
             Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure to exit this application?", "Ok", "Cancel", () =>
             {
                 //For android
-                Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+                //Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+                var platformBasicService = DependencyService.Get<IPlatformBasicService>(DependencyFetchTarget.NewInstance);
+
+                if (platformBasicService != null)
+                {
+                    platformBasicService.ExitApplication();
+                }
             },
             () =>
             {

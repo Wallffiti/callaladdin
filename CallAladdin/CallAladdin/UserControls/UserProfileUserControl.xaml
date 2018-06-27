@@ -21,7 +21,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackLayout Orientation="Vertical" Margin="20,0" Grid.Row="0" x:Name="ProfileInfoLayout">
-                    <Image x:Name="AvatarImage" HeightRequest="100" WidthRequest="100" Margin="0,10" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}"/>
+                    <Image x:Name="AvatarImage" MinimumHeightRequest="100" MinimumWidthRequest="100" Margin="0,10" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" HorizontalOptions="FillAndExpand" Aspect="AspectFit" WidthRequest="200" HeightRequest="200"/>
                     <Grid x:Name="BasicInfoGrid" Margin="0,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
