@@ -75,7 +75,7 @@
                 <Label Text="Preferred Start and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
                     <Image Source="ic_shortcut_perm_contact_calendar.png" WidthRequest="50" HeightRequest="50"/>
-                    <DatePicker  x:Name="StartDatePicker" FontSize="Small" TextColor="Green"  MaximumDate="2050-12-31" MinimumDate="2018-01-01" Date="{Binding SelectedStartDate}"/>
+                    <DatePicker  x:Name="StartDatePicker" FontSize="Small" TextColor="Green"  MaximumDate="2050-12-31" MinimumDate="{Binding MinStartDate}" Date="{Binding SelectedStartDate}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <Image Source="ic_shortcut_access_time.png" WidthRequest="50" HeightRequest="50"/>
@@ -84,7 +84,7 @@
                 <Label Text="Preferred End and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
                 <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
                     <Image Source="ic_shortcut_perm_contact_calendar.png" WidthRequest="50" HeightRequest="50"/>
-                    <DatePicker x:Name="EndDatePicker" FontSize="Small" TextColor="Red" MaximumDate="2050-12-31" MinimumDate="2018-01-01" Date="{Binding SelectedEndDate}"/>
+                    <DatePicker x:Name="EndDatePicker" FontSize="Small" TextColor="Red" MaximumDate="2050-12-31" MinimumDate="{Binding MinEndDate}" Date="{Binding SelectedEndDate}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
                     <Image Source="ic_shortcut_access_time.png" WidthRequest="50" HeightRequest="50"/>

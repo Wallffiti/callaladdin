@@ -30,6 +30,8 @@ namespace CallAladdin.ViewModel
         private string scopeOfWork;
         private DateTime selectedStartDate;
         private DateTime selectedEndDate;
+        private DateTime minStartDate;
+        private DateTime minEndDate;
         private TimeSpan selectedStartTime;
         private TimeSpan selectedEndTime;
         private string selectedCountry;
@@ -78,28 +80,99 @@ namespace CallAladdin.ViewModel
             set { scopeOfWork = value; UpdateJobRequest(); OnPropertyChanged("ScopeOfWork"); }
         }
 
+        public DateTime MinStartDate
+        {
+            get { return minStartDate; }
+            set { minStartDate = value; OnPropertyChanged("MinStartDate"); }
+        }
+
+        public DateTime MinEndDate
+        {
+            get { return minEndDate; }
+            set { minEndDate = value; OnPropertyChanged("MinEndDate"); }
+        }
+
         public DateTime SelectedStartDate
         {
             get { return selectedStartDate; }
-            set { selectedStartDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartDate"); }
+            set
+            {
+                var oldValue = selectedStartDate;
+                selectedStartDate = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedStartDate = oldValue;
+                }
+                OnPropertyChanged("SelectedStartDate");
+            }
         }
 
         public DateTime SelectedEndDate
         {
             get { return selectedEndDate; }
-            set { selectedEndDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedEndDate"); }
+            set
+            {
+                var oldValue = selectedEndDate;
+                selectedEndDate = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedEndDate = oldValue;
+                }
+
+                OnPropertyChanged("SelectedEndDate");
+            }
         }
 
         public TimeSpan SelectedStartTime
         {
             get { return selectedStartTime; }
-            set { selectedStartTime = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartTime"); }
+            set
+            {
+                var oldValue = selectedStartTime;
+                selectedStartTime = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedStartTime = oldValue;
+                }
+
+                OnPropertyChanged("SelectedStartTime");
+            }
         }
 
         public TimeSpan SelectedEndTime
         {
             get { return selectedEndTime; }
-            set { selectedEndTime = value; UpdateJobRequest(); OnPropertyChanged("SelectedEndTime"); }
+            set
+            {
+                var oldValue = selectedEndTime;
+                selectedEndTime = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedEndTime = oldValue;
+                }
+                
+                OnPropertyChanged("SelectedEndTime");
+            }
         }
 
         public string SelectedCountry
@@ -205,7 +278,7 @@ namespace CallAladdin.ViewModel
 
         public JobRequestViewModel(object owner)
         {
-            var guid = Guid.NewGuid().ToString().Replace("-","");
+            var guid = Guid.NewGuid().ToString().Replace("-", "");
             mediaFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), guid + ".3gpp");
             var parentViewModel = (HomeUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
@@ -274,7 +347,7 @@ namespace CallAladdin.ViewModel
                     //for ios
                     RemoveRecordedVoice();
                 });
-               
+
             }, param =>
             {
                 return true;
@@ -282,6 +355,39 @@ namespace CallAladdin.ViewModel
             LoadImageUploaderOptions();
             InitializeVoiceButtons();
             SetupMediaPlayer();
+            InitializeMinStartAndEndDates();
+        }
+
+        private void InitializeMinStartAndEndDates()
+        {
+            MinStartDate = DateTime.Now;
+            MinEndDate = DateTime.Now;
+        }
+
+        private bool ValidateDateTime()
+        {
+            bool result = true;
+
+            if (selectedStartDate != default(DateTime) && selectedEndDate != default(DateTime) && selectedStartTime != default(TimeSpan) && selectedEndTime != default(TimeSpan))
+            {
+                if (/*!isBusy && */ GetStartDateTime() > GetEndDateTime())
+                {
+                    Navigator.Instance.OkAlert("Error", "Preferred end date time should be later than preferred start date time", "OK");
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
+        private DateTime GetStartDateTime()
+        {
+            return new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds);
+        }
+
+        private DateTime GetEndDateTime()
+        {
+            return new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds);
         }
 
         private void RemoveRecordedVoice()
@@ -325,7 +431,7 @@ namespace CallAladdin.ViewModel
             AllowPlaying = false;
             AllowDeleting = false;
             mediaState = MediaState.PLAY;
-            mediaPlayer.Play(mediaFilePath, (s,e) =>
+            mediaPlayer.Play(mediaFilePath, (s, e) =>
             {
                 AllowStopping = false;
                 AllowPlaying = true;
@@ -459,8 +565,8 @@ namespace CallAladdin.ViewModel
                 Category = jobRequestType,
                 City = selectedCity,
                 Country = selectedCountry,
-                StartDateTime = new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds),
-                EndDateTime = new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds),
+                StartDateTime = GetStartDateTime(),
+                EndDateTime = GetEndDateTime(),
                 CreatedDateTime = DateTime.Now,
                 ModifiedDateTime = DateTime.Now,
                 ImagePath = jobRequestImage,
