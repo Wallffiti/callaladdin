@@ -29,7 +29,7 @@
             <uc:DashboardUserControl BindingContext="{Binding DashboardUserControlViewModel}" />
         </ContentPage.Content>
     </ContentPage>
-    <ContentPage Title="Contractor" Icon="contractor_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}">
+    <ContentPage Title="Contractor" Icon="ic_briefcase.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}">
         <ContentPage.Content>
             <!--<Grid>
                 <Grid.RowDefinitions>
