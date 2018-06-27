@@ -34,8 +34,9 @@ namespace CallAladdin.Services
                 var fullUrl = baseUrl + "/user_profiles/";
                 var name = userRegistration.Name;
                 var city = userRegistration.City;
-                var tempPhone = userRegistration.Mobile.Replace(" ", "").Trim();
-                var phone = tempPhone.StartsWith("+") ? tempPhone : "+" + tempPhone; //userRegistration.Mobile;
+                //var tempPhone = userRegistration.Mobile.Replace(" ", "").Trim();
+                //var phone = tempPhone.StartsWith("+") ? tempPhone : "+" + tempPhone;
+                var phone = userRegistration.Mobile;
                 var address = string.IsNullOrEmpty(userRegistration.CompanyAddress) ? "Unspecified" : userRegistration.CompanyAddress;
                 var country = userRegistration.Country;
                 var email = userRegistration.Email;
