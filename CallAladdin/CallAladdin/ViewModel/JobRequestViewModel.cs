@@ -30,6 +30,8 @@ namespace CallAladdin.ViewModel
         private string scopeOfWork;
         private DateTime selectedStartDate;
         private DateTime selectedEndDate;
+        private DateTime minStartDate;
+        private DateTime minEndDate;
         private TimeSpan selectedStartTime;
         private TimeSpan selectedEndTime;
         private string selectedCountry;
@@ -82,6 +84,18 @@ namespace CallAladdin.ViewModel
         {
             get { return selectedStartDate; }
             set { selectedStartDate = value; UpdateJobRequest(); OnPropertyChanged("SelectedStartDate"); }
+        }
+
+        public DateTime MinStartDate
+        {
+            get { return minStartDate; }
+            set { minStartDate = value; OnPropertyChanged("MinStartDate"); }
+        }
+
+        public DateTime MinEndDate
+        {
+            get { return minEndDate; }
+            set { minEndDate = value; OnPropertyChanged("MinEndDate"); }
         }
 
         public DateTime SelectedEndDate
@@ -205,7 +219,7 @@ namespace CallAladdin.ViewModel
 
         public JobRequestViewModel(object owner)
         {
-            var guid = Guid.NewGuid().ToString().Replace("-","");
+            var guid = Guid.NewGuid().ToString().Replace("-", "");
             mediaFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), guid + ".3gpp");
             var parentViewModel = (HomeUserControlViewModel)owner;
             this.parentViewModel = parentViewModel;
@@ -274,7 +288,7 @@ namespace CallAladdin.ViewModel
                     //for ios
                     RemoveRecordedVoice();
                 });
-               
+
             }, param =>
             {
                 return true;
@@ -282,6 +296,13 @@ namespace CallAladdin.ViewModel
             LoadImageUploaderOptions();
             InitializeVoiceButtons();
             SetupMediaPlayer();
+            InitializeMinStartAndEndDates();
+        }
+
+        private void InitializeMinStartAndEndDates()
+        {
+            MinStartDate = DateTime.Now;
+            MinEndDate = DateTime.Now;
         }
 
         private void RemoveRecordedVoice()
