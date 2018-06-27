@@ -3,23 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Name="DashboardUserControl"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="CallAladdin.UserControls.DashboardUserControl">
     <Grid.Resources>
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
     </Grid.Resources>
     <Grid.RowDefinitions>
-        <!--<RowDefinition Height="Auto" />-->
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <Label Style="{StaticResource defaultHeader}" Text="DASHBOARD" Grid.Row="0" />
-    <!--<Grid Grid.Row="1" BackgroundColor="Transparent" IsVisible="{Binding IsBusy}">
-        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}">
-            <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" />
-            <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
-        </StackLayout>
-    </Grid>-->
     <StackLayout Grid.Row="1" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" HeightRequest="40">
         <Label Text="{Binding DescriptionLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
     </StackLayout>
@@ -40,7 +34,12 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" HeightRequest="50" WidthRequest="50" Margin="20" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" />
+                        <!--<Image Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" HeightRequest="50" WidthRequest="50" Margin="20" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" />-->
+                        <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" Margin="20" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+			                WidthRequest="50" HeightRequest="50"
+			                DownsampleToViewSize="true"
+			                Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
+                        </ffimageloading:CachedImage>
                         <Label Text="{Binding Category}" FontSize="14" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1"/>
                         <Label Text="{Binding Title}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" />
                     </Grid>

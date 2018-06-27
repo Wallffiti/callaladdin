@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using Xamarin.Forms;
 
@@ -28,7 +29,10 @@ namespace CallAladdin.Converters
                         return ImageSource.FromUri(new Uri(path));
                     }
 
-                    return ImageSource.FromFile(path);
+                    if (File.Exists(path))
+                    {
+                        return ImageSource.FromFile(path);
+                    }
                 }
                 catch (Exception ex)
                 {

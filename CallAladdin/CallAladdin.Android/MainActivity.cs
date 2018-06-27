@@ -49,6 +49,8 @@ namespace CallAladdin.Droid
             string apiKey = b.GetString("com.call.aladdin.project.api.key", "");
             dict.Add("com.call.aladdin.project.api.key", apiKey);
 
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
+
             CrossCurrentActivity.Current.Init(this, bundle);
 
             LoadApplication(new App(dict));
