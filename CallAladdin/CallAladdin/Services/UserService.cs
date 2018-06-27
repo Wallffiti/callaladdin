@@ -371,15 +371,11 @@ namespace CallAladdin.Services
                                 {
                                     var bytes = Utilities.StreamToBytes(fs);
                                     request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
-
-                                    response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                                 }
                             }
                         }
-                        else
-                        {
-                            response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
-                        }
+
+                        response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {

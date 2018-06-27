@@ -36,7 +36,8 @@ namespace CallAladdin.Converters
                 }
             }
 
-            return ImageSource.FromResource("CallAladdin.Assets.Images.default_avatar_image.jpeg");
+            //return ImageSource.FromResource("CallAladdin.Assets.Images.default_avatar_image.jpeg");
+            return ImageSource.FromResource("CallAladdin.Assets.Images.ic_image.png");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

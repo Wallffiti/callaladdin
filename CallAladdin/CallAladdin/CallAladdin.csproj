@@ -13,6 +13,7 @@
     <None Remove="Assets\Images\air_conditioner.png" />
     <None Remove="Assets\Images\alarm_cctv.png" />
     <None Remove="Assets\Images\aluminium_glass_works.png" />
+    <None Remove="Assets\Images\baseline_image_black_48.png" />
     <None Remove="Assets\Images\blackbars.png" />
     <None Remove="Assets\Images\ceiling.png" />
     <None Remove="Assets\Images\cleaning_services.png" />
@@ -63,6 +64,7 @@
     <None Remove="Assets\Images\general_workers_2.png" />
     <None Remove="Assets\Images\house_movers.png" />
     <None Remove="Assets\Images\house_movers_2.png" />
+    <None Remove="Assets\Images\ic_image.png" />
     <None Remove="Assets\Images\interior_design_carpenter.png" />
     <None Remove="Assets\Images\landscaping.png" />
     <None Remove="Assets\Images\pest_control.png" />
@@ -125,6 +127,7 @@
     <EmbeddedResource Include="Assets\Images\general_workers_2.png" />
     <EmbeddedResource Include="Assets\Images\house_movers.png" />
     <EmbeddedResource Include="Assets\Images\house_movers_2.png" />
+    <EmbeddedResource Include="Assets\Images\ic_image.png" />
     <EmbeddedResource Include="Assets\Images\interior_design_carpenter.png" />
     <EmbeddedResource Include="Assets\Images\landscaping.png" />
     <EmbeddedResource Include="Assets\Images\pest_control.png" />
