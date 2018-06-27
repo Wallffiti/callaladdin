@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:CallAladdin"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
              xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
+              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="CallAladdin.EditRequestorProfilePage" FormattedTitle="EDIT USER PROFILE" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False" >
     <local:CustomPage.Resources>
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
@@ -15,11 +16,19 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackLayout Margin="20,0" Grid.Row="0">
-                <Image x:Name="AvatarImage" MinimumHeightRequest="100" MinimumWidthRequest="100" Margin="0,20" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}"  HorizontalOptions="FillAndExpand" Aspect="AspectFit" WidthRequest="200" HeightRequest="200">
+                <!--<Image x:Name="AvatarImage" MinimumHeightRequest="100" MinimumWidthRequest="100" Margin="0,20" Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}"  HorizontalOptions="FillAndExpand" Aspect="AspectFit" WidthRequest="200" HeightRequest="200">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" CommandParameter="{Binding IsBusy}" />
                     </Image.GestureRecognizers>
-                </Image>
+                </Image>-->
+                <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" Margin="0,20"
+			            WidthRequest="200" HeightRequest="200"
+			            DownsampleToViewSize="true"
+			            Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" >
+                    <ffimageloading:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" CommandParameter="{Binding IsBusy}" />
+                    </ffimageloading:CachedImage.GestureRecognizers>
+                </ffimageloading:CachedImage>
                 <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="0,0,0,0">
                     <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
                     <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>

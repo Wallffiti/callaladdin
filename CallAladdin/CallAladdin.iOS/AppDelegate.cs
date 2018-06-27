@@ -33,6 +33,8 @@ namespace CallAladdin.iOS
             string fullPath = Path.Combine(folderPath, dbname);
             dict.Add("call_aladdin.sqlite_path", fullPath);
 
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+
             LoadApplication(new App(dict));
 
             return base.FinishedLaunching(app, options);

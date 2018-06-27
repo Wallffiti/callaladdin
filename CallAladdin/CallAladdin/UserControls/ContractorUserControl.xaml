@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Name="ContractorUserControl"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="CallAladdin.UserControls.ContractorUserControl">
     <Grid.Resources>
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
