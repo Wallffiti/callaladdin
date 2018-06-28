@@ -49,7 +49,7 @@ namespace CallAladdin.Droid
                 {
                     File.Delete(pathToAudioFile);
                 }
-                if (player == null)
+                if (recorder == null)
                 {
                     recorder = new MediaRecorder(); // Initial state.
                 }
