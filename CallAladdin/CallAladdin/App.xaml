@@ -46,6 +46,12 @@
                 <Setter Property="HorizontalOptions" Value="Start"/>
                 <Setter Property="VerticalOptions" Value="Center"/>
             </Style>
+            <Style TargetType="Label" x:Key="hintLabel">
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="FontAttributes" Value="Italic"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="HorizontalTextAlignment" Value="Start"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

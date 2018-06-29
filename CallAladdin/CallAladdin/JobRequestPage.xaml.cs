@@ -17,10 +17,36 @@ namespace CallAladdin
 
 		public JobRequestPage(object owner)
 		{
-			InitializeComponent ();
+			InitializeComponent (); 
             jobRequestViewModel = new JobRequestViewModel(owner);
             BindingContext = jobRequestViewModel;
-		}
+
+            //POC for image compression - future reference if needed:
+            //this.JobRequestCachedImage.Success += async (s, e) =>
+            //{
+            //    try
+            //    {
+            //        var test = await this.JobRequestCachedImage.GetImageAsJpgAsync();
+            //        var test2 = await this.JobRequestCachedImage.GetImageAsPngAsync();
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //    }
+            //};
+            //this.JobRequestCachedImage.Finish += async (s, e) =>
+            //{
+            //    try
+            //    {
+            //        var test = await this.JobRequestCachedImage.GetImageAsJpgAsync();
+            //        var test2 = await this.JobRequestCachedImage.GetImageAsPngAsync();
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //    }
+            //};
+        }
 
         protected override bool OnBackButtonPressed()
         {
