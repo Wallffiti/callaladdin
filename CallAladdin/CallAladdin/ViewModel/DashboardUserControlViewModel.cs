@@ -16,9 +16,16 @@ namespace CallAladdin.ViewModel
         private IJobService jobService;
         private bool isBusy;
         private string descriptionLabel;
+        private Job selectedJob;
         private const string DESCRIPTION_MESSAGE = "You have recently requested for {0} new jobs";
         public ICommand EditJobRequestCmd { get; set; }
         public ICommand DeleteJobRequestCmd { get; set; }
+        public ICommand GoToJobView { get; set; }
+
+        public Job GetSelectedJob()
+        {
+            return selectedJob;
+        }
 
         public IList<Job> JobRequestList
         {
@@ -69,14 +76,51 @@ namespace CallAladdin.ViewModel
             {
                 return true;
             });
-            DeleteJobRequestCmd = new Xamarin.Forms.Command(e =>
+            DeleteJobRequestCmd = new Xamarin.Forms.Command(async e =>
             {
-                //TODO
+                var job = (Job)e;
+
+                Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to delete this job (cannot be undone)?", "Yes", "No", async () =>
+                {
+                    //For android
+                    await DoDeleteJob(job);
+                    await RefreshListAsync();
+                }, async () =>
+                {
+                    //For ios
+                    await DoDeleteJob(job);
+                    await RefreshListAsync();
+                });
             },
             param =>
             {
                 return true;
             });
+            GoToJobView = new Xamarin.Forms.Command(async e =>
+            {
+                this.selectedJob = (Job)e;
+                await Navigator.Instance.NavigateTo(PageType.JOB_VIEW, this);
+            },
+            param =>
+            {
+                return true;
+            });
+        }
+
+        private async Task DoDeleteJob(Job job)
+        {
+            if (job != null)
+            {
+                IsBusy = true;
+                var result = await jobService.DeleteJob(job.SystemUUID);
+
+                if (result)
+                {
+                    Navigator.Instance.OkAlert("Alert", "Your job has been deleted", "OK");
+                }
+
+                IsBusy = false;
+            }
         }
 
         private void UpdateDescriptionLabel()

@@ -64,6 +64,7 @@ namespace CallAladdin.ViewModel
         public ICommand RefreshJobList { get; set; }
         public ICommand EditJobRequestHistoryCmd { get; set; }
         public ICommand DeleteJobRequestHistoryCmd { get; set; }
+        public ICommand SortJobByDate { get; set; }
 
         public HistoryUserControlViewModel(object owner)
         {
@@ -95,6 +96,14 @@ namespace CallAladdin.ViewModel
             DeleteJobRequestHistoryCmd = new Xamarin.Forms.Command(e =>
             {
                 //TODO
+            },
+            param =>
+            {
+                return true;
+            });
+            SortJobByDate = new Xamarin.Forms.Command(e =>
+            {
+
             },
             param =>
             {

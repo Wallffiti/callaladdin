@@ -84,6 +84,7 @@ namespace CallAladdin.Services
                     {
 
                     }
+
                 }
             }
 
@@ -96,6 +97,50 @@ namespace CallAladdin.Services
                 {
                     result.SystemGeneratedId = responseData.uuid;
                     result.IsSuccess = true;
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<bool> DeleteJob(string jobUUID)
+        {
+            if (string.IsNullOrEmpty(jobUUID))
+                return false;
+
+            var result = false;
+            IRestResponse response = null;
+
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+            var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+            {
+                var fullUrl = baseUrl + "/requests/" + jobUUID + "/";
+                var client = new RestClient(fullUrl);
+                var request = new RestRequest(Method.PATCH);
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "Basic " + apiKey);
+                request.AddParameter("status", Constants.DELETED);
+
+                try
+                {
+                    response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            if (response != null && response.IsSuccessful)
+            {
+                var strResponse = response?.Content;
+                dynamic responseData = string.IsNullOrEmpty(strResponse) ? "" : JsonConvert.DeserializeObject(strResponse);
+
+                if (responseData != null)
+                {
+                    result = responseData.uuid != null;
                 }
             }
 

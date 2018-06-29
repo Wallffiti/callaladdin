@@ -24,6 +24,7 @@
             <DataTemplate>
                 <ViewCell>
                     <ViewCell.ContextActions>
+                        <MenuItem Text="View" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference DashboardUserControl}, Path=BindingContext.GoToJobView}" />
                         <MenuItem Text="Edit" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference DashboardUserControl}, Path=BindingContext.EditJobRequestCmd}" />
                         <MenuItem Text="Delete" IsDestructive="True" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference DashboardUserControl}, Path=BindingContext.DeleteJobRequestCmd}" />        
                     </ViewCell.ContextActions>
@@ -42,6 +43,9 @@
 			                WidthRequest="80" HeightRequest="80"
 			                DownsampleToViewSize="true"
 			                Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
+                            <ffimageloading:CachedImage.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference DashboardUserControl}, Path=BindingContext.GoToJobView}" CommandParameter="{Binding .}" />
+                            </ffimageloading:CachedImage.GestureRecognizers>
                         </ffimageloading:CachedImage>
                         <Label Text="{Binding Category}" FontSize="14" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1" Margin="5"/>
                         <Label Text="{Binding Title}" VerticalOptions="Start" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" Margin="5"/>

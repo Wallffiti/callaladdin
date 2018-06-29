@@ -48,6 +48,9 @@
         </ContentPage.Content>
     </ContentPage>
     <ContentPage Title="History" Icon="history_dark_grey.png" xf:BottomBarPageExtensions.TabColor="{StaticResource darkgrey}" >
+        <!--<ContentPage.ToolbarItems>
+            <ToolbarItem Name="SortByDate" Order="Primary" Icon="ic_action_sort.png" Text="Sort by Date" Priority="0" Command="{Binding HistoryUserControlViewModel.SortJobByDate}" />
+        </ContentPage.ToolbarItems>-->
         <ContentPage.Content>
             <!--<Grid>
                 <Grid.RowDefinitions>
