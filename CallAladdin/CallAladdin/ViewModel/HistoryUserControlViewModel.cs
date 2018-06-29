@@ -119,22 +119,53 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshListAsync()
         {
             IsBusy = true;
-            var data = await jobService.GetJobs(UserProfile?.SystemUUID);   //TODO: need backend to provide better filtering
-            if (data != null)
+            var requestedJobs = await jobService.GetJobs(UserProfile?.SystemUUID);   //TODO: need backend to provide better filtering
+            var fullList = new List<Job>();
+            int contractorFoundCount = 0;
+            int expiredJobsCount = 0;
+            int acceptedJobsCount = 0;
+
+            if (requestedJobs != null)
             {
-                var contractorFoundJobs = data
+                var filteredJobs = requestedJobs
+                    .Where(p => p.Status != Constants.DELETED)
+                    .ToList();
+
+                var contractorFoundJobs = filteredJobs
                     .Where(p => !string.IsNullOrEmpty(p.ContractorSystemUUID))
                     .ToList();
-                var expiredJobs = data
-                    .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days >= Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS) && p.Status.ToLower() == "pending")
+                var expiredJobs = filteredJobs
+                    .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days >= Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS) && p.Status.ToLower() == Constants.PENDING)
                     .ToList();
-                var jobsAccepted = new List<Job>();
 
-                JobRequestHistoryList = contractorFoundJobs.Concat(expiredJobs).Concat(jobsAccepted).ToList();
-                UpdateDescriptionLabel(contractorFoundJobs == null ? 0 : contractorFoundJobs.Count(),
-                    expiredJobs == null ? 0 : expiredJobs.Count(),
-                    jobsAccepted == null ? 0 : jobsAccepted.Count());
+                if (contractorFoundJobs != null)
+                {
+                    contractorFoundCount = contractorFoundJobs.Count;
+                    fullList.AddRange(contractorFoundJobs);
+                }
+
+                if (expiredJobs != null)
+                {
+                    expiredJobsCount = expiredJobs.Count;
+                    fullList.AddRange(expiredJobs);
+                }
             }
+
+            var acceptedJobs = await jobService.GetAcceptedJobs(UserProfile?.SystemUUID);
+
+            if (acceptedJobs != null)
+            {
+                acceptedJobsCount = acceptedJobs.Count;
+                fullList.AddRange(acceptedJobs);
+            }
+
+            JobRequestHistoryList = fullList;
+            UpdateDescriptionLabel(contractorFoundCount, expiredJobsCount, acceptedJobsCount);
+
+            //UpdateDescriptionLabel(contractorFoundJobs == null ? 0 : contractorFoundJobs.Count(),
+            //    expiredJobs == null ? 0 : expiredJobs.Count(),
+            //    acceptedJobs == null ? 0 : acceptedJobs.Count()); //TODO
+
             IsBusy = false;
         }
     }

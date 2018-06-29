@@ -102,6 +102,23 @@ namespace CallAladdin.Services
             return result;
         }
 
+        public async Task<IList<Job>> GetAcceptedJobs(string contractorUUID)
+        {
+            if (string.IsNullOrEmpty(contractorUUID))
+                return null;
+
+            var results = new List<Job>();
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl))
+            {
+                var fullUrl = baseUrl + "/requests" + "?contractor=" + contractorUUID;
+                await CallGetJobsApi(results, fullUrl);
+            }
+
+            return results;
+        }
+
         public async Task<IList<Job>> GetJobs(string requestorUUID, string status)
         {
             if (string.IsNullOrEmpty(requestorUUID))
@@ -119,72 +136,77 @@ namespace CallAladdin.Services
                     fullUrl += "&status=" + status;
                 }
 
-                using (var httpClient = new HttpClient())
-                {
-                    try
-                    {
-                        var response = await httpClient.GetAsync(fullUrl).ConfigureAwait(false);
-                        var content = await response.Content.ReadAsStringAsync();
-                        if (!string.IsNullOrEmpty(content))
-                        {
-                            dynamic responseData = JsonConvert.DeserializeObject(content);
-                            if (responseData != null && responseData.Count > 0)
-                            {
-                                foreach (dynamic item in responseData)
-                                {
-                                    var job = new Job
-                                    {
-                                        SystemUUID = item?.uuid,
-                                        RequestorSystemUUID = item?.requestor_uuid,
-                                        ImagePath = item?.image,
-                                        Title = item?.title,
-                                        ScopeOfWork = item?.scope_of_work,
-                                        VoiceNotePath = item?.voice_note,
-                                        Address = item?.address,
-                                        City = item?.city,
-                                        Country = item?.country,
-                                        ContractorSystemUUID = item?.contractor,
-                                        Category = item?.work_category,
-                                        Status = item?.status,
-                                        Comment = item?.comment,
-
-                                        StartDateTime = item?.preferred_start_datetime,
-                                        EndDateTime = item?.preferred_end_datetime,
-                                        ModifiedDateTime = item?.modified,
-                                        CreatedDateTime = item?.created,
-                                    };
-
-                                    string longitude = item?.longitude;
-                                    if (!string.IsNullOrEmpty(longitude))
-                                    {
-                                        job.Longitude = float.Parse(longitude);
-                                    }
-
-                                    string latitude = item?.latitude;
-                                    if (!string.IsNullOrEmpty(latitude))
-                                    {
-                                        job.Latitude = float.Parse(latitude);
-                                    }
-
-                                    string rating = item?.rating;
-                                    if (!string.IsNullOrEmpty(rating))
-                                    {
-                                        job.Rating = float.Parse(rating);
-                                    }
-
-                                    results.Add(job);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-                }
+                await CallGetJobsApi(results, fullUrl);
             }
 
             return results;
+        }
+
+        private async Task CallGetJobsApi(List<Job> results, string fullUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var response = await httpClient.GetAsync(fullUrl).ConfigureAwait(false);
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        dynamic responseData = JsonConvert.DeserializeObject(content);
+                        if (responseData != null && responseData.Count > 0)
+                        {
+                            foreach (dynamic item in responseData)
+                            {
+                                var job = new Job
+                                {
+                                    SystemUUID = item?.uuid,
+                                    RequestorSystemUUID = item?.requestor_uuid,
+                                    ImagePath = item?.image,
+                                    Title = item?.title,
+                                    ScopeOfWork = item?.scope_of_work,
+                                    VoiceNotePath = item?.voice_note,
+                                    Address = item?.address,
+                                    City = item?.city,
+                                    Country = item?.country,
+                                    ContractorSystemUUID = item?.contractor,
+                                    Category = item?.work_category,
+                                    Status = item?.status,
+                                    Comment = item?.comment,
+
+                                    StartDateTime = item?.preferred_start_datetime,
+                                    EndDateTime = item?.preferred_end_datetime,
+                                    ModifiedDateTime = item?.modified,
+                                    CreatedDateTime = item?.created,
+                                };
+
+                                string longitude = item?.longitude;
+                                if (!string.IsNullOrEmpty(longitude))
+                                {
+                                    job.Longitude = float.Parse(longitude);
+                                }
+
+                                string latitude = item?.latitude;
+                                if (!string.IsNullOrEmpty(latitude))
+                                {
+                                    job.Latitude = float.Parse(latitude);
+                                }
+
+                                string rating = item?.rating;
+                                if (!string.IsNullOrEmpty(rating))
+                                {
+                                    job.Rating = float.Parse(rating);
+                                }
+
+                                results.Add(job);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
     }
 }

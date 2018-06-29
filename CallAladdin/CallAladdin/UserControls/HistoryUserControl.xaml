@@ -7,6 +7,8 @@
              x:Class="CallAladdin.UserControls.HistoryUserControl">
     <Grid.Resources>
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+        <conv:JobStatusDisplayConverter x:Key="jobStatusDisplayConverter"/>
+        <conv:JobStatusColorConverter x:Key="jobStatusColorConverter"/>
     </Grid.Resources>
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
@@ -21,26 +23,28 @@
         <Label Text="{Binding ExpiredLabel}" VerticalOptions="Center" TextColor="DarkRed" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
         <Label Text="{Binding AcceptedLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
     </StackLayout>
-    <Label Text="Hint: You can tap and hold on selected item to reveal additional options" Style="{StaticResource hintLabel}" Margin="20,0,20,10" Grid.Row="2"/>
-    <ListView Grid.Row="3" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="100" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
+    <!--<Label Text="Hint: You can tap and hold on selected item to reveal additional options" Style="{StaticResource hintLabel}" Margin="20,0,20,10" Grid.Row="2"/>-->
+    <ListView Grid.Row="3" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="150" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <ViewCell.ContextActions>
+                    <!--<ViewCell.ContextActions>
                         <MenuItem Text="Edit" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference HistoryUserControl}, Path=BindingContext.EditJobRequestHistoryCmd}" />
                         <MenuItem Text="Delete" IsDestructive="True" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference DashboardUserControl}, Path=BindingContext.DeleteJobRequestHistoryCmd}" />
-                    </ViewCell.ContextActions>
+                    </ViewCell.ContextActions>-->
                     <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="{StaticResource lightgrey}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <ffimageloading:CachedImage HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"
+                        <ffimageloading:CachedImage HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Margin="5"
                             WidthRequest="80" HeightRequest="80"
 			                DownsampleToViewSize="true"
 			                Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
@@ -48,6 +52,8 @@
                         <Label Text="{Binding Category}" FontSize="14" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1" Margin="5"/>
                         <Label Text="{Binding Title}" VerticalOptions="Start" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" Margin="5"/>
                         <Label Text="{Binding ModifiedDateTime, StringFormat='Last modified on {0:D}'}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                        <Label Text="TODO for contractor info" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="3" Grid.Column="1" Margin="5"/>
+                        <Label Text="{Binding ., Converter={StaticResource jobStatusDisplayConverter}}" TextColor="{Binding ., Converter={StaticResource jobStatusColorConverter}}" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"/>
                     </Grid>
                 </ViewCell>
             </DataTemplate>

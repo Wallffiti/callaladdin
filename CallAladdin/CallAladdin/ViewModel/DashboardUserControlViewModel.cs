@@ -87,7 +87,7 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshListAsync()
         {
             IsBusy = true;
-            var data = await jobService.GetJobs(UserProfile?.SystemUUID, "pending");
+            var data = await jobService.GetJobs(UserProfile?.SystemUUID, Constants.PENDING);
             if (data != null)
             {
                 JobRequestList = data

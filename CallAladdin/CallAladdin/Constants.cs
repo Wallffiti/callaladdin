@@ -11,7 +11,7 @@ namespace CallAladdin
         public const string PRINCIPAL = "PRINCIPAL";
         public const string ADMIN_NUMBER = "+601235678";
         public const int ALLOWABLE_JOB_REQUESTS_PER_MONTH = 333;  //DEBUG: please change it to 3 before go live
-        public const int JOB_REQUEST_EXPIRY_DURATION_IN_DAYS = 7;
+        public const int JOB_REQUEST_EXPIRY_DURATION_IN_DAYS = 1;   //DEBUG: please change it to 7 before go live
 
         // EVENT ARGS
         public const string USER_PROFILE_UPDATE = "USER_PROFILE_UPDATE";
@@ -26,6 +26,21 @@ namespace CallAladdin
         public const string CONTRACTOR = "CONTRACTOR";
         public const string HISTORY = "HISTORY";
         public const string USER_PROFILE = "USER_PROFILE";
+
+        //STATUS
+        public const string DELETED = "deleted";
+        public const string PENDING = "pending";
+        public const string SUSPENDED = "suspended";
+        public const string FOUND_CONTRACTOR = "found_contractor";
+        public const string COMPLETED = "completed";
+
+        //STATUS FOR DISPLAY
+        public const string CONTRACTOR_FOUND = "CONTRACTOR FOUND";
+        public const string EXPIRED_NO_CONTRACTOR_FOUND = "EXPIRED - NO CONTRACTOR FOUND";
+        public const string JOB_ACCEPTED = "JOB ACCEPTED";
+        public const string JOB_SUSPENDED = "JOB SUSPENDED";
+        public const string JOB_COMPLETED = "JOB COMPLETED";
+        public const string UNKNOWN_STATUS = "UNKNOWN STATUS";
 
         //HOME ICONS
 
