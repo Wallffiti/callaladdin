@@ -102,7 +102,7 @@ namespace CallAladdin.Services
             return result;
         }
 
-        public async Task<IList<Job>> GetJobs(string requestorUUID)
+        public async Task<IList<Job>> GetJobs(string requestorUUID, string status)
         {
             if (string.IsNullOrEmpty(requestorUUID))
                 return null;
@@ -113,6 +113,11 @@ namespace CallAladdin.Services
             if (!string.IsNullOrEmpty(baseUrl))
             {
                 var fullUrl = baseUrl + "/requests" + "?requestor_uuid=" + requestorUUID;
+
+                if (!string.IsNullOrEmpty(status))
+                {
+                    fullUrl += "&status=" + status;
+                }
 
                 using (var httpClient = new HttpClient())
                 {

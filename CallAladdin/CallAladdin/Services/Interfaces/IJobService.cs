@@ -9,6 +9,6 @@ namespace CallAladdin.Services.Interfaces
     public interface IJobService
     {
         Task<JobRequestResponse> CreateRequest(JobRequestRequest jobRequest);
-        Task<IList<Job>> GetJobs(string requestorUUID);
+        Task<IList<Job>> GetJobs(string requestorUUID, string status = "");
     }
 }

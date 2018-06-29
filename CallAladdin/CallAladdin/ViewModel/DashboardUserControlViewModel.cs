@@ -87,11 +87,11 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshListAsync()
         {
             IsBusy = true;
-            var data = await jobService.GetJobs(UserProfile?.SystemUUID);   //TODO: need backend to do proper filtering
+            var data = await jobService.GetJobs(UserProfile?.SystemUUID, "pending");
             if (data != null)
             {
                 JobRequestList = data
-                    .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days < Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS) && p.Status.ToLower() == "pending")
+                    .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days < Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS) /*&& p.Status.ToLower() == "pending"*/)
                     .ToList();
             }
             UpdateDescriptionLabel();
