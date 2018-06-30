@@ -4,21 +4,9 @@
               xmlns:local="clr-namespace:CallAladdin"
               xmlns:conv="clr-namespace:CallAladdin.Converters"
               xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+              xmlns:uc="clr-namespace:CallAladdin.UserControls"
              x:Class="CallAladdin.JobViewPage" FormattedTitle="JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
-    <local:CustomPage.Resources>
-        <conv:PathToImageConverter x:Key="pathToImageConverter"/>
-    </local:CustomPage.Resources>
     <ScrollView>
-        <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
-            <FlexLayout Direction="Row" AlignItems="Center" JustifyContent="Center" Margin="0, 10, 0, 0" HorizontalOptions="Center">
-                <Image Source="{Binding ContractorIcon, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"/>
-                <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
-            </FlexLayout>
-            <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" x:Name="JobRequestCachedImage"
-			    WidthRequest="300" HeightRequest="300"
-			    DownsampleToViewSize="true"
-			    Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}">
-            </ffimageloading:CachedImage>
-        </StackLayout>
+        <uc:JobViewCommonUserControl BindingContext="{Binding JobViewCommonUserControlViewModel}" />
     </ScrollView>
 </local:CustomPage>

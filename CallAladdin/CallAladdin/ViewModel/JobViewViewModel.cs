@@ -1,56 +1,35 @@
 ﻿using CallAladdin.Helper;
+using CallAladdin.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
     public class JobViewViewModel : BaseViewModel
     {
+        private JobViewCommonUserControlViewModel jobviewCommonUserControlViewModel;
         private BaseViewModel parentViewModel;
-        private string contractorIcon;
-        private string jobRequestType;
-        private string jobRequestImage;
+        private Job selectedJob;
 
-        public string ContractorIcon
+        public JobViewCommonUserControlViewModel JobViewCommonUserControlViewModel
         {
             get
             {
-                return contractorIcon;
+                return jobviewCommonUserControlViewModel;
             }
             set
             {
-                contractorIcon = value;
-                OnPropertyChanged(nameof(ContractorIcon));
+                jobviewCommonUserControlViewModel = value;
+                OnPropertyChanged(nameof(JobViewCommonUserControlViewModel));
             }
         }
 
-        public string JobRequestType
+        public Job GetSelectedJob()
         {
-            get
-            {
-                return jobRequestType;
-            }
-            set
-            {
-                jobRequestType = value;
-                OnPropertyChanged(nameof(JobRequestType));
-            }
+            return selectedJob;
         }
-
-        public string JobRequestImage
-        {
-            get
-            {
-                return jobRequestImage;
-            }
-            set
-            {
-                jobRequestImage = value;
-                OnPropertyChanged(nameof(JobRequestImage));
-            }
-        }
-
 
         public JobViewViewModel(object owner)
         {
@@ -59,14 +38,10 @@ namespace CallAladdin.ViewModel
             if (parentViewModel is DashboardUserControlViewModel)
             {
                 var dashboardViewModel = (DashboardUserControlViewModel)parentViewModel;
-                var selectedJob = dashboardViewModel.GetSelectedJob();
-                if (selectedJob != null)
-                {
-                    this.JobRequestImage = selectedJob.ImagePath;
-                    this.JobRequestType = selectedJob.Category;
-                    this.ContractorIcon = Utilities.GetIconByCategory(selectedJob.Category);
-                }
+                this.selectedJob = dashboardViewModel.GetSelectedJob();
             }
+
+            jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);
         }
     }
 }

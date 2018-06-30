@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:local="clr-namespace:CallAladdin"
+              xmlns:conv="clr-namespace:CallAladdin.Converters"
+              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="CallAladdin.UserControls.JobViewCommonUserControl">
+    <StackLayout.Resources>
+        <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+    </StackLayout.Resources>
+    <FlexLayout Direction="Row" AlignItems="Center" JustifyContent="Center" Margin="0, 10, 0, 0" HorizontalOptions="Center">
+        <Image Source="{Binding ContractorIcon, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"/>
+        <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
+    </FlexLayout>
+    <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" x:Name="JobRequestCachedImage"
+			    WidthRequest="300" HeightRequest="300"
+			    DownsampleToViewSize="true"
+			    Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}">
+    </ffimageloading:CachedImage>
+    <Grid Margin="20, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Text="Title" Style="{StaticResource fieldLabel}"/>
+        <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Title}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Text="Scope of Work" Style="{StaticResource fieldLabel}"/>
+        <Label HeightRequest="60" Text="{Binding ScopeOfWork}" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" FontSize="Small"/>
+
+        <StackLayout Orientation="Horizontal" Margin="5" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" WidthRequest="100">
+            <Button Image="ic_play.png" BackgroundColor="Transparent"  WidthRequest="40" HeightRequest="40" Command="{Binding PlayRecordedCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowPlaying}"/>
+            <Button Image="ic_stop.png" BackgroundColor="Transparent" WidthRequest="40" HeightRequest="40" Command="{Binding StopCmd}" CommandParameter="{Binding IsBusy}" IsVisible="{Binding AllowStopping}"/>
+        </StackLayout>
+        <ActivityIndicator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="IsBusyIndicator" IsRunning="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="Center" />
+    </Grid>
+    <Grid Margin="20, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Text="Preferred Start and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+            <Image Source="ic_shortcut_perm_contact_calendar.png" WidthRequest="50" HeightRequest="50"/>
+            <Label FontSize="Small" TextColor="Green" Text="{Binding SelectedStartDate}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+            <Image Source="ic_shortcut_access_time.png" WidthRequest="50" HeightRequest="50"/>
+            <Label FontSize="Small" TextColor="Green" Text="{Binding SelectedStartTime}"/>
+        </StackLayout>
+        <Label Text="Preferred End and Date Time" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Small" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
+        <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
+            <Image Source="ic_shortcut_perm_contact_calendar.png" WidthRequest="50" HeightRequest="50"/>
+            <Label FontSize="Small" TextColor="Red" Text="{Binding SelectedEndDate}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
+            <Image Source="ic_shortcut_access_time.png" WidthRequest="50" HeightRequest="50"/>
+            <Label FontSize="Small" TextColor="Red" Text="{Binding SelectedEndTime}"/>
+        </StackLayout>
+    </Grid>
+</StackLayout>
