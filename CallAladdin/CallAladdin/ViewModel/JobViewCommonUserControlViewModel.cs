@@ -198,6 +198,13 @@ namespace CallAladdin.ViewModel
                     this.SelectedEndDate = selectedJob.EndDateTime;
                     this.SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
                     this.SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
+
+                    if (!string.IsNullOrEmpty(selectedJob.VoiceNotePath))
+                    {
+                        AllowPlaying = true;
+                    }
+
+                    AllowStopping = false;
                 }
             }
         }

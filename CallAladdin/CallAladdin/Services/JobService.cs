@@ -55,7 +55,7 @@ namespace CallAladdin.Services
                     request.AddParameter("longitude", longitude);
                     request.AddParameter("latitude", latitude);
                     request.AddParameter("work_category", workCategory);
-                    request.AddParameter("preferred_start_datetime", preferredEndTime);
+                    request.AddParameter("preferred_start_datetime", preferredStartTime);
                     request.AddParameter("preferred_end_datetime", preferredEndTime);
 
                     try
