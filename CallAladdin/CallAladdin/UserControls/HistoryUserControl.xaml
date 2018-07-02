@@ -18,10 +18,10 @@
     </Grid.RowDefinitions>
     <Label Style="{StaticResource defaultHeader}" Text="HISTORY" Grid.Row="0" />
     <StackLayout Grid.Row="1" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" VerticalOptions="FillAndExpand">
-        <Label Text="{Binding SummaryLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+        <Label Text="{Binding SummaryLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start" Margin="0,10,0,0"/>
         <Label Text="{Binding ContractorFoundLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
         <Label Text="{Binding ExpiredLabel}" VerticalOptions="Center" TextColor="DarkRed" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
-        <Label Text="{Binding AcceptedLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+        <Label Text="{Binding AcceptedLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start" Margin="0,0,0,10"/>
     </StackLayout>
     <!--<Label Text="Hint: You can tap and hold on selected item to reveal additional options" Style="{StaticResource hintLabel}" Margin="20,0,20,10" Grid.Row="2"/>-->
     <ListView Grid.Row="3" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="150" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
@@ -45,15 +45,15 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <ffimageloading:CachedImage HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Margin="5"
-                            WidthRequest="80" HeightRequest="80"
+                            WidthRequest="80" HeightRequest="80" Aspect="AspectFill"
 			                DownsampleToViewSize="true"
 			                Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
                         </ffimageloading:CachedImage>
                         <Label Text="{Binding Category}" FontSize="14" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1" Margin="5"/>
-                        <Label Text="{Binding Title}" VerticalOptions="Start" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" Margin="5"/>
-                        <Label Text="{Binding ModifiedDateTime, StringFormat='Last modified on {0:D}'}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="2" Grid.Column="1" Margin="5"/>
-                        <Label Text="TODO for contractor info" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="3" Grid.Column="1" Margin="5"/>
-                        <Label Text="{Binding ., Converter={StaticResource jobStatusDisplayConverter}}" TextColor="{Binding ., Converter={StaticResource jobStatusColorConverter}}" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"/>
+                        <Label Text="{Binding Title}" VerticalOptions="Start" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
+                        <Label Text="{Binding ModifiedDateTime, StringFormat='Last modified on {0:D}'}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="2" Grid.Column="1" Margin="5,0"/>
+                        <Label Text="TODO for contractor info" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="3" Grid.Column="1" Margin="5,0"/>
+                        <Label Text="{Binding ., Converter={StaticResource jobStatusDisplayConverter}}" TextColor="{Binding ., Converter={StaticResource jobStatusColorConverter}}" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start" Grid.Row="4" Grid.Column="1" Margin="5"/>
                     </Grid>
                 </ViewCell>
             </DataTemplate>

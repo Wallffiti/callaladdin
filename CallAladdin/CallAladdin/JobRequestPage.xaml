@@ -21,7 +21,7 @@
                 </Image.GestureRecognizers>
             </Image>-->
             <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" x:Name="JobRequestCachedImage"
-			    WidthRequest="300" HeightRequest="300"
+			    WidthRequest="300" HeightRequest="300" Aspect="Fill"
 			    DownsampleToViewSize="true"
 			    Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}">
                 <ffimageloading:CachedImage.GestureRecognizers>
