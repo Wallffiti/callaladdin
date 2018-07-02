@@ -1,8 +1,11 @@
 ﻿using CallAladdin.Helper;
+using CallAladdin.Helper.Interfaces;
+using CallAladdin.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace CallAladdin.ViewModel
 {
@@ -21,6 +24,10 @@ namespace CallAladdin.ViewModel
         private DateTime selectedEndDate;
         private TimeSpan selectedStartTime;
         private TimeSpan selectedEndTime;
+        private string city;
+        private string country;
+        private bool hasAudio;
+        private IMediaPlayer mediaPlayer;
 
         public string ContractorIcon
         {
@@ -175,38 +182,133 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public string City
+        {
+            get
+            {
+                return city;
+            }
+            set
+            {
+                city = value;
+                OnPropertyChanged(nameof(City));
+            }
+        }
+
+        public string Country
+        {
+            get
+            {
+                return country;
+            }
+            set
+            {
+                country = value;
+                OnPropertyChanged(nameof(Country));
+            }
+        }
+
+        public bool HasAudio
+        {
+            get
+            {
+                return hasAudio;
+            }
+            set
+            {
+                hasAudio = value;
+                OnPropertyChanged(nameof(HasAudio));
+            }
+        }
+
+        private string voiceNotePath;
+
         public ICommand PlayRecordedCmd { get; set; }
         public ICommand StopCmd { get; set; }
 
         public JobViewCommonUserControlViewModel(object owner)
         {
             parentViewModel = (BaseViewModel)owner;
+            Job selectedJob = null;
 
             if (parentViewModel is JobViewViewModel)
             {
                 var jobViewViewModel = (JobViewViewModel)parentViewModel;
-                var selectedJob = jobViewViewModel.GetSelectedJob();
+                selectedJob = jobViewViewModel.GetSelectedJob();
+            }
 
-                if (selectedJob != null)
+            if (selectedJob != null)
+            {
+                this.JobRequestImage = selectedJob.ImagePath;
+                this.JobRequestType = selectedJob.Category;
+                this.ContractorIcon = Utilities.GetIconByCategory(selectedJob.Category);
+                this.Title = selectedJob.Title;
+                this.ScopeOfWork = selectedJob.ScopeOfWork;
+                this.SelectedStartDate = selectedJob.StartDateTime;
+                this.SelectedEndDate = selectedJob.EndDateTime;
+                this.SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
+                this.SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
+                this.City = selectedJob.City;
+                this.Country = selectedJob.Country;
+
+                if (!string.IsNullOrEmpty(selectedJob.VoiceNotePath))
                 {
-                    this.JobRequestImage = selectedJob.ImagePath;
-                    this.JobRequestType = selectedJob.Category;
-                    this.ContractorIcon = Utilities.GetIconByCategory(selectedJob.Category);
-                    this.Title = selectedJob.Title;
-                    this.ScopeOfWork = selectedJob.ScopeOfWork;
-                    this.SelectedStartDate = selectedJob.StartDateTime;
-                    this.SelectedEndDate = selectedJob.EndDateTime;
-                    this.SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
-                    this.SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
-
-                    if (!string.IsNullOrEmpty(selectedJob.VoiceNotePath))
-                    {
-                        AllowPlaying = true;
-                    }
-
-                    AllowStopping = false;
+                    HasAudio = true;
+                    voiceNotePath = selectedJob.VoiceNotePath;
+                    AllowPlaying = true;
+                    mediaPlayer = DependencyService.Get<IMediaPlayer>(DependencyFetchTarget.NewInstance);
                 }
             }
+
+            PlayRecordedCmd = new Xamarin.Forms.Command(e =>
+            {
+                PlayRecordedAudio();
+            },
+            param =>
+            {
+                if (param == null)
+                    return false;
+
+                var isBusy = (bool)param;
+                return !isBusy;
+            });
+            StopCmd = new Xamarin.Forms.Command(e =>
+            {
+                StopPlayingRecordedAudio();
+            },
+            param =>
+            {
+                if (param == null)
+                    return false;
+
+                var isBusy = (bool)param;
+                return !isBusy;
+            });
+        }
+
+        private void PlayRecordedAudio()
+        {
+            if (string.IsNullOrEmpty(voiceNotePath))
+                return;
+
+            AllowPlaying = false;
+            AllowStopping = true;
+            mediaPlayer.Play(voiceNotePath, (s, e) =>
+            {
+                AllowStopping = false;
+                AllowPlaying = true;
+            });
+        }
+
+        private void StopPlayingRecordedAudio()
+        {
+            if (string.IsNullOrEmpty(voiceNotePath))
+                return;
+
+            AllowStopping = false;
+            AllowPlaying = true;
+
+            mediaPlayer.StopPlaying();
         }
     }
 }
