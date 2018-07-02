@@ -10,6 +10,18 @@ namespace CallAladdin.ViewModel
         private JobViewCommonUserControlViewModel jobviewCommonUserControlViewModel;
         private BaseViewModel parentViewModel;
         private Job selectedJob;
+        public Job Job
+        {
+            get
+            {
+                return selectedJob;
+            }
+            set
+            {
+                selectedJob = value;
+                OnPropertyChanged(nameof(Job));
+            }
+        }
 
         public JobViewCommonUserControlViewModel JobViewCommonUserControlViewModel
         {
@@ -24,10 +36,10 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public Job GetSelectedJob()
-        {
-            return selectedJob;
-        }
+        //public Job GetSelectedJob()
+        //{
+        //    return selectedJob;
+        //}
 
         public JobHistoryViewViewModel(object owner)
         {
@@ -36,7 +48,7 @@ namespace CallAladdin.ViewModel
             if (parentViewModel is HistoryUserControlViewModel)
             {
                 var historyViewModel = (HistoryUserControlViewModel)parentViewModel;
-                this.selectedJob = historyViewModel.GetSelectedJob();
+                this.Job = historyViewModel.GetSelectedJob();
             }
 
             jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);

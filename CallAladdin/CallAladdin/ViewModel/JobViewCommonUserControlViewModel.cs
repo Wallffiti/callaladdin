@@ -239,7 +239,7 @@ namespace CallAladdin.ViewModel
             else if (parentViewModel is JobHistoryViewViewModel)
             {
                 var jobHistoryViewViewModel = (JobHistoryViewViewModel)parentViewModel;
-                selectedJob = jobHistoryViewViewModel.GetSelectedJob();
+                selectedJob = jobHistoryViewViewModel.Job;
             }
 
             if (selectedJob != null)
