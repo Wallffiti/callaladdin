@@ -65,6 +65,14 @@ namespace CallAladdin.ViewModel
         public ICommand EditJobRequestHistoryCmd { get; set; }
         public ICommand DeleteJobRequestHistoryCmd { get; set; }
         public ICommand SortJobByDate { get; set; }
+        public ICommand GoToJobView { get; set; }
+
+        private Job selectedJob;
+
+        public Job GetSelectedJob()
+        {
+            return selectedJob;
+        }
 
         public HistoryUserControlViewModel(object owner)
         {
@@ -104,6 +112,15 @@ namespace CallAladdin.ViewModel
             SortJobByDate = new Xamarin.Forms.Command(e =>
             {
 
+            },
+            param =>
+            {
+                return true;
+            });
+            GoToJobView = new Xamarin.Forms.Command(async e =>
+            {
+                this.selectedJob = (Job)e;
+                await Navigator.Instance.NavigateTo(PageType.HISTORY_JOB_VIEW, this);
             },
             param =>
             {

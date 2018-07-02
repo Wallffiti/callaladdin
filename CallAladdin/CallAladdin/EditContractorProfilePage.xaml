@@ -22,7 +22,7 @@
                     </Image.GestureRecognizers>
                 </Image>-->
                 <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" Margin="0,20"
-			            WidthRequest="200" HeightRequest="200" Aspect="AspectFill"
+			            WidthRequest="200" HeightRequest="200"
 			            DownsampleToViewSize="true"
 			            Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" >
                     <ffimageloading:CachedImage.GestureRecognizers>

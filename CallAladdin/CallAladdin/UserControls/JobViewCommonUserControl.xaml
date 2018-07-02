@@ -14,7 +14,7 @@
         <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
     </FlexLayout>
     <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" x:Name="JobRequestCachedImage"
-			    WidthRequest="300" HeightRequest="300" Aspect="AspectFill"
+			    WidthRequest="300" HeightRequest="300" 
 			    DownsampleToViewSize="true"
 			    Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}">
     </ffimageloading:CachedImage>

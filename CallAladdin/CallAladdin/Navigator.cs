@@ -68,6 +68,9 @@ namespace CallAladdin
                 case PageType.JOB_VIEW:
                     view = new JobViewPage(parameter);
                     break;
+                case PageType.HISTORY_JOB_VIEW:
+                    view = new JobHistoryViewPage(parameter);
+                    break;
                 case PageType.DUMMY:
                     view = new DummyPage();
                     break;
@@ -196,6 +199,7 @@ namespace CallAladdin
         EDIT_CONTRACTOR_PROFILE = 8,
         JOB_REQUEST = 9,
         JOB_VIEW = 10,
+        HISTORY_JOB_VIEW = 11,
         DUMMY = 99
     }
 
