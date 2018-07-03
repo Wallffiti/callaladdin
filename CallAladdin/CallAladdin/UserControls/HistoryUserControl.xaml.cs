@@ -51,7 +51,7 @@ namespace CallAladdin.UserControls
                 {
                     titleLabel.TextColor = Color.White;
                 }
-                var modifiedDateTimeLabel = selectedItemGrid.FindByName<Label>("modifiedDateTimeLabel");
+                var modifiedDateTimeLabel = selectedItemGrid.FindByName<Label>("modifiedTimeLabel");
                 if (modifiedDateTimeLabel != null)
                 {
                     modifiedDateTimeLabel.TextColor = Color.White;
@@ -79,7 +79,7 @@ namespace CallAladdin.UserControls
                 {
                     titleLabel.TextColor = Color.Default;
                 }
-                var modifiedDateTimeLabel = selectedItemGrid.FindByName<Label>("modifiedDateTimeLabel");
+                var modifiedDateTimeLabel = selectedItemGrid.FindByName<Label>("modifiedTimeLabel");
                 if (modifiedDateTimeLabel != null)
                 {
                     modifiedDateTimeLabel.TextColor = Color.Default;

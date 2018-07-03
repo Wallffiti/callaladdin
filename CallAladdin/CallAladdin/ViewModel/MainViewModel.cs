@@ -71,7 +71,7 @@ namespace CallAladdin.ViewModel
 
             if (userIdentityEntity != null && !string.IsNullOrEmpty(userIdentityEntity.Email))
             {
-                userProfile = await userService.GetUserProfile(userIdentityEntity.LocalId);
+                userProfile = await userService.GetUserProfileByAuthLocalId(userIdentityEntity.LocalId);
 
                 //Below code: tries to get latest data from server (and update cached data), otherwise get from cached data
                 if (userProfile == null)

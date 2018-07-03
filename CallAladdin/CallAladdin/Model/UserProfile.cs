@@ -24,5 +24,6 @@ namespace CallAladdin.Model
         public string SystemUUID { get; set; }
         public float Longitude { get; set; }
         public float Latitude { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

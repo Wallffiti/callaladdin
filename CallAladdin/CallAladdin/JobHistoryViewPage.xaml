@@ -4,18 +4,31 @@
              xmlns:local="clr-namespace:CallAladdin"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
               xmlns:uc="clr-namespace:CallAladdin.UserControls"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="CallAladdin.JobHistoryViewPage" FormattedTitle="JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
     <ScrollView>
         <StackLayout>
             <StackLayout.Resources>
                 <conv:JobStatusDisplayConverter x:Key="jobStatusDisplayConverter"/>
                 <conv:JobStatusColorConverter x:Key="jobStatusColorConverter"/>
+                <conv:PathToImageConverter x:Key="pathToImageConverter"/>
             </StackLayout.Resources>
-            <!--TODO: company branding and rating -->
-            <uc:JobViewCommonUserControl BindingContext="{Binding JobViewCommonUserControlViewModel}" />
             <StackLayout Margin="20,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource lightOrange}" Padding="20, 0" HeightRequest="40">
-                <Label Text="{Binding Job, Converter={StaticResource jobStatusDisplayConverter}}" TextColor="{Binding Job, Converter={StaticResource jobStatusColorConverter}}" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Margin="5"/>
+                <Label Text="{Binding Job, Converter={StaticResource jobStatusDisplayConverter}}" TextColor="{Binding Job, Converter={StaticResource jobStatusColorConverter}}" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="Center" VerticalTextAlignment="Center" Margin="5"/>
             </StackLayout>
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding HasContractor}" Margin="20,0" BackgroundColor="{StaticResource mediumgrey}">
+                <ffimageloading:CachedImage HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5" IsVisible="{Binding HasContractor}"
+                            WidthRequest="100" HeightRequest="100" Aspect="Fill"
+			                DownsampleToViewSize="true"
+			                Source="{Binding ContractorAvatarImage, Converter={StaticResource pathToImageConverter}}">
+                </ffimageloading:CachedImage>
+                <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="StartAndExpand" IsVisible="{Binding HasContractor}">
+                    <Label Text="{Binding ContractorName}" FontSize="Large" VerticalOptions="Center" HorizontalOptions="StartAndExpand" IsVisible="{Binding HasContractor}" />
+                    <Label Text="{Binding CreatedDate, StringFormat='Account created since {0:D}'}" FontAttributes="Italic" FontSize="Small" VerticalOptions="Center" HorizontalOptions="StartAndExpand" IsVisible="{Binding HasContractor}"/>
+                </StackLayout>
+            </StackLayout>
+            <!--TODO Rating-->
+            <uc:JobViewCommonUserControl BindingContext="{Binding JobViewCommonUserControlViewModel}" />
         </StackLayout>
     </ScrollView>
 </local:CustomPage>
