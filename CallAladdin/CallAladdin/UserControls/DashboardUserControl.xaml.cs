@@ -1,4 +1,5 @@
 ﻿using CallAladdin.ViewModel;
+using FFImageLoading.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,83 @@ using Xamarin.Forms.Xaml;
 
 namespace CallAladdin.UserControls
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class DashboardUserControl : Grid
-	{
-		public DashboardUserControl ()
-		{
-			InitializeComponent ();
-		}
-	}
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class DashboardUserControl : Grid
+    {
+        private Grid selectedItemGrid;
+
+        public DashboardUserControl()
+        {
+            InitializeComponent();
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            try
+            {
+                ResetTheme();
+
+                if (sender is CachedImage)
+                {
+                    var cachedImage = (CachedImage)sender;
+                    
+                    if (cachedImage.Parent is Grid)
+                    {
+                        selectedItemGrid = (Grid)cachedImage.Parent;
+                    }
+                }
+                else if (sender is Grid)
+                {
+                    selectedItemGrid = (Grid)sender;
+                }
+
+                if (selectedItemGrid != null)
+                {
+                    selectedItemGrid.BackgroundColor = Color.DarkBlue;
+                    var categoryLabel = selectedItemGrid.FindByName<Label>("categoryLabel");
+                    if (categoryLabel != null)
+                    {
+                        categoryLabel.TextColor = Color.White;
+                    }
+                    var titleLabel = selectedItemGrid.FindByName<Label>("titleLabel");
+                    if (titleLabel != null)
+                    {
+                        titleLabel.TextColor = Color.White;
+                    }
+                    var modifiedDateTimeLabel = selectedItemGrid.FindByName<Label>("modifiedDateTimeLabel");
+                    if (modifiedDateTimeLabel != null)
+                    {
+                        modifiedDateTimeLabel.TextColor = Color.White;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private void ResetTheme()
+        {
+            if (selectedItemGrid != null)
+            {
+                selectedItemGrid.BackgroundColor = Color.FromHex("#EAECF5");
+                var categoryLabel = selectedItemGrid.FindByName<Label>("categoryLabel");
+                if (categoryLabel != null)
+                {
+                    categoryLabel.TextColor = Color.Default;
+                }
+                var titleLabel = selectedItemGrid.FindByName<Label>("titleLabel");
+                if (titleLabel != null)
+                {
+                    titleLabel.TextColor = Color.Default;
+                }
+                var modifiedDateTimeLabel = selectedItemGrid.FindByName<Label>("modifiedDateTimeLabel");
+                if (modifiedDateTimeLabel != null)
+                {
+                    modifiedDateTimeLabel.TextColor = Color.Default;
+                }
+            }
+        }
+    }
 }

@@ -34,7 +34,7 @@
 
         <StackLayout Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2">
             <Label  Text="Scope of Work" Style="{StaticResource fieldLabel}"/>
-            <Label  Text="{Binding ScopeOfWork}"/>
+            <Label  Text="{Binding ScopeOfWork}" TextColor="Black"/>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding HasAudio}">
