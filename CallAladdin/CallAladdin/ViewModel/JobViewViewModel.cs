@@ -52,6 +52,8 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public UserProfile UserProfile { get; set; }
+
         public JobViewViewModel(object owner)
         {
             parentViewModel = (BaseViewModel)owner;
@@ -60,6 +62,7 @@ namespace CallAladdin.ViewModel
             {
                 var dashboardViewModel = (DashboardUserControlViewModel)parentViewModel;
                 this.selectedJob = dashboardViewModel.GetSelectedJob();
+                UserProfile = dashboardViewModel.UserProfile;
             }
 
             jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);

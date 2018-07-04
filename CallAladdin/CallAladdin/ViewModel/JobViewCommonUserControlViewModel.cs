@@ -208,6 +208,19 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public string Location
+        {
+            get
+            {
+                return location;
+            }
+            set
+            {
+                location = value;
+                OnPropertyChanged(nameof(Location));
+            }
+        }
+
         public bool HasAudio
         {
             get
@@ -222,6 +235,7 @@ namespace CallAladdin.ViewModel
         }
 
         private string voiceNotePath;
+        private string location;
 
         public ICommand PlayRecordedCmd { get; set; }
         public ICommand StopCmd { get; set; }
@@ -255,6 +269,7 @@ namespace CallAladdin.ViewModel
                 this.SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
                 this.City = selectedJob.City;
                 this.Country = selectedJob.Country;
+                this.Location = selectedJob.Address;
 
                 if (!string.IsNullOrEmpty(selectedJob.VoiceNotePath))
                 {

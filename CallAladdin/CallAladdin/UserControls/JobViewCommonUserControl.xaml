@@ -78,6 +78,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -88,5 +89,8 @@
 
         <Label Grid.Row="1" Grid.Column="0" Text="City" Style="{StaticResource fieldLabel}"/>
         <Label Grid.Row="1" Grid.Column="1"  Text="{Binding City}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Text="Location" Style="{StaticResource fieldLabel}"/>
+        <Label Grid.Row="2" Grid.Column="1"  Text="{Binding Location}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
     </Grid>
 </StackLayout>

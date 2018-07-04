@@ -94,6 +94,24 @@
                     <TimePicker x:Name="EndTimePicker" FontSize="Small" TextColor="Red" Time="{Binding SelectedEndTime}"/>
                 </StackLayout>
             </Grid>
+            <Grid Margin="20,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Text="Country" Style="{StaticResource fieldLabel}"/>
+                <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Country}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+                <Label Grid.Row="1" Grid.Column="0" Text="City" Style="{StaticResource fieldLabel}"/>
+                <Label Grid.Row="1" Grid.Column="1"  Text="{Binding City}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Text="Location" Style="{StaticResource fieldLabel}"/>
+                <Label Grid.Row="2" Grid.Column="1"  Text="{Binding Location}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+            </Grid>
+            <Button x:Name="SubmitButton" Style="{StaticResource defaultButton}" Margin="100,20" Text="SUBMIT" Command="{Binding SubmitJobRequestCmd}" CommandParameter="{Binding JobRequest}"/>
         </StackLayout>
     </ScrollView>
 </local:CustomPage>

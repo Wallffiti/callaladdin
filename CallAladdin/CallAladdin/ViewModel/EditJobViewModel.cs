@@ -30,6 +30,8 @@ namespace CallAladdin.ViewModel
         private string title;
         private string scopeOfWork;
         private bool isBusy;
+        private string city;
+        private string country;
 
         public string ContractorIcon
         {
@@ -71,6 +73,24 @@ namespace CallAladdin.ViewModel
         {
             get { return selectedPhotoOption; }
             set { selectedPhotoOption = value; OnPropertyChanged("SelectedPhotoOption"); }
+        }
+
+        public string City
+        {
+            get { return city; }
+            set { city = value; OnPropertyChanged("City"); }
+        }
+
+        public string Country
+        {
+            get { return country; }
+            set { country = value; OnPropertyChanged("Country"); }
+        }
+
+        public string Location
+        {
+            get { return location; }
+            set { location = value; OnPropertyChanged("Location"); }
         }
 
         public bool IsBusy
@@ -238,6 +258,7 @@ namespace CallAladdin.ViewModel
         public ICommand PlayRecordedCmd { get; set; }
         public ICommand StopCmd { get; set; }
         public ICommand DeleteCmd { get; set; }
+        public ICommand SubmitJobRequestCmd { get; set; }
 
         private string mediaFilePath;   //unique per session
         private MediaState mediaState;
@@ -248,6 +269,10 @@ namespace CallAladdin.ViewModel
         private DateTime selectedEndDate;
         private TimeSpan selectedStartTime;
         private TimeSpan selectedEndTime;
+        private string location;
+
+        public UserProfile UserProfile { get; set; }
+        private string jobSystemUUID;
 
         public EditJobViewModel(object owner)
         {
@@ -256,13 +281,17 @@ namespace CallAladdin.ViewModel
 
             if (owner is DashboardUserControlViewModel)
             {
-                parentViewModel = (DashboardUserControlViewModel)owner;
-                selectedJob = ((DashboardUserControlViewModel)parentViewModel).GetSelectedJob();
+                var dashboardUserControlViewModel = (DashboardUserControlViewModel)owner;
+                parentViewModel = dashboardUserControlViewModel;
+                selectedJob = dashboardUserControlViewModel.GetSelectedJob();
+                UserProfile = dashboardUserControlViewModel.UserProfile;
             }
             else if (owner is JobViewViewModel)
             {
-                parentViewModel = (JobViewViewModel)owner;
-                selectedJob = ((JobViewViewModel)parentViewModel).GetSelectedJob();
+                var jobViewViewModel = (JobViewViewModel)owner;
+                parentViewModel = jobViewViewModel;
+                selectedJob = jobViewViewModel.GetSelectedJob();
+                UserProfile = jobViewViewModel.UserProfile;
             }
 
             if (selectedJob != null)
@@ -276,7 +305,10 @@ namespace CallAladdin.ViewModel
                 SelectedEndDate = selectedJob.EndDateTime;
                 SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
                 SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
-                //TODO min start end date time
+                Country = selectedJob.Country;
+                City = selectedJob.City;
+                Location = selectedJob.Address;
+                jobSystemUUID = selectedJob.SystemUUID;
             }
 
             ChangeProfileImageCmd = new Xamarin.Forms.Command(e =>
@@ -334,6 +366,48 @@ namespace CallAladdin.ViewModel
             {
                 return true;
             });
+            SubmitJobRequestCmd = new Xamarin.Forms.Command(async e =>
+            {
+                if (e == null)
+                    return;
+
+                var updatedJob = (Job)e;
+
+                if (IsBusy)
+                {
+                    Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                    return;
+                }
+
+                Navigator.Instance.ConfirmationAlert("Confirmation", "Update the job now?", "Yes", "No", async () =>
+                {
+                    await DoUpdateJob(updatedJob);
+                }, async () =>
+                {
+                    await DoUpdateJob(updatedJob);
+                });
+            },
+            parameter =>
+            {
+                if (parameter == null)
+                    return false;
+
+                var jobRequest = (Job)parameter;
+
+                if (jobRequest == null || jobRequest.StartDateTime == null || jobRequest.EndDateTime == null)
+                    return false;
+
+                bool timeIsValid = jobRequest.EndDateTime > jobRequest.StartDateTime;
+
+                if (!timeIsValid)
+                    return false;
+
+                return !string.IsNullOrEmpty(jobRequest.Title)
+                && !string.IsNullOrEmpty(jobRequest.ScopeOfWork)
+                && !string.IsNullOrEmpty(jobRequest.City)
+                && !string.IsNullOrEmpty(jobRequest.Country)
+                && !string.IsNullOrEmpty(jobRequest.Address);
+            });
 
             LoadImageUploaderOptions();
 
@@ -345,6 +419,59 @@ namespace CallAladdin.ViewModel
             InitializeVoiceButtons();
             SetupMediaPlayer();
             InitializeMinStartAndEndDates();
+        }
+
+        private async System.Threading.Tasks.Task DoUpdateJob(Job updatedJob)
+        {
+            if (IsBusy)
+            {
+                Navigator.Instance.OkAlert("Alert", "The app is currently busy. Please try again later.", "OK", null, null);
+                return;
+            }
+
+            IsBusy = true;
+
+            if (updatedJob != null)
+            {
+                var response = await jobService.UpdateRequest(new Model.Requests.EditJobRequestRequest
+                {
+                    SystemUUID = jobRequest.SystemUUID,
+                    Address = jobRequest.Address,
+                    Category = jobRequest.Category,
+                    City = jobRequest.City,
+                    Country = jobRequest.Country,
+                    StartDateTime = jobRequest.StartDateTime,
+                    EndDateTime = jobRequest.EndDateTime,
+                    ImagePath = jobRequest.ImagePath,
+                    //RequestorSystemUUID = jobRequest.RequestorSystemUUID,
+                    ScopeOfWork = jobRequest.ScopeOfWork,
+                    Title = JobRequest.Title,
+                    VoiceNotePath = mediaFilePath
+                });
+                IsBusy = false;
+
+                if (response.IsSuccess)
+                {
+                    try
+                    {
+                        //TODO: notify parent for updated view
+                        Navigator.Instance.OkAlert("Job Updated", "Job update is successful.", "OK");
+                        await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        IsBusy = false;
+                    }
+                    return;
+                }
+            }
+
+            Navigator.Instance.OkAlert("Error", "There is a problem attempting to updating the job. Please try again later.", "OK");
+            IsBusy = false;
         }
 
         private void InitializeMinStartAndEndDates()
@@ -488,7 +615,20 @@ namespace CallAladdin.ViewModel
         {
             JobRequest = new Job
             {
-                //TODO
+                SystemUUID = jobSystemUUID,
+                Address = location,
+                Category = jobRequestType,
+                City = city,
+                Country = country,
+                StartDateTime = GetStartDateTime(),
+                EndDateTime = GetEndDateTime(),
+                CreatedDateTime = DateTime.Now,
+                ModifiedDateTime = DateTime.Now,
+                ImagePath = jobRequestImage,
+                ScopeOfWork = scopeOfWork,
+                Title = title,
+                RequestorSystemUUID = UserProfile?.SystemUUID  //userSystemUUID
+                //TODO: to complete remaining fields
             };
         }
     }
