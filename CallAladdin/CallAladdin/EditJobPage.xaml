@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+             xmlns:conv="clr-namespace:CallAladdin.Converters"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="CallAladdin.EditJobPage" FormattedTitle="EDIT JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
+    <local:CustomPage.Resources>
+        <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+    </local:CustomPage.Resources>
+    <ScrollView>
+        <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+            <FlexLayout Direction="Row" AlignItems="Center" JustifyContent="Center" Margin="0, 10, 0, 0" HorizontalOptions="Center">
+                <Image Source="{Binding ContractorIcon, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"/>
+                <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
+            </FlexLayout>
+            <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" x:Name="JobRequestCachedImage"
+			    WidthRequest="300" HeightRequest="300" Aspect="Fill"
+			    DownsampleToViewSize="true"
+			    Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}">
+                <ffimageloading:CachedImage.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                </ffimageloading:CachedImage.GestureRecognizers>
+            </ffimageloading:CachedImage>
+            <FlexLayout Direction="Row" JustifyContent="SpaceBetween" AlignItems="Stretch" Margin="20, 0">
+                <Label Text="Photo Selection Option: " VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="Micro" />
+                <Picker x:Name="PhotoPicker" ItemsSource="{Binding PhotoOptionSelections}" SelectedItem="{Binding SelectedPhotoOption}" FontSize="Micro" TextColor="Blue" WidthRequest="180"/>
+                <Image HeightRequest="30" WidthRequest="30" Source="baseline_add_a_photo_black_18.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </FlexLayout>
+        </StackLayout>
+    </ScrollView>
+</local:CustomPage>

@@ -68,9 +68,10 @@ namespace CallAladdin.ViewModel
 
                 return true;
             });
-            EditJobRequestCmd = new Xamarin.Forms.Command(e =>
+            EditJobRequestCmd = new Xamarin.Forms.Command(async e =>
             {
-                //TODO
+                this.selectedJob = (Job)e;
+                await Navigator.Instance.NavigateTo(PageType.EDIT_JOB_VIEW, this);
             },
             param =>
             {

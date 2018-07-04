@@ -65,9 +65,9 @@ namespace CallAladdin.ViewModel
             jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);
             jobService = new JobService();
 
-            EditCmd = new Xamarin.Forms.Command(e =>
+            EditCmd = new Xamarin.Forms.Command(async e =>
             {
-                //TODO
+                await Navigator.Instance.NavigateTo(PageType.EDIT_JOB_VIEW, this);
             },
             param =>
             {
