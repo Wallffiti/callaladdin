@@ -1,9 +1,15 @@
 ﻿using CallAladdin.Helper;
+using CallAladdin.Helper.Interfaces;
 using CallAladdin.Model;
+using CallAladdin.Services;
+using CallAladdin.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
+using Xamarin.Forms;
+using static CallAladdin.Constants;
 
 namespace CallAladdin.ViewModel
 {
@@ -12,6 +18,7 @@ namespace CallAladdin.ViewModel
         private const string CHOOSE_PHOTO_FROM_CAMERA = "Choose photo from camera";
         private const string BROWSE_PHOTO_FROM_FOLDER = "Browse photo from folder";
 
+        private IJobService jobService;
         private BaseViewModel parentViewModel;
         //private Job selectedJob;
         private string contractorIcon;
@@ -20,6 +27,9 @@ namespace CallAladdin.ViewModel
         private string selectedPhotoOption;
         private IList<string> photoOptionSelections;
         private Job jobRequest;
+        private string title;
+        private string scopeOfWork;
+        private bool isBusy;
 
         public string ContractorIcon
         {
@@ -39,6 +49,18 @@ namespace CallAladdin.ViewModel
             set { jobRequestImage = value; UpdateJobRequest(); OnPropertyChanged("JobRequestImage"); }
         }
 
+        public string Title
+        {
+            get { return title; }
+            set { title = value; UpdateJobRequest(); OnPropertyChanged("Title"); }
+        }
+
+        public string ScopeOfWork
+        {
+            get { return scopeOfWork; }
+            set { scopeOfWork = value; UpdateJobRequest(); OnPropertyChanged("ScopeOfWork"); }
+        }
+
         public IList<string> PhotoOptionSelections
         {
             get { return photoOptionSelections; }
@@ -51,6 +73,38 @@ namespace CallAladdin.ViewModel
             set { selectedPhotoOption = value; OnPropertyChanged("SelectedPhotoOption"); }
         }
 
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            set { isBusy = value; OnPropertyChanged("IsBusy"); }
+        }
+
+        private bool allowRecording;
+        public bool AllowRecording
+        {
+            get { return allowRecording; }
+            set { allowRecording = value; OnPropertyChanged("AllowRecording"); }
+        }
+        private bool allowPlaying;
+        public bool AllowPlaying
+        {
+            get { return allowPlaying; }
+            set { allowPlaying = value; OnPropertyChanged("AllowPlaying"); }
+        }
+        private bool allowStopping;
+        public bool AllowStopping
+        {
+            get { return allowStopping; }
+            set { allowStopping = value; OnPropertyChanged("AllowStopping"); }
+        }
+
+        private bool allowDeleting;
+        public bool AllowDeleting
+        {
+            get { return allowDeleting; }
+            set { allowDeleting = value; OnPropertyChanged("AllowDeleting"); }
+        }
+
         public Job JobRequest
         {
             get { return jobRequest; }
@@ -59,9 +113,19 @@ namespace CallAladdin.ViewModel
 
         public ICommand ChangeProfileImageCmd { get; set; }
 
+        public ICommand RecordVoiceCmd { get; set; }
+        public ICommand PlayRecordedCmd { get; set; }
+        public ICommand StopCmd { get; set; }
+        public ICommand DeleteCmd { get; set; }
+
+        private string mediaFilePath;   //unique per session
+        private MediaState mediaState;
+        private IMediaPlayer mediaPlayer;
+
         public EditJobViewModel(object owner)
         {
             Job selectedJob = null;
+            jobService = new JobService();
 
             if (owner is DashboardUserControlViewModel)
             {
@@ -78,11 +142,12 @@ namespace CallAladdin.ViewModel
             {
                 ContractorIcon = Helper.Utilities.GetIconByCategory(selectedJob.Category);
                 JobRequestType = selectedJob.Category;
-                jobRequestImage = selectedJob.ImagePath;
+                JobRequestImage = selectedJob.ImagePath;
+                Title = selectedJob.Title;
+                ScopeOfWork = selectedJob.ScopeOfWork;
+
                 //TODO
             }
-
-            LoadImageUploaderOptions();
 
             ChangeProfileImageCmd = new Xamarin.Forms.Command(e =>
             {
@@ -91,6 +156,162 @@ namespace CallAladdin.ViewModel
             {
                 return true;
             });
+            RecordVoiceCmd = new Xamarin.Forms.Command(e =>
+            {
+                Navigator.Instance.OkAlert("Alert", "Begin recording your voice once you tapped OK, and tap on the solid rectangular icon on your right to stop", "OK", () =>
+                {
+                    //for android
+                    BeginRecording();
+                },
+                () =>
+                {
+                    //for ios
+                    BeginRecording();
+                });
+
+            }, param =>
+            {
+                return true;
+            });
+            PlayRecordedCmd = new Xamarin.Forms.Command(e =>
+            {
+                PlayRecordedVoice();
+            }, param =>
+            {
+                return true;
+            });
+            StopCmd = new Xamarin.Forms.Command(e =>
+            {
+                StopMedia();
+            }, param =>
+            {
+                return true;
+            });
+            DeleteCmd = new Xamarin.Forms.Command(e =>
+            {
+                Navigator.Instance.ConfirmationAlert("Alert", "Are you sure you want to delete your voice message?", "Yes", "No", () =>
+                {
+                    //for android
+                    RemoveRecordedVoice();
+                },
+                () =>
+                {
+                    //for ios
+                    RemoveRecordedVoice();
+                });
+
+            }, param =>
+            {
+                return true;
+            });
+
+            LoadImageUploaderOptions();
+
+            if (selectedJob != null && !string.IsNullOrEmpty(selectedJob.VoiceNotePath))
+            {
+                mediaFilePath = selectedJob.VoiceNotePath;
+            }
+
+            InitializeVoiceButtons();
+            SetupMediaPlayer();
+        }
+
+        private void SetupMediaPlayer()
+        {
+            mediaState = MediaState.NEUTRAL;
+            mediaPlayer = DependencyService.Get<IMediaPlayer>(DependencyFetchTarget.NewInstance);
+        }
+
+        private void InitializeVoiceButtons()
+        {
+            if (string.IsNullOrEmpty(mediaFilePath))
+            {
+                AllowRecording = true;
+                AllowStopping = false;
+                AllowPlaying = false;
+                AllowDeleting = false;
+                GenerateMediaFilePath();
+            }
+            else
+            {
+                AllowRecording = false;
+                AllowStopping = false;
+                AllowPlaying = true;
+                AllowDeleting = true;
+            }
+        }
+
+        private void GenerateMediaFilePath()
+        {
+            var guid = Guid.NewGuid().ToString().Replace("-", "");
+            mediaFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), guid + ".3gpp");
+        }
+
+        private void StopMedia()
+        {
+            AllowRecording = false;
+            AllowStopping = false;
+            AllowPlaying = File.Exists(mediaFilePath) || Validators.ValidateUrl(mediaFilePath);   //if there is a recorded file
+            AllowDeleting = File.Exists(mediaFilePath) || Validators.ValidateUrl(mediaFilePath);   //if there is a recorded file
+
+            if (mediaState == MediaState.RECORD)
+            {
+                mediaPlayer.StopRecording();
+            }
+            else if (mediaState == MediaState.PLAY)
+            {
+                mediaPlayer.StopPlaying();
+            }
+
+            mediaState = MediaState.STOP;
+        }
+
+        private void PlayRecordedVoice()
+        {
+            AllowRecording = false;
+            AllowStopping = true;
+            AllowPlaying = false;
+            AllowDeleting = false;
+            mediaState = MediaState.PLAY;
+            mediaPlayer.Play(mediaFilePath, (s, e) =>
+            {
+                AllowStopping = false;
+                AllowPlaying = true;
+                AllowDeleting = true;
+            });
+        }
+
+        private void RemoveRecordedVoice()
+        {
+            AllowRecording = true;
+            AllowStopping = false;
+            AllowPlaying = false;
+
+            if (Validators.ValidateUrl(mediaFilePath))
+            {
+                //if media exists and is stored in backend, then reset it to a new path so that it can overwrite the copy in backend
+                GenerateMediaFilePath();
+            }
+            else
+            {
+                if (File.Exists(mediaFilePath))
+                {
+                    File.Delete(mediaFilePath);
+                }
+            }
+
+            AllowDeleting = false; //if file is successfully deleted
+            mediaState = MediaState.NEUTRAL;
+        }
+
+        private void BeginRecording()
+        {
+            AllowRecording = false;
+            AllowStopping = true;
+            AllowPlaying = false;
+            AllowDeleting = false;
+            mediaState = MediaState.RECORD;
+            mediaPlayer.Record(mediaFilePath);
         }
 
         private async void ChangeProfileImageAsync()
