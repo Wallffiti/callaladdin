@@ -7,6 +7,21 @@
               xmlns:uc="clr-namespace:CallAladdin.UserControls"
              x:Class="CallAladdin.JobViewPage" FormattedTitle="JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
     <ScrollView>
-        <uc:JobViewCommonUserControl BindingContext="{Binding JobViewCommonUserControlViewModel}" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <uc:JobViewCommonUserControl BindingContext="{Binding JobViewCommonUserControlViewModel}" Grid.Row="0" />
+            <ActivityIndicator Grid.Row="0" x:Name="IsBusyIndicator" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center" HorizontalOptions="Center" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="EditButton" Style="{StaticResource defaultButton}" Text="EDIT" Command="{Binding EditCmd}"  WidthRequest="100" Margin="10"/>
+                <Button Grid.Column="1" x:Name="DeleteButton" Style="{StaticResource defaultButton}" BackgroundColor="Red" Text="DELETE" Command="{Binding DeleteCmd}" WidthRequest="100" Margin="10"/>
+            </Grid>
+        </Grid>
     </ScrollView>
 </local:CustomPage>
