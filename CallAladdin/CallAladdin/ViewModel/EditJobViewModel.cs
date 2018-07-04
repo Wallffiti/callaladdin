@@ -105,6 +105,127 @@ namespace CallAladdin.ViewModel
             set { allowDeleting = value; OnPropertyChanged("AllowDeleting"); }
         }
 
+        public DateTime MinStartDate
+        {
+            get { return minStartDate; }
+            set { minStartDate = value; OnPropertyChanged("MinStartDate"); }
+        }
+
+        public DateTime MinEndDate
+        {
+            get { return minEndDate; }
+            set { minEndDate = value; OnPropertyChanged("MinEndDate"); }
+        }
+
+        public DateTime SelectedStartDate
+        {
+            get { return selectedStartDate; }
+            set
+            {
+                var oldValue = selectedStartDate;
+                selectedStartDate = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedStartDate = oldValue;
+                }
+                OnPropertyChanged("SelectedStartDate");
+            }
+        }
+
+        private bool ValidateDateTime()
+        {
+            bool result = true;
+
+            if (selectedStartDate != default(DateTime) && selectedEndDate != default(DateTime) && selectedStartTime != default(TimeSpan) && selectedEndTime != default(TimeSpan))
+            {
+                if (GetStartDateTime() > GetEndDateTime())
+                {
+                    Navigator.Instance.OkAlert("Error", "Preferred end date time should be later than preferred start date time", "OK");
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
+        private DateTime GetStartDateTime()
+        {
+            return new DateTime(selectedStartDate.Year, selectedStartDate.Month, selectedStartDate.Day, selectedStartTime.Hours, selectedStartTime.Minutes, selectedStartTime.Seconds);
+        }
+
+        private DateTime GetEndDateTime()
+        {
+            return new DateTime(selectedEndDate.Year, selectedEndDate.Month, selectedEndDate.Day, selectedEndTime.Hours, selectedEndTime.Minutes, selectedEndTime.Seconds);
+        }
+
+        public DateTime SelectedEndDate
+        {
+            get { return selectedEndDate; }
+            set
+            {
+                var oldValue = selectedEndDate;
+                selectedEndDate = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedEndDate = oldValue;
+                }
+
+                OnPropertyChanged("SelectedEndDate");
+            }
+        }
+
+        public TimeSpan SelectedStartTime
+        {
+            get { return selectedStartTime; }
+            set
+            {
+                var oldValue = selectedStartTime;
+                selectedStartTime = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedStartTime = oldValue;
+                }
+
+                OnPropertyChanged("SelectedStartTime");
+            }
+        }
+
+        public TimeSpan SelectedEndTime
+        {
+            get { return selectedEndTime; }
+            set
+            {
+                var oldValue = selectedEndTime;
+                selectedEndTime = value;
+
+                if (ValidateDateTime())
+                {
+                    UpdateJobRequest();
+                }
+                else
+                {
+                    selectedEndTime = oldValue;
+                }
+
+                OnPropertyChanged("SelectedEndTime");
+            }
+        }
+
         public Job JobRequest
         {
             get { return jobRequest; }
@@ -121,6 +242,12 @@ namespace CallAladdin.ViewModel
         private string mediaFilePath;   //unique per session
         private MediaState mediaState;
         private IMediaPlayer mediaPlayer;
+        private DateTime minEndDate;
+        private DateTime minStartDate;
+        private DateTime selectedStartDate;
+        private DateTime selectedEndDate;
+        private TimeSpan selectedStartTime;
+        private TimeSpan selectedEndTime;
 
         public EditJobViewModel(object owner)
         {
@@ -145,8 +272,11 @@ namespace CallAladdin.ViewModel
                 JobRequestImage = selectedJob.ImagePath;
                 Title = selectedJob.Title;
                 ScopeOfWork = selectedJob.ScopeOfWork;
-
-                //TODO
+                SelectedStartDate = selectedJob.StartDateTime;
+                SelectedEndDate = selectedJob.EndDateTime;
+                SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
+                SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
+                //TODO min start end date time
             }
 
             ChangeProfileImageCmd = new Xamarin.Forms.Command(e =>
@@ -214,6 +344,13 @@ namespace CallAladdin.ViewModel
 
             InitializeVoiceButtons();
             SetupMediaPlayer();
+            InitializeMinStartAndEndDates();
+        }
+
+        private void InitializeMinStartAndEndDates()
+        {
+            MinStartDate = DateTime.Now;
+            MinEndDate = DateTime.Now;
         }
 
         private void SetupMediaPlayer()
