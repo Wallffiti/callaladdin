@@ -1,5 +1,7 @@
-﻿using CallAladdin.Helper;
+﻿using CallAladdin.EventArgs;
+using CallAladdin.Helper;
 using CallAladdin.Model;
+using CallAladdin.Observers.Interfaces;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
 using System;
@@ -10,7 +12,7 @@ using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
-    public class JobViewViewModel : BaseViewModel
+    public class JobViewViewModel : BaseViewModel, ISubscriber
     {
         private IJobService jobService;
         private JobViewCommonUserControlViewModel jobviewCommonUserControlViewModel;
@@ -63,6 +65,7 @@ namespace CallAladdin.ViewModel
                 var dashboardViewModel = (DashboardUserControlViewModel)parentViewModel;
                 this.selectedJob = dashboardViewModel.GetSelectedJob();
                 UserProfile = dashboardViewModel.UserProfile;
+                SubscribeMeToThis(dashboardViewModel);
             }
 
             jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);
@@ -120,6 +123,25 @@ namespace CallAladdin.ViewModel
                     }
                 }
             }
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            if (sender is EditJobViewModel && eventArgs?.EventName == Constants.JOB_REQUEST_LIST_UPDATE)
+            {
+                var updatedJob = (Job)eventArgs?.Parameters;
+                if (updatedJob != null)
+                {
+                    this.selectedJob = updatedJob;
+                    jobviewCommonUserControlViewModel.UpdateView(updatedJob);
+                    base.NotifyCompletion(this, eventArgs);
+                }
+            }
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+            //if needed
         }
     }
 }

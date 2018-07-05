@@ -285,6 +285,7 @@ namespace CallAladdin.ViewModel
                 parentViewModel = dashboardUserControlViewModel;
                 selectedJob = dashboardUserControlViewModel.GetSelectedJob();
                 UserProfile = dashboardUserControlViewModel.UserProfile;
+                SubscribeMeToThis(dashboardUserControlViewModel);
             }
             else if (owner is JobViewViewModel)
             {
@@ -292,6 +293,7 @@ namespace CallAladdin.ViewModel
                 parentViewModel = jobViewViewModel;
                 selectedJob = jobViewViewModel.GetSelectedJob();
                 UserProfile = jobViewViewModel.UserProfile;
+                SubscribeMeToThis(jobViewViewModel);
             }
 
             if (selectedJob != null)
@@ -454,9 +456,9 @@ namespace CallAladdin.ViewModel
                 {
                     try
                     {
-                        //TODO: notify parent for updated view
                         Navigator.Instance.OkAlert("Job Updated", "Job update is successful.", "OK");
                         await Navigator.Instance.ReturnPrevious(UIPageType.PAGE);
+                        NotifyCompletion(this, new EventArgs.ObserverEventArgs(Constants.JOB_REQUEST_LIST_UPDATE, string.Empty, updatedJob));
                     }
                     catch (Exception ex)
                     {
@@ -625,9 +627,10 @@ namespace CallAladdin.ViewModel
                 CreatedDateTime = DateTime.Now,
                 ModifiedDateTime = DateTime.Now,
                 ImagePath = jobRequestImage,
+                RequestorSystemUUID = UserProfile?.SystemUUID,  //userSystemUUID
                 ScopeOfWork = scopeOfWork,
                 Title = title,
-                RequestorSystemUUID = UserProfile?.SystemUUID  //userSystemUUID
+                VoiceNotePath = mediaFilePath,
                 //TODO: to complete remaining fields
             };
         }

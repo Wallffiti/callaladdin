@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Linq;
+using CallAladdin.Observers.Interfaces;
+using CallAladdin.EventArgs;
 
 namespace CallAladdin.ViewModel
 {
-    public class DashboardUserControlViewModel : BaseViewModel
+    public class DashboardUserControlViewModel : BaseViewModel, ISubscriber
     {
         private IList<Job> jobRequestList;
         private IJobService jobService;
@@ -55,6 +57,7 @@ namespace CallAladdin.ViewModel
             if (parentViewModel != null)
             {
                 this.UserProfile = parentViewModel.UserProfile;
+                SubscribeMeToThis(parentViewModel);
             }
             UpdateDescriptionLabel();
             jobService = new JobService();
@@ -141,6 +144,22 @@ namespace CallAladdin.ViewModel
             }
             UpdateDescriptionLabel();
             IsBusy = false;
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            if (sender is JobViewViewModel || sender is EditJobViewModel)
+            {
+                if (eventArgs?.EventName == Constants.JOB_REQUEST_LIST_UPDATE)
+                {
+                    RefreshJobList?.Execute(eventArgs?.Parameters);   
+                }
+            }
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+            //if needed
         }
     }
 }

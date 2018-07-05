@@ -258,26 +258,7 @@ namespace CallAladdin.ViewModel
 
             if (selectedJob != null)
             {
-                this.JobRequestImage = selectedJob.ImagePath;
-                this.JobRequestType = selectedJob.Category;
-                this.ContractorIcon = Utilities.GetIconByCategory(selectedJob.Category);
-                this.Title = selectedJob.Title;
-                this.ScopeOfWork = selectedJob.ScopeOfWork;
-                this.SelectedStartDate = selectedJob.StartDateTime;
-                this.SelectedEndDate = selectedJob.EndDateTime;
-                this.SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
-                this.SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
-                this.City = selectedJob.City;
-                this.Country = selectedJob.Country;
-                this.Location = selectedJob.Address;
-
-                if (!string.IsNullOrEmpty(selectedJob.VoiceNotePath))
-                {
-                    HasAudio = true;
-                    voiceNotePath = selectedJob.VoiceNotePath;
-                    AllowPlaying = true;
-                    mediaPlayer = DependencyService.Get<IMediaPlayer>(DependencyFetchTarget.NewInstance);
-                }
+                UpdateView(selectedJob);
             }
 
             PlayRecordedCmd = new Xamarin.Forms.Command(e =>
@@ -304,6 +285,30 @@ namespace CallAladdin.ViewModel
                 var isBusy = (bool)param;
                 return !isBusy;
             });
+        }
+
+        public void UpdateView(Job selectedJob)
+        {
+            this.JobRequestImage = selectedJob.ImagePath;
+            this.JobRequestType = selectedJob.Category;
+            this.ContractorIcon = Utilities.GetIconByCategory(selectedJob.Category);
+            this.Title = selectedJob.Title;
+            this.ScopeOfWork = selectedJob.ScopeOfWork;
+            this.SelectedStartDate = selectedJob.StartDateTime;
+            this.SelectedEndDate = selectedJob.EndDateTime;
+            this.SelectedStartTime = new TimeSpan(selectedJob.StartDateTime.Hour, selectedJob.StartDateTime.Minute, 0);
+            this.SelectedEndTime = new TimeSpan(selectedJob.EndDateTime.Hour, selectedJob.EndDateTime.Minute, 0);
+            this.City = selectedJob.City;
+            this.Country = selectedJob.Country;
+            this.Location = selectedJob.Address;
+
+            if (!string.IsNullOrEmpty(selectedJob.VoiceNotePath))
+            {
+                HasAudio = true;
+                voiceNotePath = selectedJob.VoiceNotePath;
+                AllowPlaying = true;
+                mediaPlayer = mediaPlayer == null ? DependencyService.Get<IMediaPlayer>(DependencyFetchTarget.NewInstance) : mediaPlayer;
+            }
         }
 
         private void PlayRecordedAudio()
