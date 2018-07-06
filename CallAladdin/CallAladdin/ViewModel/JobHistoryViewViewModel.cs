@@ -106,11 +106,6 @@ namespace CallAladdin.ViewModel
 
         public ICommand GoToContractorProfileCmd { get; set; }
 
-        //public Job GetSelectedJob()
-        //{
-        //    return selectedJob;
-        //}
-
         public JobHistoryViewViewModel(object owner)
         {
             parentViewModel = (BaseViewModel)owner;
@@ -119,8 +114,9 @@ namespace CallAladdin.ViewModel
             {
                 var historyViewModel = (HistoryUserControlViewModel)parentViewModel;
                 this.Job = historyViewModel.GetSelectedJob();
-                var contractorSystemUUID = this.Job?.ContractorSystemUUID;
+                var contractorSystemUUID = this.Job?.ContractorSystemUUID;  
 
+                //TODO: need to distinguish whether user is requestor or contractor, hence the system UUID here would be different
                 if (!string.IsNullOrEmpty(contractorSystemUUID))
                 {
                     HasContractor = true;
@@ -128,7 +124,7 @@ namespace CallAladdin.ViewModel
                     GetContractorProfile(contractorSystemUUID);
                     GoToContractorProfileCmd = new Xamarin.Forms.Command(async e =>
                     {
-                        await Navigator.Instance.NavigateTo(PageType.CONTRACTOR_PROFILE_VIEW, this);
+                        await Navigator.Instance.NavigateTo(PageType.CONTRACTOR_PROFILE_VIEW, this); //TODO: need to make this more generic where profile view can be contractor OR requestor
                     },
                     param =>
                     {

@@ -10,7 +10,8 @@ using Xamarin.Forms.Xaml;
 
 namespace CallAladdin
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    //TODO: need to rename this to make it more genetic ie cater both requestor and contractor
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ContractorProfilePage : CustomPage
 	{
         private ContractorProfileViewModel contractorProfileViewModel;

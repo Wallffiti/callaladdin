@@ -4,6 +4,7 @@ using System.Text;
 
 namespace CallAladdin.ViewModel
 {
+    //TODO: need to rename this to make it more genetic ie cater both requestor and contractor
     public class ContractorProfileViewModel : BaseViewModel
     {
         private BaseViewModel parentViewModel;
