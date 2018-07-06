@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CallAladdin.ViewModel
 {
@@ -19,6 +20,12 @@ namespace CallAladdin.ViewModel
         private DateTime createdDate;
         private bool hasContractor;
         private Job selectedJob;
+
+        public UserProfile GetContractorProfile()
+        {
+            return contractorProfile;
+        }
+
         public Job Job
         {
             get
@@ -97,6 +104,8 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public ICommand GoToContractorProfileCmd { get; set; }
+
         //public Job GetSelectedJob()
         //{
         //    return selectedJob;
@@ -117,6 +126,14 @@ namespace CallAladdin.ViewModel
                     HasContractor = true;
                     userService = new UserService();
                     GetContractorProfile(contractorSystemUUID);
+                    GoToContractorProfileCmd = new Xamarin.Forms.Command(async e =>
+                    {
+                        await Navigator.Instance.NavigateTo(PageType.CONTRACTOR_PROFILE_VIEW, this);
+                    },
+                    param =>
+                    {
+                        return true;
+                    });
                 }
                 else
                 {

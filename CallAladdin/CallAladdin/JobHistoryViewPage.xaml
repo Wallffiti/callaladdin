@@ -17,6 +17,9 @@
                 <Label Text="{Binding Job, Converter={StaticResource jobStatusDisplayConverter}}" TextColor="{Binding Job, Converter={StaticResource jobStatusColorConverter}}" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="Center" VerticalTextAlignment="Center" Margin="5"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal" IsVisible="{Binding HasContractor}" Margin="20,0" BackgroundColor="{StaticResource mediumgrey}">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToContractorProfileCmd}" />
+                </StackLayout.GestureRecognizers>
                 <ffimageloading:CachedImage HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5" IsVisible="{Binding HasContractor}"
                             WidthRequest="100" HeightRequest="100" Aspect="Fill"
 			                DownsampleToViewSize="true"
