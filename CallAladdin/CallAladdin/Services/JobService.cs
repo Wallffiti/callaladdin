@@ -276,9 +276,9 @@ namespace CallAladdin.Services
 
         private async Task CallGetJobsApi(List<Job> results, string fullUrl)
         {
-            using (var httpClient = new HttpClient())
+            try
             {
-                try
+                using (var httpClient = new HttpClient())
                 {
                     var response = await httpClient.GetAsync(fullUrl).ConfigureAwait(false);
                     var content = await response.Content.ReadAsStringAsync();
@@ -334,10 +334,10 @@ namespace CallAladdin.Services
                         }
                     }
                 }
-                catch (Exception ex)
-                {
+            }
+            catch (Exception ex)
+            {
 
-                }
             }
         }
     }

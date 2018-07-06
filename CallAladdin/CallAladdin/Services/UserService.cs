@@ -115,7 +115,7 @@ namespace CallAladdin.Services
             }
 
             return result;
-        } 
+        }
 
         public async Task<UserProfile> GetUserProfileByAuthLocalId(string localId)
         {
@@ -223,38 +223,45 @@ namespace CallAladdin.Services
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
                 fullUrl = baseUrl + "/verifyPassword?key=" + apiKey;
-                using (var httpClient = new HttpClient())
+                try
                 {
-                    httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                    var body = new UserLoginRequest
+                    using (var httpClient = new HttpClient())
                     {
-                        email = userLogin.Email,
-                        password = userLogin.Password,
-                        returnSecureToken = true
-                    };
-                    var bodyStr = JsonConvert.SerializeObject(body);
-                    var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                        var body = new UserLoginRequest
+                        {
+                            email = userLogin.Email,
+                            password = userLogin.Password,
+                            returnSecureToken = true
+                        };
+                        var bodyStr = JsonConvert.SerializeObject(body);
+                        var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+                        var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
+                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                    result = new UserLoginResponse();
-                    dynamic deserializedContent = JsonConvert.DeserializeObject(content);
+                        result = new UserLoginResponse();
+                        dynamic deserializedContent = JsonConvert.DeserializeObject(content);
 
-                    if (deserializedContent?.error != null)
-                    {
-                        result.IsError = true;
-                        result.ErrorMessage = deserializedContent.error?.message?.ToString();
+                        if (deserializedContent?.error != null)
+                        {
+                            result.IsError = true;
+                            result.ErrorMessage = deserializedContent.error?.message?.ToString();
+                        }
+
+                        if (deserializedContent?.idToken != null)
+                        {
+                            result.IdToken = deserializedContent.idToken.ToString();
+                            var expiresIn = deserializedContent.expiresIn?.ToString();
+                            result.ExpiresIn = int.Parse(expiresIn);
+                            result.LocalId = deserializedContent.localId?.ToString();
+                            result.RefreshToken = deserializedContent.refreshToken?.ToString();
+                            result.Email = deserializedContent.email?.ToString();
+                        }
                     }
-
-                    if (deserializedContent?.idToken != null)
-                    {
-                        result.IdToken = deserializedContent.idToken.ToString();
-                        var expiresIn = deserializedContent.expiresIn?.ToString();
-                        result.ExpiresIn = int.Parse(expiresIn);
-                        result.LocalId = deserializedContent.localId?.ToString();
-                        result.RefreshToken = deserializedContent.refreshToken?.ToString();
-                        result.Email = deserializedContent.email?.ToString();
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
                 }
             }
 
@@ -286,45 +293,52 @@ namespace CallAladdin.Services
                 if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
                 {
                     fullUrl = baseUrl + "/signupNewUser?key=" + apiKey;
-                    using (var httpClient = new HttpClient())
+                    try
                     {
-                        httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                        //var body = new
-                        //{
-                        //    email = userRegistration.Email,
-                        //    password = userRegistration.Password,
-                        //    returnSecureToken = true
-
-                        //};
-                        var body = new UserSignupRequest()
+                        using (var httpClient = new HttpClient())
                         {
-                            email = userRegistration.Email,
-                            password = userRegistration.Password,
-                            returnSecureToken = true
-                        };
-                        var bodyStr = JsonConvert.SerializeObject(body);
-                        var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
-                        var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
-                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                            //var body = new
+                            //{
+                            //    email = userRegistration.Email,
+                            //    password = userRegistration.Password,
+                            //    returnSecureToken = true
 
-                        result = new UserSignupResponse();
-                        dynamic deserializedContent = JsonConvert.DeserializeObject(content);
+                            //};
+                            var body = new UserSignupRequest()
+                            {
+                                email = userRegistration.Email,
+                                password = userRegistration.Password,
+                                returnSecureToken = true
+                            };
+                            var bodyStr = JsonConvert.SerializeObject(body);
+                            var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+                            var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
+                            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                        if (deserializedContent?.error != null)
-                        {
-                            result.IsError = true;
-                            result.ErrorMessage = deserializedContent.error?.message?.ToString();
+                            result = new UserSignupResponse();
+                            dynamic deserializedContent = JsonConvert.DeserializeObject(content);
+
+                            if (deserializedContent?.error != null)
+                            {
+                                result.IsError = true;
+                                result.ErrorMessage = deserializedContent.error?.message?.ToString();
+                            }
+
+                            if (deserializedContent?.idToken != null)
+                            {
+                                result.IdToken = deserializedContent.idToken.ToString();
+                                var expiresIn = deserializedContent.expiresIn?.ToString();
+                                result.ExpiresIn = int.Parse(expiresIn);
+                                result.LocalId = deserializedContent.localId?.ToString();
+                                result.RefreshToken = deserializedContent.refreshToken?.ToString();
+                                result.Email = deserializedContent.email?.ToString();
+                            }
                         }
-
-                        if (deserializedContent?.idToken != null)
-                        {
-                            result.IdToken = deserializedContent.idToken.ToString();
-                            var expiresIn = deserializedContent.expiresIn?.ToString();
-                            result.ExpiresIn = int.Parse(expiresIn);
-                            result.LocalId = deserializedContent.localId?.ToString();
-                            result.RefreshToken = deserializedContent.refreshToken?.ToString();
-                            result.Email = deserializedContent.email?.ToString();
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
                     }
                 }
             }
@@ -343,21 +357,28 @@ namespace CallAladdin.Services
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(email))
             {
                 fullUrl = baseUrl + "/getOobConfirmationCode?key=" + apiKey;
-                using (var httpClient = new HttpClient())
+                try
                 {
-                    httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                    var body = new ForgottenPasswordRequest
+                    using (var httpClient = new HttpClient())
                     {
-                        requestType = "PASSWORD_RESET",
-                        email = email
-                    };
-                    var bodyStr = JsonConvert.SerializeObject(body);
-                    var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var deserializedContent = JsonConvert.DeserializeObject<ForgottenPasswordResponse>(content);
+                        httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                        var body = new ForgottenPasswordRequest
+                        {
+                            requestType = "PASSWORD_RESET",
+                            email = email
+                        };
+                        var bodyStr = JsonConvert.SerializeObject(body);
+                        var stringContent = new StringContent(bodyStr, Encoding.UTF8, "application/json");
+                        var response = await httpClient.PostAsync(fullUrl, stringContent).ConfigureAwait(false);
+                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        var deserializedContent = JsonConvert.DeserializeObject<ForgottenPasswordResponse>(content);
 
-                    result = deserializedContent != null && !string.IsNullOrEmpty(deserializedContent.email) && !string.IsNullOrEmpty(deserializedContent.kind);
+                        result = deserializedContent != null && !string.IsNullOrEmpty(deserializedContent.email) && !string.IsNullOrEmpty(deserializedContent.kind);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
                 }
             }
 

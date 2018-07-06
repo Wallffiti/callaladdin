@@ -21,19 +21,26 @@ namespace CallAladdin.Services
         {
             IList<string> results = null;
 
-            using (var httpClient = new HttpClient())
+            try
             {
-                var response = await httpClient.GetAsync(url + "/countries").ConfigureAwait(false);
-                if (response?.IsSuccessStatusCode == true)
+                using (var httpClient = new HttpClient())
                 {
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    dynamic deserializedContent = JsonConvert.DeserializeObject<List<dynamic>>(content);
-                    results = new List<string>();
-                    foreach (dynamic item in deserializedContent)
+                    var response = await httpClient.GetAsync(url + "/countries").ConfigureAwait(false);
+                    if (response?.IsSuccessStatusCode == true)
                     {
-                        results.Add(item?.name?.ToString());
+                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        dynamic deserializedContent = JsonConvert.DeserializeObject<List<dynamic>>(content);
+                        results = new List<string>();
+                        foreach (dynamic item in deserializedContent)
+                        {
+                            results.Add(item?.name?.ToString());
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             return results;
@@ -43,19 +50,26 @@ namespace CallAladdin.Services
         {
             IList<string> results = null;
 
-            using (var httpClient = new HttpClient())
+            try
             {
-                var response = await httpClient.GetAsync(url + "/cities").ConfigureAwait(false);
-                if (response?.IsSuccessStatusCode == true)
+                using (var httpClient = new HttpClient())
                 {
-                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    dynamic deserializedContent = JsonConvert.DeserializeObject<List<dynamic>>(content);
-                    results = new List<string>();
-                    foreach (var item in deserializedContent)
+                    var response = await httpClient.GetAsync(url + "/cities").ConfigureAwait(false);
+                    if (response?.IsSuccessStatusCode == true)
                     {
-                        results.Add(item?.name?.ToString());
+                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        dynamic deserializedContent = JsonConvert.DeserializeObject<List<dynamic>>(content);
+                        results = new List<string>();
+                        foreach (var item in deserializedContent)
+                        {
+                            results.Add(item?.name?.ToString());
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             return results;

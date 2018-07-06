@@ -30,7 +30,7 @@ namespace CallAladdin.Converters
                 {
                     return Color.Black;
                 }
-                else if (status == Constants.FOUND_CONTRACTOR)
+                else if (status == Constants.FOUND_CONTRACTOR || status == Constants.JOB_ACCEPTED)
                 {
                     return Color.Green;
                 }

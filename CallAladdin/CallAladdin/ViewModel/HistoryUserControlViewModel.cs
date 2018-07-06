@@ -172,12 +172,27 @@ namespace CallAladdin.ViewModel
                 var contractorFoundJobs = filteredJobs
                     .Where(p => !string.IsNullOrEmpty(p.ContractorSystemUUID))
                     .ToList();
+
                 var expiredJobs = filteredJobs
                     .Where(p => (DateTime.Now.Subtract(p.CreatedDateTime).Days >= Constants.JOB_REQUEST_EXPIRY_DURATION_IN_DAYS) && p.Status.ToLower() == Constants.PENDING)
                     .ToList();
 
                 if (contractorFoundJobs != null)
                 {
+                    //foreach (var item in contractorFoundJobs)
+                    //{
+                    //    if (item.ContractorSystemUUID == userProfile?.SystemUUID)
+                    //    {
+                    //        //if the job's assigned contractor's uuid is the same as the user's uuid, then status = job accepted
+                    //        item.Status = Constants.JOB_ACCEPTED;
+                    //    }
+                    //    else
+                    //    {
+                    //        //if the job's requestor's uuid is the same as user's uuid, then status = contractor found
+                    //        item.Status = Constants.CONTRACTOR_FOUND;
+                    //    }
+                    //}
+
                     contractorFoundCount = contractorFoundJobs.Count;
                     fullList.AddRange(contractorFoundJobs);
                 }
@@ -193,6 +208,11 @@ namespace CallAladdin.ViewModel
 
             if (acceptedJobs != null)
             {
+                foreach (var item in acceptedJobs)
+                {
+                    item.Status = Constants.JOB_ACCEPTED;
+                }
+
                 acceptedJobsCount = acceptedJobs.Count;
                 fullList.AddRange(acceptedJobs);
             }
