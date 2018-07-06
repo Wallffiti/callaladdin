@@ -5,4 +5,52 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Class="CallAladdin.ContractorProfilePage" FormattedTitle="CONTRACTOR PROFILE" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False">
+    <StackLayout>
+        <StackLayout.Resources>
+            <conv:PathToImageConverter x:Key="pathToImageConverter"/>
+        </StackLayout.Resources>
+        <ffimageloading:CachedImage x:Name="AvatarImage" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,10"
+			            WidthRequest="200" HeightRequest="200"
+			            DownsampleToViewSize="true"
+			            Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}" >
+        </ffimageloading:CachedImage>
+        <!--TODO rating and reviews-->
+        <StackLayout Orientation="Vertical" Margin="10">
+            <Label Text="Company Name" Style="{StaticResource fieldLabel}"/>
+            <Label Text="{Binding CompanyName}" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+        </StackLayout>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Text="Name" Style="{StaticResource fieldLabel}"/>
+            <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Name}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Text="Mobile" Style="{StaticResource fieldLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1"  Text="{Binding Mobile}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Text="Email" Style="{StaticResource fieldLabel}"/>
+            <Label Grid.Row="2" Grid.Column="1"  Text="{Binding Email}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+            <Label Grid.Row="3" Grid.Column="0" Text="City" Style="{StaticResource fieldLabel}"/>
+            <Label Grid.Row="3" Grid.Column="1"  Text="{Binding City}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Text="Country" Style="{StaticResource fieldLabel}"/>
+            <Label Grid.Row="4" Grid.Column="1"  Text="{Binding Country}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+        </Grid>
+        <StackLayout Orientation="Vertical" Margin="10">
+            <Label Text="Company Address" Style="{StaticResource fieldLabel}"/>
+            <Label Text="{Binding CompanyAddress}" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center"/>
+        </StackLayout>
+        <Label Margin="10" FontAttributes="Italic" Text="{Binding CreatedDate, StringFormat='Account created since {0:D}'}" Style="{StaticResource fieldLabel}" HorizontalOptions="Start" VerticalOptions="Center" HorizontalTextAlignment="Start"/>
+    </StackLayout>
 </local:CustomPage>
+    
