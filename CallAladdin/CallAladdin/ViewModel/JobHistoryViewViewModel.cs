@@ -12,18 +12,18 @@ namespace CallAladdin.ViewModel
     public class JobHistoryViewViewModel : BaseViewModel
     {
         private IUserService userService;
-        private UserProfile contractorProfile;
+        private UserProfile profile;
         private JobViewCommonUserControlViewModel jobviewCommonUserControlViewModel;
         private BaseViewModel parentViewModel;
-        private string contractorAvatarImage;
-        private string contractorName;
+        private string profileAvatarImage;
+        private string profileName;
         private DateTime createdDate;
-        private bool hasContractor;
+        private bool hasProfile;
         private Job selectedJob;
 
-        public UserProfile GetContractorProfile()
+        public UserProfile GetProfile()
         {
-            return contractorProfile;
+            return profile;
         }
 
         public Job Job
@@ -52,29 +52,29 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public string ContractorAvatarImage
+        public string ProfileAvatarImage
         {
             get
             {
-                return contractorAvatarImage;
+                return profileAvatarImage;
             }
             set
             {
-                contractorAvatarImage = value;
-                OnPropertyChanged(nameof(ContractorAvatarImage));
+                profileAvatarImage = value;
+                OnPropertyChanged(nameof(ProfileAvatarImage));
             }
         }
 
-        public string ContractorName
+        public string ProfileName
         {
             get
             {
-                return contractorName;
+                return profileName;
             }
             set
             {
-                contractorName = value;
-                OnPropertyChanged(nameof(ContractorName));
+                profileName = value;
+                OnPropertyChanged(nameof(ProfileName));
             }
         }
 
@@ -91,20 +91,22 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public bool HasContractor
+        public bool HasProfile
         {
             get
             {
-                return hasContractor;
+                return hasProfile;
             }
             set
             {
-                hasContractor = value;
-                OnPropertyChanged(nameof(HasContractor));
+                hasProfile = value;
+                OnPropertyChanged(nameof(HasProfile));
             }
         }
 
-        public ICommand GoToContractorProfileCmd { get; set; }
+        public string ProfileType { get; set; }
+
+        public ICommand GoToProfilePageCmd { get; set; }
 
         public JobHistoryViewViewModel(object owner)
         {
@@ -114,43 +116,56 @@ namespace CallAladdin.ViewModel
             {
                 var historyViewModel = (HistoryUserControlViewModel)parentViewModel;
                 this.Job = historyViewModel.GetSelectedJob();
-                var contractorSystemUUID = this.Job?.ContractorSystemUUID;  
 
-                //TODO: need to distinguish whether user is requestor or contractor, hence the system UUID here would be different
-                if (!string.IsNullOrEmpty(contractorSystemUUID))
+                GoToProfilePageCmd = new Xamarin.Forms.Command(async e =>
                 {
-                    HasContractor = true;
-                    userService = new UserService();
-                    GetContractorProfile(contractorSystemUUID);
-                    GoToContractorProfileCmd = new Xamarin.Forms.Command(async e =>
-                    {
-                        await Navigator.Instance.NavigateTo(PageType.CONTRACTOR_PROFILE_VIEW, this); //TODO: need to make this more generic where profile view can be contractor OR requestor
-                    },
-                    param =>
-                    {
-                        return true;
-                    });
-                }
-                else
+                    await Navigator.Instance.NavigateTo(PageType.PROFILE_VIEW, this);
+                },
+                param =>
                 {
-                    HasContractor = false;
+                    return true;
+                });
+
+                string userSystemUUID = "";
+                userService = new UserService();
+                var user = historyViewModel?.UserProfile;
+
+                if (user != null && this.Job != null)
+                {
+                    //if the current user is a contractor, and this job is the job that this contractor accepted, the profile displayed would be the job requestor's
+                    if (user.IsContractor && this.Job.ContractorSystemUUID == user.SystemUUID)
+                    {
+                        userSystemUUID = this.Job.RequestorSystemUUID;
+                        HasProfile = true;
+                        ProfileType = Constants.REQUESTOR;
+                    }
+                    else if (this.Job.RequestorSystemUUID == user.SystemUUID && !string.IsNullOrEmpty(this.Job.ContractorSystemUUID))
+                    {
+                        //if the job has contractor user uuid assigned (that means the job is accepted by a contractor), then the profile displayed would be contractor's
+                        userSystemUUID = this.Job.ContractorSystemUUID;
+                        HasProfile = true;
+                        ProfileType = Constants.CONTRACTOR;
+                    }
                 }
+
+                if (!string.IsNullOrEmpty(userSystemUUID))
+                    GetProfileData(userSystemUUID);
             }
 
             jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);
         }
 
-        private void GetContractorProfile(string contractorSystemUUID)
+        private void GetProfileData(string userSystemUUID)
         {
             Task.Run(async () =>
             {
                 //jobviewCommonUserControlViewModel.IsBusy = true;
-                contractorProfile = await userService.GetUserProfileByUUID(contractorSystemUUID);
-                if (contractorProfile != null)
+                profile = await userService.GetUserProfileByUUID(userSystemUUID);
+                if (profile != null)
                 {
-                    this.ContractorAvatarImage = contractorProfile.PathToProfileImage;
-                    this.ContractorName = contractorProfile.Name;
-                    this.CreatedDate = contractorProfile.CreatedDate;
+                    this.ProfileAvatarImage = profile.PathToProfileImage;
+                    this.ProfileName = profile.Name;
+                    this.CreatedDate = profile.CreatedDate;
                 }
                 //jobviewCommonUserControlViewModel.IsBusy = false;
             });

@@ -23,7 +23,19 @@ namespace CallAladdin.ViewModel
         private string expiredLabel;
         private string acceptedLabel;
 
-        public UserProfile UserProfile { get; set; }
+        private UserProfile userProfile;
+        public UserProfile UserProfile
+        {
+            get
+            {
+                return userProfile;
+            }
+            set
+            {
+                userProfile = value;
+                OnPropertyChanged("UserProfile");
+            }
+        }
 
         public bool IsBusy
         {
@@ -187,10 +199,6 @@ namespace CallAladdin.ViewModel
 
             JobRequestHistoryList = fullList;
             UpdateDescriptionLabel(contractorFoundCount, expiredJobsCount, acceptedJobsCount);
-
-            //UpdateDescriptionLabel(contractorFoundJobs == null ? 0 : contractorFoundJobs.Count(),
-            //    expiredJobs == null ? 0 : expiredJobs.Count(),
-            //    acceptedJobs == null ? 0 : acceptedJobs.Count()); //TODO
 
             IsBusy = false;
         }
