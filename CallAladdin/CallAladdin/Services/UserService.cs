@@ -101,7 +101,23 @@ namespace CallAladdin.Services
             return result;
         }
 
-        public async Task<UserProfile> GetUserProfile(string localId)
+        public async Task<UserProfile> GetUserProfileByUUID(string uuid)
+        {
+            UserProfile result = null;
+
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+            var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+            {
+                var fullUrl = baseUrl + "/user_profiles" + "/" + uuid + "/";
+                result = await GetUserProfile(result, fullUrl);
+            }
+
+            return result;
+        } 
+
+        public async Task<UserProfile> GetUserProfileByAuthLocalId(string localId)
         {
             UserProfile result = null;
 
@@ -111,56 +127,86 @@ namespace CallAladdin.Services
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
                 var fullUrl = baseUrl + "/user_profiles" + "?identifier_for_vendor=" + localId;
+                result = await GetUserProfile(result, fullUrl);
+            }
 
-                using (var httpClient = new HttpClient())
+            return result;
+        }
+
+        private bool IsArray(dynamic data)
+        {
+            if (data != null)
+            {
+                dynamic count = data.Count;
+                int val;
+                if (count != null && int.TryParse(count.ToString(), out val))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private async Task<UserProfile> GetUserProfile(UserProfile result, string fullUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
                 {
-                    try
+                    var response = await httpClient.GetAsync(fullUrl).ConfigureAwait(false);
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(content))
                     {
-                        var response = await httpClient.GetAsync(fullUrl).ConfigureAwait(false);
-                        var content = await response.Content.ReadAsStringAsync();
-                        if (!string.IsNullOrEmpty(content))
+                        dynamic responseData = JsonConvert.DeserializeObject(content);
+                        dynamic item = null; //responseData?[0];
+
+                        if (IsArray(responseData))
                         {
-                            dynamic responseData = JsonConvert.DeserializeObject(content);
-                            dynamic item = responseData?[0];
-                            if (item != null)
+                            item = responseData?[0];
+                        }
+                        else
+                        {
+                            item = responseData;
+                        }
+
+                        if (item != null)
+                        {
+                            result = new UserProfile
                             {
-                                result = new UserProfile
-                                {
-                                    SystemUUID = item.uuid,
-                                    Name = item.name,
-                                    Email = item.email,
-                                    PathToProfileImage = item.image,
-                                    CompanyRegisteredAddress = item.address,
-                                    Longitude = item.longitude,
-                                    Latitude = item.latitude,
-                                    Mobile = item.phone,
-                                    City = item.city,
-                                    Country = item.country,
-                                    IsContractor = item.is_contractor,
-                                    CompanyName = item.company_name,
-                                    Category = item.work_categories,
-                                };
-                            }
+                                SystemUUID = item.uuid,
+                                Name = item.name,
+                                Email = item.email,
+                                PathToProfileImage = item.image,
+                                CompanyRegisteredAddress = item.address,
+                                Longitude = item.longitude,
+                                Latitude = item.latitude,
+                                Mobile = item.phone,
+                                City = item.city,
+                                Country = item.country,
+                                IsContractor = item.is_contractor,
+                                CompanyName = item.company_name,
+                                Category = item.work_categories,
+                                CreatedDate = item.created
+                            };
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        //result = new UserProfile()    //DEBUG
-                        //{
-                        //    Name = "Jackson",
-                        //    Mobile = "012 345 678",
-                        //    Email = "dimensionconcept@yahoo.com",
-                        //    City = "Miri",
-                        //    Country = "Malaysia",
-                        //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
-                        //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
-                        //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
-                        //    OverallRating = 4,
-                        //    TotalReviewers = 102,
-                        //    LastReviewedDate = new DateTime(2018, 5, 1),
-                        //    IsContractor = localId == "contractor"
-                        //};
-                    }
+                }
+                catch (Exception ex)
+                {
+                    //result = new UserProfile()    //DEBUG
+                    //{
+                    //    Name = "Jackson",
+                    //    Mobile = "012 345 678",
+                    //    Email = "dimensionconcept@yahoo.com",
+                    //    City = "Miri",
+                    //    Country = "Malaysia",
+                    //    Category = Constants.INTERIOR_DESIGN_CARPENTERS,
+                    //    CompanyName = "Dimension Concept Interior Design Sdn. Bhd.",
+                    //    CompanyRegisteredAddress = "LOT 1234, Senadin Phase 2, Jalan 12345, 98000 Miri, Sarawak",
+                    //    OverallRating = 4,
+                    //    TotalReviewers = 102,
+                    //    LastReviewedDate = new DateTime(2018, 5, 1),
+                    //    IsContractor = localId == "contractor"
+                    //};
                 }
             }
 

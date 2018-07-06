@@ -19,7 +19,7 @@
                     </Image.GestureRecognizers>
                 </Image>-->
                 <ffimageloading:CachedImage x:Name="AvatarImage" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,20"
-			            WidthRequest="200" HeightRequest="200"
+			            WidthRequest="200" HeightRequest="200" Aspect="Fill"
 			            DownsampleToViewSize="true"
 			            Source="{ext:ImageResource CallAladdin.Assets.Images.ic_image.png}">
                     <ffimageloading:CachedImage.GestureRecognizers>

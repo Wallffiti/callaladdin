@@ -55,7 +55,7 @@ namespace CallAladdin.Services
                     request.AddParameter("longitude", longitude);
                     request.AddParameter("latitude", latitude);
                     request.AddParameter("work_category", workCategory);
-                    request.AddParameter("preferred_start_datetime", preferredEndTime);
+                    request.AddParameter("preferred_start_datetime", preferredStartTime);
                     request.AddParameter("preferred_end_datetime", preferredEndTime);
 
                     try
@@ -185,6 +185,93 @@ namespace CallAladdin.Services
             }
 
             return results;
+        }
+
+        public async Task<EditJobRequestResponse> UpdateRequest(EditJobRequestRequest jobRequest)
+        {
+            EditJobRequestResponse result = null;
+            IRestResponse response = null;
+
+            if (jobRequest != null)
+            {
+                result = new EditJobRequestResponse();
+                var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+                var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+                if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+                {
+                    var fullUrl = baseUrl + "/requests/" + jobRequest.SystemUUID + "/";
+                    //var requestorUUID = jobRequest.RequestorSystemUUID;
+                    var title = jobRequest.Title;
+                    var scopeOfWork = jobRequest.ScopeOfWork;
+                    var address = jobRequest.Address;
+                    var city = jobRequest.City;
+                    var country = jobRequest.Country;
+                    var longitude = jobRequest.Longitude;
+                    var latitude = jobRequest.Latitude;
+                    var workCategory = jobRequest.Category;
+                    var preferredStartTime = jobRequest.StartDateTime;
+                    var preferredEndTime = jobRequest.EndDateTime;
+
+                    var client = new RestClient(fullUrl);
+                    var request = new RestRequest(Method.PATCH);
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "Basic " + apiKey);
+                    //request.AddParameter("requestor_uuid", requestorUUID);
+                    request.AddParameter("title", title);
+                    request.AddParameter("scope_of_work", scopeOfWork);
+                    request.AddParameter("address", address);
+                    request.AddParameter("city", city);
+                    request.AddParameter("country", country);
+                    request.AddParameter("longitude", longitude);
+                    request.AddParameter("latitude", latitude);
+                    request.AddParameter("work_category", workCategory);
+                    request.AddParameter("preferred_start_datetime", preferredStartTime);
+                    request.AddParameter("preferred_end_datetime", preferredEndTime);
+
+                    try
+                    {
+                        if (File.Exists(jobRequest.ImagePath))
+                        {
+                            using (var fs = File.OpenRead(jobRequest.ImagePath))
+                            {
+                                var bytes = Utilities.StreamToBytes(fs);
+                                request.AddFile("image", bytes, Guid.NewGuid().ToString() + ".jpg", "image/jpg");
+                            }
+                        }
+
+                        if (File.Exists(jobRequest.VoiceNotePath))
+                        {
+                            using (var fs = File.OpenRead(jobRequest.VoiceNotePath))
+                            {
+                                var bytes = Utilities.StreamToBytes(fs);
+                                request.AddFile("voice_note", bytes, Guid.NewGuid().ToString() + ".mp3", "audio/mpeg");
+                            }
+                        }
+
+                        response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                }
+            }
+
+            if (response != null && response.IsSuccessful)
+            {
+                var strResponse = response?.Content;
+                dynamic responseData = string.IsNullOrEmpty(strResponse) ? "" : JsonConvert.DeserializeObject(strResponse);
+
+                if (responseData != null)
+                {
+                    result.SystemGeneratedId = responseData.uuid;
+                    result.IsSuccess = true;
+                }
+            }
+
+            return result;
         }
 
         private async Task CallGetJobsApi(List<Job> results, string fullUrl)

@@ -485,7 +485,16 @@ namespace CallAladdin.ViewModel
             SelectedStartDate = now;
             SelectedEndDate = now;
             SelectedStartTime = new TimeSpan(now.Hour, now.Minute, now.Second);
-            SelectedEndTime = new TimeSpan(now.Hour + 1, now.Minute, now.Second);
+
+            if (SelectedStartTime.Add(new TimeSpan(1,0,0)) > new TimeSpan(11,59, 59))
+            {
+                SelectedEndDate = now.AddDays(1);
+                SelectedEndTime = new TimeSpan(0, now.Minute, now.Second);
+            }
+            else
+            {
+                SelectedEndTime = new TimeSpan(now.Hour + 1, now.Minute, now.Second);
+            }
         }
 
         public /*async*/ void CreateJobRequest()

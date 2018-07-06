@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ext="clr-namespace:CallAladdin.Helper;assembly=CallAladdin"
              xmlns:local="clr-namespace:CallAladdin"
              xmlns:conv="clr-namespace:CallAladdin.Converters"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             x:Class="CallAladdin.JobRequestPage" FormattedTitle="JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
+             x:Class="CallAladdin.EditJobPage" FormattedTitle="EDIT JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False" >
     <local:CustomPage.Resources>
         <conv:PathToImageConverter x:Key="pathToImageConverter"/>
     </local:CustomPage.Resources>
@@ -15,11 +14,6 @@
                 <Image Source="{Binding ContractorIcon, Converter={StaticResource pathToImageConverter}, ConverterParameter=isEmbedded}" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"/>
                 <Label Text="{Binding JobRequestType}" VerticalOptions="Center" FontSize="Small" TextColor="Black" />
             </FlexLayout>
-            <!--<Image Source="{Binding JobRequestImage, Converter={StaticResource pathToImageConverter}}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Aspect="AspectFit" WidthRequest="300" HeightRequest="300">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ChangeProfileImageCmd}" />
-                </Image.GestureRecognizers>
-            </Image>-->
             <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center" x:Name="JobRequestCachedImage"
 			    WidthRequest="300" HeightRequest="300" Aspect="Fill"
 			    DownsampleToViewSize="true"
@@ -108,20 +102,15 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label Text="Country" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
-                <Picker x:Name="CountryPicker" Title="Country" ItemsSource="{Binding Countries}" Grid.Row="0" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCountry}">
-                </Picker>
-                <Label Text="City" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
-                <Picker x:Name="CityPicker" Title="City" ItemsSource="{Binding Cities}" Grid.Row="1" Grid.Column="1" FontSize="Small" SelectedItem="{Binding SelectedCity}">
-                </Picker>
+                <Label Grid.Row="0" Grid.Column="0" Text="Country" Style="{StaticResource fieldLabel}"/>
+                <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Country}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+                <Label Grid.Row="1" Grid.Column="0" Text="City" Style="{StaticResource fieldLabel}"/>
+                <Label Grid.Row="1" Grid.Column="1"  Text="{Binding City}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Text="Location" Style="{StaticResource fieldLabel}"/>
+                <Label Grid.Row="2" Grid.Column="1"  Text="{Binding Location}" TextColor="Black" HorizontalOptions="End" VerticalOptions="Center"/>
             </Grid>
-            <SearchBar Margin="20,10" SearchCommand="{Binding SearchLocationCmd}" SearchCommandParameter="{Binding Location}"  Placeholder="Set Your Location Here" x:Name="LocationSearchBar" TextColor="Black" PlaceholderColor="{StaticResource darkergrey}" HorizontalOptions="Fill" Grid.Column="1" VerticalOptions="Center" Text="{Binding Location}" FontSize="Small"/>
-            <StackLayout Margin="20,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource lightOrange}" Padding="20, 0" HeightRequest="40">
-                <Label TextColor="Red" FontSize="10" Text="{Binding ContractorsAvailable}" VerticalOptions="Center" VerticalTextAlignment="Center" BackgroundColor="{StaticResource lightOrange}"/>
-                <Label TextColor="{StaticResource darkergrey}" FontSize="10" Text="contractors available in" VerticalOptions="Center" VerticalTextAlignment="Center" BackgroundColor="{StaticResource lightOrange}"/>
-                <Label TextColor="{StaticResource darkergrey}" FontSize="10" FontAttributes="Italic" Text="{Binding SelectedCity}" VerticalOptions="Center" VerticalTextAlignment="Center" BackgroundColor="{StaticResource lightOrange}"/>
-            </StackLayout>
             <Button x:Name="SubmitButton" Style="{StaticResource defaultButton}" Margin="100,20" Text="SUBMIT" Command="{Binding SubmitJobRequestCmd}" CommandParameter="{Binding JobRequest}"/>
         </StackLayout>
     </ScrollView>

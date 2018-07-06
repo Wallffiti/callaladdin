@@ -144,7 +144,7 @@ namespace CallAladdin.ViewModel
                 }
 
                 //2. Call backend server api to get user profile using data from signupUserResponse
-                var userProfile = await userService.GetUserProfile(authResponse.LocalId);
+                var userProfile = await userService.GetUserProfileByAuthLocalId(authResponse.LocalId);
 
                 if (userProfile != null)
                 {
