@@ -20,6 +20,7 @@ namespace CallAladdin.ViewModel
         private DateTime createdDate;
         private bool hasProfile;
         private Job selectedJob;
+        private bool isBusy;
 
         public UserProfile GetProfile()
         {
@@ -104,6 +105,19 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public bool IsBusy
+        {
+            get
+            {
+                return isBusy;
+            }
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
+
         public string ProfileType { get; set; }
 
         public ICommand GoToProfilePageCmd { get; set; }
@@ -123,7 +137,10 @@ namespace CallAladdin.ViewModel
                 },
                 param =>
                 {
-                    return true;
+                    if (param == null)
+                        return false;
+
+                    return !(bool)param;
                 });
 
                 string userSystemUUID = "";
@@ -160,6 +177,7 @@ namespace CallAladdin.ViewModel
             Task.Run(async () =>
             {
                 //jobviewCommonUserControlViewModel.IsBusy = true;
+                IsBusy = true;
                 profile = await userService.GetUserProfileByUUID(userSystemUUID);
                 if (profile != null)
                 {
@@ -167,6 +185,7 @@ namespace CallAladdin.ViewModel
                     this.ProfileName = profile.Name;
                     this.CreatedDate = profile.CreatedDate;
                 }
+                IsBusy = false;
                 //jobviewCommonUserControlViewModel.IsBusy = false;
             });
         }
