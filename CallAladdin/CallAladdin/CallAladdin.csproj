@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Assets\aladdin-logo-new-2017.png" />
+    <None Remove="Assets\HTML\passwordless_auth.html" />
     <None Remove="Assets\Images\air_conditioner.png" />
     <None Remove="Assets\Images\alarm_cctv.png" />
     <None Remove="Assets\Images\aluminium_glass_works.png" />
@@ -75,6 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\HTML\passwordless_auth.html" />
     <EmbeddedResource Include="Assets\Images\air_conditioner.png" />
     <EmbeddedResource Include="Assets\Images\aladdin-logo-new-2017.png" />
     <EmbeddedResource Include="Assets\Images\alarm_cctv.png" />
@@ -168,9 +170,6 @@
     <EmbeddedResource Update="ChangePhoneNumberPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="ContractorProfilePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="CustomPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -202,6 +201,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="PersonalDataProtectionPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ProfilePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="SmsVerificationPage.xaml">

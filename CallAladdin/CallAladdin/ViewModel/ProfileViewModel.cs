@@ -4,10 +4,10 @@ using System.Text;
 
 namespace CallAladdin.ViewModel
 {
-    //TODO: need to rename this to make it more genetic ie cater both requestor and contractor
-    public class ContractorProfileViewModel : BaseViewModel
+    public class ProfileViewModel : BaseViewModel
     {
         private BaseViewModel parentViewModel;
+        private string pageTitle;
         private string imagePath;
         private string companyName;
         private string name;
@@ -17,6 +17,16 @@ namespace CallAladdin.ViewModel
         private string country;
         private string companyAddress;
         private DateTime createdDate;
+
+        public string PageTitle
+        {
+            get { return pageTitle; }
+            set
+            {
+                pageTitle = value;
+                OnPropertyChanged(nameof(PageTitle));
+            }
+        }
 
         public string ImagePath
         {
@@ -108,25 +118,39 @@ namespace CallAladdin.ViewModel
             }
         }
 
-        public ContractorProfileViewModel(object owner)
+        public ProfileViewModel(object owner)
         {
             if (owner is JobHistoryViewViewModel)
             {
                 var jobHistoryViewViewModel = (JobHistoryViewViewModel)owner;
                 parentViewModel = jobHistoryViewViewModel;
-                var contractorProfile = jobHistoryViewViewModel.GetContractorProfile();
+                var profile = jobHistoryViewViewModel.GetProfile();
 
-                if (contractorProfile != null)
+                if (profile != null)
                 {
-                    ImagePath = contractorProfile.PathToProfileImage;
-                    CompanyName = contractorProfile.CompanyName;
-                    Name = contractorProfile.Name;
-                    Mobile = contractorProfile.Mobile;
-                    Email = contractorProfile.Email;
-                    City = contractorProfile.City;
-                    Country = contractorProfile.Country;
-                    CompanyAddress = contractorProfile.CompanyRegisteredAddress;
-                    CreatedDate = contractorProfile.CreatedDate;
+                    ImagePath = profile.PathToProfileImage;
+                    CompanyName = profile.CompanyName;
+                    Name = profile.Name;
+                    Mobile = profile.Mobile;
+                    Email = profile.Email;
+                    City = profile.City;
+                    Country = profile.Country;
+                    CompanyAddress = profile.CompanyRegisteredAddress;
+                    CreatedDate = profile.CreatedDate;
+                }
+
+                var profileType = jobHistoryViewViewModel.ProfileType;
+                if (string.IsNullOrEmpty(profileType))
+                {
+                    PageTitle = "USER PROFILE";
+                }
+                else if (profileType == Constants.REQUESTOR)
+                {
+                    PageTitle = "REQUESTOR PROFILE";
+                }
+                else if (profileType == Constants.CONTRACTOR)
+                {
+                    PageTitle = "CONTRACTOR PROFILE";
                 }
             }
         }

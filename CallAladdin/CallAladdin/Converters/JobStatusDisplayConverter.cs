@@ -37,6 +37,10 @@ namespace CallAladdin.Converters
                 {
                     return Constants.JOB_COMPLETED;
                 }
+                else
+                {
+                    return status;
+                }
             }
 
             return Constants.UNKNOWN_STATUS;
