@@ -77,6 +77,9 @@ namespace CallAladdin
                 case PageType.PROFILE_VIEW:
                     view = new ProfilePage(parameter);
                     break;
+                case PageType.JOB_ACCEPTANCE_VIEW:
+                    view = new JobAcceptanceViewPage(parameter);
+                    break;
                 case PageType.DUMMY:
                     view = new DummyPage();
                     break;
@@ -208,6 +211,7 @@ namespace CallAladdin
         HISTORY_JOB_VIEW = 11,
         EDIT_JOB_VIEW = 12,
         PROFILE_VIEW = 13,
+        JOB_ACCEPTANCE_VIEW = 14,
         DUMMY = 99
     }
 

@@ -7,10 +7,12 @@ using CallAladdin.Model;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
 using System.Linq;
+using CallAladdin.Observers.Interfaces;
+using CallAladdin.EventArgs;
 
 namespace CallAladdin.ViewModel
 {
-    public class ContractorUserControlViewModel : BaseViewModel
+    public class ContractorUserControlViewModel : BaseViewModel, ISubscriber
     {
         private IJobService jobService;
         private string descriptionLabel;
@@ -20,6 +22,7 @@ namespace CallAladdin.ViewModel
         private IList<Job> availableJobsList;
         private const string DESCRIPTION_MESSAGE = "There are {0} available jobs near your location";
         private bool showHints;
+        private Job selectedJob;
 
         public string DescriptionLabel
         {
@@ -45,6 +48,11 @@ namespace CallAladdin.ViewModel
             set { showHints = value; OnPropertyChanged("ShowHints"); }
         }
 
+        public Job GetSelectedJob()
+        {
+            return selectedJob;
+        }
+
         public ICommand GoToJobView { get; set; }
 
         public ContractorUserControlViewModel(object owner)
@@ -68,7 +76,8 @@ namespace CallAladdin.ViewModel
             });
             GoToJobView = new Xamarin.Forms.Command(async (e) =>
             {
-                //TODO
+                this.selectedJob = (Job)e;
+                await Navigator.Instance.NavigateTo(PageType.JOB_ACCEPTANCE_VIEW, this);
             },
             (param) =>
             {
@@ -107,6 +116,16 @@ namespace CallAladdin.ViewModel
                 DescriptionLabel = "You can only view this page if you are registered as CONTRACTOR";
                 ShowHints = false;
             }
+        }
+
+        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
+        {
+            //TODO
+        }
+
+        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
+        {
+            //If needed
         }
     }
 }
