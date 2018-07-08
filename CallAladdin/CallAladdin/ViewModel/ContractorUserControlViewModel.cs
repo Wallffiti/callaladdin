@@ -61,12 +61,10 @@ namespace CallAladdin.ViewModel
                 await RefreshListAsync();
             }, (param) =>
             {
-                if (param == null)
+                if (IsBusy)
                     return false;
 
-                var canRefresh = !(bool)param;
-
-                return canRefresh;
+                return true;
             });
             GoToJobView = new Xamarin.Forms.Command(async (e) =>
             {
