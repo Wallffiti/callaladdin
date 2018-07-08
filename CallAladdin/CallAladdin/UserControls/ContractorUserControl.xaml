@@ -18,7 +18,41 @@
     <StackLayout Grid.Row="1" Margin="0,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal" BackgroundColor="{StaticResource mediumgrey}" Padding="20, 0" HeightRequest="40">
         <Label Text="{Binding DescriptionLabel}" VerticalOptions="Center" TextColor="DarkBlue" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
     </StackLayout>
-    <ListView Grid.Row="2" x:Name="AvailableJobsListView" ItemsSource="{Binding AvailableJobsList}" RowHeight="100" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
-        <!--todo-->
+    <Label Text="Hint: You can tap and hold on selected item to reveal additional options" Style="{StaticResource hintLabel}" Margin="20,0,20,10" Grid.Row="2" IsVisible="{Binding ShowHints}"/>
+    <ListView Grid.Row="3" x:Name="AvailableJobsListView" ItemsSource="{Binding AvailableJobsList}" RowHeight="100" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Text="View" CommandParameter="{Binding .}" Command="{Binding Source={x:Reference ContractorUserControl}, Path=BindingContext.GoToJobView}" />
+                    </ViewCell.ContextActions>
+                    <Grid HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="{StaticResource lightgrey}">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Grid.GestureRecognizers>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ffimageloading:CachedImage HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="5"
+                            WidthRequest="80" HeightRequest="80" Aspect="AspectFill"
+			                DownsampleToViewSize="true"
+			                Source="{Binding ImagePath, Converter={StaticResource pathToImageConverter}}">
+                            <ffimageloading:CachedImage.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference ContractorUserControl}, Path=BindingContext.GoToJobView}" CommandParameter="{Binding .}" Tapped="TapGestureRecognizer_Tapped"/>
+                            </ffimageloading:CachedImage.GestureRecognizers>
+                        </ffimageloading:CachedImage>
+                        <Label x:Name="categoryLabel" Text="{Binding Category}" FontSize="14" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontAttributes="Bold" Grid.Row="0" Grid.Column="1" Margin="5"/>
+                        <Label x:Name="titleLabel" Text="{Binding Title}" VerticalOptions="Start" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="12" FontAttributes="Italic" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
+                        <Label x:Name="modifiedDateTimeLabel" Text="{Binding ModifiedDateTime, StringFormat='Last modified on {0:D}'}" HorizontalOptions="Fill" HorizontalTextAlignment="Start" FontSize="8" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
     </ListView>
 </Grid>

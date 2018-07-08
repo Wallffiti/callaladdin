@@ -19,6 +19,7 @@ namespace CallAladdin.ViewModel
         public ICommand RefreshJobList { get; set; }
         private IList<Job> availableJobsList;
         private const string DESCRIPTION_MESSAGE = "There are {0} available jobs near your location";
+        private bool showHints;
 
         public string DescriptionLabel
         {
@@ -38,6 +39,14 @@ namespace CallAladdin.ViewModel
             set { availableJobsList = value; OnPropertyChanged("AvailableJobsList"); }
         }
 
+        public bool ShowHints
+        {
+            get { return showHints; }
+            set { showHints = value; OnPropertyChanged("ShowHints"); }
+        }
+
+        public ICommand GoToJobView { get; set; }
+
         public ContractorUserControlViewModel(object owner)
         {
             var parentViewModel = (HomeViewModel)owner;
@@ -45,16 +54,26 @@ namespace CallAladdin.ViewModel
             {
                 this.UserProfile = parentViewModel.UserProfile;
             }
-            //UpdateDescriptionLabel();
+            UpdateDescriptionLabel(UserProfile?.IsContractor == true);  //provide initial description while loading job
             jobService = new JobService();
             RefreshJobList = new Xamarin.Forms.Command(async (e) =>
             {
                 await RefreshListAsync();
             }, (param) =>
             {
-                if (IsBusy)
+                if (param == null)
                     return false;
 
+                var canRefresh = !(bool)param;
+
+                return canRefresh;
+            });
+            GoToJobView = new Xamarin.Forms.Command(async (e) =>
+            {
+                //TODO
+            },
+            (param) =>
+            {
                 return true;
             });
         }
@@ -83,10 +102,12 @@ namespace CallAladdin.ViewModel
             if (isContractor)
             {
                 DescriptionLabel = string.Format(DESCRIPTION_MESSAGE, AvailableJobsList == null ? 0 : AvailableJobsList.Count);
+                ShowHints = true;
             }
             else
             {
                 DescriptionLabel = "You can only view this page if you are registered as CONTRACTOR";
+                ShowHints = false;
             }
         }
     }

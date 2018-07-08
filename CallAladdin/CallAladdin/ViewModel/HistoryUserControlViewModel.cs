@@ -107,7 +107,7 @@ namespace CallAladdin.ViewModel
             });
             EditJobRequestHistoryCmd = new Xamarin.Forms.Command(e =>
             {
-                //TODO
+                //TODO if required
             },
            param =>
            {
@@ -115,7 +115,7 @@ namespace CallAladdin.ViewModel
            });
             DeleteJobRequestHistoryCmd = new Xamarin.Forms.Command(e =>
             {
-                //TODO
+                //TODO if required
             },
             param =>
             {
