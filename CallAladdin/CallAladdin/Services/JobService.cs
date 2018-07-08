@@ -1,7 +1,6 @@
 ﻿using CallAladdin.Model.Requests;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using CallAladdin.Model;
 using System.Net.Http;
@@ -11,6 +10,7 @@ using RestSharp;
 using System.IO;
 using CallAladdin.Helper;
 using CallAladdin.Services.Interfaces;
+using System.Linq;
 
 namespace CallAladdin.Services
 {
@@ -164,7 +164,34 @@ namespace CallAladdin.Services
             return results;
         }
 
-        public async Task<IList<Job>> GetJobs(string requestorUUID, string status)
+        public async Task<IList<Job>> GetAvailableJobs(string requestorUUID, string city, string workCategory)
+        {
+            if (string.IsNullOrEmpty(requestorUUID) || string.IsNullOrEmpty(city))
+                return null;
+
+            var results = new List<Job>();
+            var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+
+            if (!string.IsNullOrEmpty(baseUrl))
+            {
+                city = System.Net.WebUtility.UrlEncode(city);
+                var fullUrl = baseUrl + "/requests" + "?city=" + city + "&&status=pending";
+
+                if (!string.IsNullOrEmpty(workCategory))
+                {
+                    workCategory = System.Net.WebUtility.UrlEncode(workCategory);
+                    fullUrl += "&&work_category=" + workCategory;
+                }
+
+                await CallGetJobsApi(results, fullUrl);
+            }
+
+            return results?
+                .Where(p=>p.RequestorSystemUUID != requestorUUID)
+                .Select(p=>p).ToList();
+        }
+
+        public async Task<IList<Job>> GetRequestedJobs(string requestorUUID, string status)
         {
             if (string.IsNullOrEmpty(requestorUUID))
                 return null;

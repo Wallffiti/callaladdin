@@ -157,7 +157,7 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshListAsync()
         {
             IsBusy = true;
-            var requestedJobs = await jobService.GetJobs(UserProfile?.SystemUUID);   //TODO: need backend to provide better filtering
+            var requestedJobs = await jobService.GetRequestedJobs(UserProfile?.SystemUUID);   //TODO: need backend to provide better filtering
             var fullList = new List<Job>();
             int contractorFoundCount = 0;
             int expiredJobsCount = 0;

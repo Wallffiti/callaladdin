@@ -45,7 +45,7 @@ namespace CallAladdin.ViewModel
             {
                 this.UserProfile = parentViewModel.UserProfile;
             }
-            UpdateDescriptionLabel();
+            //UpdateDescriptionLabel();
             jobService = new JobService();
             RefreshJobList = new Xamarin.Forms.Command(async (e) =>
             {
@@ -61,19 +61,27 @@ namespace CallAladdin.ViewModel
 
         public async Task RefreshListAsync()
         {
-            IsBusy = true;
-            //TODO: call API for available jobs for a particular location
-            UpdateDescriptionLabel();
-            IsBusy = false;
+            var isContractor = UserProfile?.IsContractor;
+
+            if (isContractor == true)
+            {
+                IsBusy = true;
+                await GetAvailableJobs();
+                IsBusy = false;
+            }
+
+            UpdateDescriptionLabel(isContractor == true);
         }
 
-        private void UpdateDescriptionLabel()
+        private async Task GetAvailableJobs()
         {
-            if (UserProfile != null && UserProfile.IsContractor)
-            {
-                //TODO: load available jobs here
-                AvailableJobsList = null;
+            AvailableJobsList = await jobService.GetAvailableJobs(UserProfile?.SystemUUID, UserProfile?.City);
+        }
 
+        private void UpdateDescriptionLabel(bool isContractor)
+        {
+            if (isContractor)
+            {
                 DescriptionLabel = string.Format(DESCRIPTION_MESSAGE, AvailableJobsList == null ? 0 : AvailableJobsList.Count);
             }
             else

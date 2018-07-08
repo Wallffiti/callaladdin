@@ -11,7 +11,8 @@ namespace CallAladdin.Services.Interfaces
         Task<JobRequestResponse> CreateRequest(JobRequestRequest jobRequest);
         Task<EditJobRequestResponse> UpdateRequest(EditJobRequestRequest updatedJobRequest);
         Task<IList<Job>> GetAcceptedJobs(string contractorUUID);
-        Task<IList<Job>> GetJobs(string requestorUUID, string status = "");
+        Task<IList<Job>> GetRequestedJobs(string requestorUUID, string status = "");
+        Task<IList<Job>> GetAvailableJobs(string requestorUUID, string city, string workCategory = "");
         Task<bool> DeleteJob(string jobUUID);
     }
 }
