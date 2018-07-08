@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+             xmlns:uc="clr-namespace:CallAladdin.UserControls"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="CallAladdin.JobAcceptanceViewPage" FormattedTitle="JOB REQUEST" Style="{StaticResource secondaryBackground}" BackgroundColor="{StaticResource homeIconBackground}" NavigationPage.HasBackButton="False">
+    <ScrollView>
+        <StackLayout>
+            <uc:JobViewCommonUserControl BindingContext="{Binding JobViewCommonUserControlViewModel}" />
+            <Button x:Name="AcceptButton" Style="{StaticResource defaultButton}" Margin="100,10" Text="ACCEPT" HorizontalOptions="Center" BackgroundColor="Green" VerticalOptions="Center" Command="{Binding AcceptJobCmd}"/>
+        </StackLayout>
+    </ScrollView>
+</local:CustomPage>

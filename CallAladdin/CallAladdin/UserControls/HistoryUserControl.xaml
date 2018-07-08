@@ -23,6 +23,7 @@
         <Label Text="{Binding ExpiredLabel}" VerticalOptions="Center" TextColor="DarkRed" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
         <Label Text="{Binding AcceptedLabel}" VerticalOptions="Center" TextColor="DarkGreen" FontSize="Small" HorizontalOptions="Start" HorizontalTextAlignment="Start" Margin="0,0,0,10"/>
     </StackLayout>
+    <Label Text="Hint: You can tap and hold on selected item to reveal additional options" Style="{StaticResource hintLabel}" Margin="20,0,20,10" Grid.Row="2"/>
     <ListView Grid.Row="3" x:Name="JobRequestHistoryListView" ItemsSource="{Binding JobRequestHistoryList}" RowHeight="150" SeparatorColor="Black" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshJobList}" IsRefreshing="{Binding IsBusy}">
         <ListView.ItemTemplate>
             <DataTemplate>

@@ -89,7 +89,7 @@ namespace CallAladdin.ViewModel
         {
             bool? result = null;
 
-            var jobs = await jobService.GetJobs(/*userSystemUUID*/ UserProfile?.SystemUUID);
+            var jobs = await jobService.GetRequestedJobs(/*userSystemUUID*/ UserProfile?.SystemUUID);
 
             if (jobs != null)
             {

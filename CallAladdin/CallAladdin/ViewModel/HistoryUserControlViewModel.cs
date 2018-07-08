@@ -107,7 +107,7 @@ namespace CallAladdin.ViewModel
             });
             EditJobRequestHistoryCmd = new Xamarin.Forms.Command(e =>
             {
-                //TODO
+                //TODO if required
             },
            param =>
            {
@@ -115,7 +115,7 @@ namespace CallAladdin.ViewModel
            });
             DeleteJobRequestHistoryCmd = new Xamarin.Forms.Command(e =>
             {
-                //TODO
+                //TODO if required
             },
             param =>
             {
@@ -157,7 +157,7 @@ namespace CallAladdin.ViewModel
         public async System.Threading.Tasks.Task RefreshListAsync()
         {
             IsBusy = true;
-            var requestedJobs = await jobService.GetJobs(UserProfile?.SystemUUID);   //TODO: need backend to provide better filtering
+            var requestedJobs = await jobService.GetRequestedJobs(UserProfile?.SystemUUID);   //TODO: need backend to provide better filtering
             var fullList = new List<Job>();
             int contractorFoundCount = 0;
             int expiredJobsCount = 0;
@@ -210,7 +210,8 @@ namespace CallAladdin.ViewModel
             {
                 foreach (var item in acceptedJobs)
                 {
-                    item.Status = Constants.JOB_ACCEPTED;
+                    if (item.Status == Constants.FOUND_CONTRACTOR)
+                        item.Status = Constants.JOB_ACCEPTED;
                 }
 
                 acceptedJobsCount = acceptedJobs.Count;

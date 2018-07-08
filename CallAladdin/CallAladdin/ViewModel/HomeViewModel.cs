@@ -107,7 +107,9 @@ namespace CallAladdin.ViewModel
                         //Update user profile for related user controls here
                         this.UserProfile = eventArgs.Parameters as UserProfile;
                         HomeUserControlViewModel.UserProfile = this.UserProfile;
-                        dashboardUserControlViewModel.UserProfile = this.UserProfile;
+                        DashboardUserControlViewModel.UserProfile = this.UserProfile;
+                        ContractorUserControlViewModel.UserProfile = this.UserProfile;
+                        HistoryUserControlViewModel.UserProfile = this.UserProfile;
                     }
                 }
             }

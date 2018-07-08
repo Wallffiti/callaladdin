@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CallAladdin.Model;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
-using System.Linq;
 
 namespace CallAladdin.ViewModel
 {
@@ -19,6 +16,8 @@ namespace CallAladdin.ViewModel
         public ICommand RefreshJobList { get; set; }
         private IList<Job> availableJobsList;
         private const string DESCRIPTION_MESSAGE = "There are {0} available jobs near your location";
+        private bool showHints;
+        private Job selectedJob;
 
         public string DescriptionLabel
         {
@@ -38,6 +37,19 @@ namespace CallAladdin.ViewModel
             set { availableJobsList = value; OnPropertyChanged("AvailableJobsList"); }
         }
 
+        public bool ShowHints
+        {
+            get { return showHints; }
+            set { showHints = value; OnPropertyChanged("ShowHints"); }
+        }
+
+        public Job GetSelectedJob()
+        {
+            return selectedJob;
+        }
+
+        public ICommand GoToJobView { get; set; }
+
         public ContractorUserControlViewModel(object owner)
         {
             var parentViewModel = (HomeViewModel)owner;
@@ -45,7 +57,7 @@ namespace CallAladdin.ViewModel
             {
                 this.UserProfile = parentViewModel.UserProfile;
             }
-            UpdateDescriptionLabel();
+            UpdateDescriptionLabel(UserProfile?.IsContractor == true);  //provide initial description while loading job
             jobService = new JobService();
             RefreshJobList = new Xamarin.Forms.Command(async (e) =>
             {
@@ -57,28 +69,47 @@ namespace CallAladdin.ViewModel
 
                 return true;
             });
+            GoToJobView = new Xamarin.Forms.Command(async (e) =>
+            {
+                this.selectedJob = (Job)e;
+                await Navigator.Instance.NavigateTo(PageType.JOB_ACCEPTANCE_VIEW, this);
+            },
+            (param) =>
+            {
+                return true;
+            });
         }
 
         public async Task RefreshListAsync()
         {
-            IsBusy = true;
-            //TODO: call API for available jobs for a particular location
-            UpdateDescriptionLabel();
-            IsBusy = false;
+            var isContractor = UserProfile?.IsContractor;
+
+            if (isContractor == true)
+            {
+                IsBusy = true;
+                await GetAvailableJobs();
+                IsBusy = false;
+            }
+
+            UpdateDescriptionLabel(isContractor == true);
         }
 
-        private void UpdateDescriptionLabel()
+        private async Task GetAvailableJobs()
         {
-            if (UserProfile != null && UserProfile.IsContractor)
-            {
-                //TODO: load available jobs here
-                AvailableJobsList = null;
+            AvailableJobsList = await jobService.GetAvailableJobs(UserProfile?.SystemUUID, UserProfile?.City);
+        }
 
+        private void UpdateDescriptionLabel(bool isContractor)
+        {
+            if (isContractor)
+            {
                 DescriptionLabel = string.Format(DESCRIPTION_MESSAGE, AvailableJobsList == null ? 0 : AvailableJobsList.Count);
+                ShowHints = true;
             }
             else
             {
                 DescriptionLabel = "You can only view this page if you are registered as CONTRACTOR";
+                ShowHints = false;
             }
         }
     }

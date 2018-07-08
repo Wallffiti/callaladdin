@@ -12,6 +12,7 @@ namespace CallAladdin.ViewModel
     public class JobHistoryViewViewModel : BaseViewModel
     {
         private IUserService userService;
+        private IJobService jobService;
         private UserProfile profile;
         private JobViewCommonUserControlViewModel jobviewCommonUserControlViewModel;
         private BaseViewModel parentViewModel;
@@ -21,6 +22,7 @@ namespace CallAladdin.ViewModel
         private bool hasProfile;
         private Job selectedJob;
         private bool isBusy;
+        private bool showFooterButtons;
 
         public UserProfile GetProfile()
         {
@@ -118,9 +120,24 @@ namespace CallAladdin.ViewModel
             }
         }
 
+        public bool ShowFooterButtons
+        {
+            get
+            {
+                return showFooterButtons;
+            }
+            set
+            {
+                showFooterButtons = value;
+                OnPropertyChanged(nameof(ShowFooterButtons));
+            }
+        }
+
         public string ProfileType { get; set; }
 
         public ICommand GoToProfilePageCmd { get; set; }
+        public ICommand SuspendCmd { get; set; }
+        public ICommand JobCompletedCmd { get; set; }
 
         public JobHistoryViewViewModel(object owner)
         {
@@ -145,6 +162,7 @@ namespace CallAladdin.ViewModel
 
                 string userSystemUUID = "";
                 userService = new UserService();
+                jobService = new JobService();
                 var user = historyViewModel?.UserProfile;
 
                 if (user != null && this.Job != null)
@@ -162,6 +180,11 @@ namespace CallAladdin.ViewModel
                         userSystemUUID = this.Job.ContractorSystemUUID;
                         HasProfile = true;
                         ProfileType = Constants.CONTRACTOR;
+                        
+                        if (this.Job.Status != Constants.SUSPENDED && this.Job.Status != Constants.COMPLETED)
+                        {
+                            ShowFooterButtons = true;
+                        }
                     }
                 }
 
@@ -170,6 +193,78 @@ namespace CallAladdin.ViewModel
             }
 
             jobviewCommonUserControlViewModel = new JobViewCommonUserControlViewModel(this);
+            SuspendCmd = new Xamarin.Forms.Command(async e =>
+            {
+                Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to suspend this job?", "Yes", "No", async () =>
+                {
+                    //For android
+                    await DoSuspendJob();
+                },
+                async () =>
+                {
+                    //For ios
+                    await DoSuspendJob();
+                });
+            },
+            param =>
+            {
+                if (param == null)
+                    return false;
+
+                return !(bool)param;
+            });
+            JobCompletedCmd = new Xamarin.Forms.Command(async e =>
+            {
+                Navigator.Instance.ConfirmationAlert("Confirmation", "Are you sure you want to complete this job?", "Yes", "No", async () =>
+                {
+                    //For android
+                    await DoCompleteJob();
+                },
+               async () =>
+               {
+                   //For ios
+                   await DoCompleteJob();
+               });
+            },
+            param =>
+            {
+                if (param == null)
+                    return false;
+
+                return !(bool)param;
+            });
+        }
+
+        private async Task DoSuspendJob()
+        {
+            IsBusy = true;
+            var result = await jobService.SuspendJob(selectedJob?.SystemUUID);
+            IsBusy = false;
+
+            if (result)
+            {
+                Navigator.Instance.OkAlert("Job Suspended", "The job is now suspended", "OK");
+            }
+            else
+            {
+                Navigator.Instance.OkAlert("Error", "There is a problem with the server. Please try again later.", "OK");
+            }
+        }
+
+        private async Task DoCompleteJob()
+        {
+            IsBusy = true;
+            var result = await jobService.CompleteJob(selectedJob?.SystemUUID);
+            IsBusy = false;
+
+            if (result)
+            {
+                Navigator.Instance.OkAlert("Job Completed", "The job is now completed", "OK");
+            }
+            else
+            {
+                Navigator.Instance.OkAlert("Error", "There is a problem with the server. Please try again later.", "OK");
+            }
         }
 
         private void GetProfileData(string userSystemUUID)
