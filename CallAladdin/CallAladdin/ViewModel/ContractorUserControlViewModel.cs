@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CallAladdin.Model;
 using CallAladdin.Services;
 using CallAladdin.Services.Interfaces;
-using System.Linq;
-using CallAladdin.Observers.Interfaces;
-using CallAladdin.EventArgs;
 
 namespace CallAladdin.ViewModel
 {
-    public class ContractorUserControlViewModel : BaseViewModel, ISubscriber
+    public class ContractorUserControlViewModel : BaseViewModel
     {
         private IJobService jobService;
         private string descriptionLabel;
@@ -116,16 +111,6 @@ namespace CallAladdin.ViewModel
                 DescriptionLabel = "You can only view this page if you are registered as CONTRACTOR";
                 ShowHints = false;
             }
-        }
-
-        public void OnUpdatedHandler(object sender, ObserverEventArgs eventArgs)
-        {
-            //TODO
-        }
-
-        public void OnErrorHandler(object sender, ObserverErrorEventArgs eventArgs)
-        {
-            //If needed
         }
     }
 }

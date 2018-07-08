@@ -16,6 +16,52 @@ namespace CallAladdin.Services
 {
     public class JobService : IJobService
     {
+        public async Task<bool> AcceptJob(AcceptJobRequestRequest acceptJobRequestRequest)
+        {
+            bool result = false;
+            IRestResponse response = null;
+
+            if (acceptJobRequestRequest != null)
+            {
+                var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+                var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+                if (!string.IsNullOrEmpty(acceptJobRequestRequest.ContractorUUID) && !string.IsNullOrEmpty(acceptJobRequestRequest.JobSystemUUID))
+                {
+                    var fullUrl = baseUrl + "/requests/" + acceptJobRequestRequest.JobSystemUUID + "/";
+
+                    var client = new RestClient(fullUrl);
+                    var request = new RestRequest(Method.PATCH);
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "Basic " + apiKey);
+                    request.AddParameter("contractor", acceptJobRequestRequest.ContractorUUID);
+                    request.AddParameter("status", Constants.FOUND_CONTRACTOR);
+
+                    try
+                    {
+                        response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+
+            if (response != null && response.IsSuccessful)
+            {
+                var strResponse = response?.Content;
+                dynamic responseData = string.IsNullOrEmpty(strResponse) ? "" : JsonConvert.DeserializeObject(strResponse);
+
+                if (responseData != null)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public async Task<JobRequestResponse> CreateRequest(JobRequestRequest jobRequest)
         {
             JobRequestResponse result = null;
