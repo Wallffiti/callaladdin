@@ -62,6 +62,43 @@ namespace CallAladdin.Services
             return result;
         }
 
+        public async Task<bool> CompleteJob(string jobSystemUUID)
+        {
+            bool result = false;
+            IRestResponse response = null;
+
+            response = await CallApiSetJobStatus(jobSystemUUID, response, Constants.COMPLETED);
+
+            return result;
+        }
+
+        private static async Task<IRestResponse> CallApiSetJobStatus(string jobSystemUUID, IRestResponse response, string status)
+        {
+            if (!string.IsNullOrEmpty(jobSystemUUID))
+            {
+                var baseUrl = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.url")?.ToString();
+                var apiKey = GlobalConfig.Instance.GetByKey("com.call.aladdin.project.api.key")?.ToString();
+
+                var fullUrl = baseUrl + "/requests/" + jobSystemUUID + "/";
+                var client = new RestClient(fullUrl);
+                var request = new RestRequest(Method.PATCH);
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "Basic " + apiKey);
+                request.AddParameter("status", status);
+
+                try
+                {
+                    response = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            return response;
+        }
+
         public async Task<JobRequestResponse> CreateRequest(JobRequestRequest jobRequest)
         {
             JobRequestResponse result = null;
@@ -258,6 +295,16 @@ namespace CallAladdin.Services
             }
 
             return results;
+        }
+
+        public async Task<bool> SuspendJob(string jobSystemUUID)
+        {
+            bool result = false;
+            IRestResponse response = null;
+
+            response = await CallApiSetJobStatus(jobSystemUUID, response, Constants.SUSPENDED);
+
+            return result;
         }
 
         public async Task<EditJobRequestResponse> UpdateRequest(EditJobRequestRequest jobRequest)

@@ -15,5 +15,7 @@ namespace CallAladdin.Services.Interfaces
         Task<IList<Job>> GetAvailableJobs(string requestorUUID, string city, string workCategory = "");
         Task<bool> DeleteJob(string jobUUID);
         Task<bool> AcceptJob(AcceptJobRequestRequest acceptJobRequestRequest);
+        Task<bool> SuspendJob(string jobSystemUUID);
+        Task<bool> CompleteJob(string jobSystemUUID);
     }
 }
