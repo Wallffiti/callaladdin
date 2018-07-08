@@ -210,7 +210,8 @@ namespace CallAladdin.ViewModel
             {
                 foreach (var item in acceptedJobs)
                 {
-                    item.Status = Constants.JOB_ACCEPTED;
+                    if (item.Status == Constants.FOUND_CONTRACTOR)
+                        item.Status = Constants.JOB_ACCEPTED;
                 }
 
                 acceptedJobsCount = acceptedJobs.Count;
