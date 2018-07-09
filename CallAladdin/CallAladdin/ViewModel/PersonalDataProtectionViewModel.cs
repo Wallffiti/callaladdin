@@ -23,6 +23,11 @@ namespace CallAladdin.ViewModel
         private string personalDataProtectionText;
         private bool isBusy;
 
+        public UserRegistration GetUserRegistration()
+        {
+            return userRegistration;
+        }
+
         public string PersonalDataProtectionText
         {
             get { return personalDataProtectionText; }
@@ -106,7 +111,8 @@ namespace CallAladdin.ViewModel
             }
 
             IsBusy = true;
-            await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, this.userRegistration);
+            //await Navigator.Instance.NavigateTo(PageType.SMS_VERIFICATION, this.userRegistration);
+            await Navigator.Instance.NavigateTo(PageType.FIREBASE_PHONE_AUTH, this);
             await Task.Delay(1500);
             IsBusy = false;
         }

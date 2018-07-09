@@ -25,17 +25,21 @@ namespace CallAladdin.Commands
             if (userRegistration != null)
             {
                 bool requiredVerificationFulfilled = true;
+                bool mobilePhoneRequirementFulfilled = true;
                 
                 if (!Auth.UsePasswordless())
                 {
                     bool passwordMatched = string.Compare(userRegistration.Password, userRegistration.ReTypePassword) == 0;
                     requiredVerificationFulfilled = passwordMatched && (string.IsNullOrEmpty(userRegistration.Password) ? false : Validators.ValidatePassword(userRegistration.Password));
+
+                    mobilePhoneRequirementFulfilled = !string.IsNullOrEmpty(userRegistration.Mobile);
                 }
 
                 bool hasMandatoryInfo = !string.IsNullOrEmpty(userRegistration.Name)
                     && !string.IsNullOrEmpty(userRegistration.Email)
                     && Validators.ValidateEmail(userRegistration.Email)
-                    && !string.IsNullOrEmpty(userRegistration.Mobile)
+                    //&& !string.IsNullOrEmpty(userRegistration.Mobile)
+                    && mobilePhoneRequirementFulfilled
                     && !string.IsNullOrEmpty(userRegistration.City)
                     && !string.IsNullOrEmpty(userRegistration.Country)
                     && requiredVerificationFulfilled;

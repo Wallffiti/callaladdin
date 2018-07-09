@@ -2,9 +2,12 @@
 <local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:CallAladdin"
+             xmlns:conv="clr-namespace:CallAladdin.Converters"
              x:Class="CallAladdin.MainPage" Style="{StaticResource defaultBackground}" NavigationPage.HasNavigationBar="False">
-
     <Grid CompressedLayout.IsHeadless="True">
+        <Grid.Resources>
+            <conv:BooleanInverserConverter x:Key="BoolInverser"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -16,7 +19,7 @@
             <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN"  Margin="100,0" Command="{Binding GoToLoginCmd}" CommandParameter="{Binding IsBusy}"/>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Label Text="Passwordless Registration" TextColor="DarkBlue" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Italic"/>
-                <Switch IsToggled="{Binding UsePasswordless}" VerticalOptions="Center" />
+                <Switch IsToggled="{Binding UsePasswordless}" VerticalOptions="Center" IsEnabled="{Binding IsBusy, Converter={StaticResource BoolInverser}}" />
             </StackLayout>
         </StackLayout>
         <StackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" CompressedLayout.IsHeadless="True">

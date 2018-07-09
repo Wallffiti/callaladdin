@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<local:CustomPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:CallAladdin"
+             xmlns:fwv="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
+             x:Class="CallAladdin.FirebasePhoneAuthPage" FormattedTitle="SMS VERIFICATION" Style="{StaticResource secondaryBackground}" NavigationPage.HasBackButton="False" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <fwv:FormsWebView x:Name="WebContent" ContentType="Internet" Source="https://webauth-b240d.firebaseapp.com" Grid.Row="0" />
+
+        <!--footer-->
+        <Grid Grid.Row="1" BackgroundColor="Transparent">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                <ActivityIndicator x:Name="ProgressIndicator" IsRunning="{Binding IsBusy}" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" />
+                <Label Text="Loading..." TextColor="Red" FontSize="Micro" VerticalOptions="Center" IsVisible="{Binding IsBusy}" />
+            </StackLayout>
+        </Grid>
+    </Grid>
+</local:CustomPage>

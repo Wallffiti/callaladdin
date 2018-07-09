@@ -9,6 +9,7 @@ using Android.OS;
 using System.Collections.Generic;
 using System.IO;
 using Plugin.CurrentActivity;
+using Xam.Plugin.WebView.Droid;
 
 namespace CallAladdin.Droid
 {
@@ -21,7 +22,7 @@ namespace CallAladdin.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
-
+            FormsWebViewRenderer.Initialize();
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             var dict = new Dictionary<string, object>();

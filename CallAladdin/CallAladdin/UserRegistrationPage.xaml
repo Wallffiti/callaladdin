@@ -52,29 +52,30 @@
                     <Label Text="Name" TextColor="Black" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
                     <Entry Placeholder="John Doe" x:Name="NameEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="{Binding Name}" FontSize="Small"/>
 
-                    <Label Text="Mobile" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
-                    <Entry Placeholder="6012345678" Keyboard="Telephone" x:Name="MobileEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Mobile}" FontSize="Small"/>
-
-                    <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
-                    <Entry Placeholder="john.doe@email.com" Keyboard="Email" x:Name="EmailEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" Text="{Binding Email}" FontSize="Small">
+                    <Label Text="Email" TextColor="Black" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry Placeholder="john.doe@email.com" Keyboard="Email" x:Name="EmailEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" Text="{Binding Email}" FontSize="Small">
                         <Entry.Behaviors>
                             <validator:EmailValidatorBehavior />
                         </Entry.Behaviors>
                     </Entry>
 
-                    <Label IsVisible="{Binding ShowPasswordField}" Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
-                    <Entry IsVisible="{Binding ShowPasswordField}" IsPassword="True" x:Name="PasswordEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="1" VerticalOptions="Center" Text="{Binding Password}" FontSize="Small">
+                    <Label IsVisible="{Binding ShowPasswordField}" Text="Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry IsVisible="{Binding ShowPasswordField}" IsPassword="True" x:Name="PasswordEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" Text="{Binding Password}" FontSize="Small">
                         <Entry.Behaviors>
                             <validator:PasswordValidationBehavior />
                         </Entry.Behaviors>
                     </Entry>
 
-                    <Label IsVisible="{Binding ShowPasswordField}" Text="Re-type Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
-                    <Entry IsVisible="{Binding ShowPasswordField}" IsPassword="True" x:Name="ReTypePasswordEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="4" Grid.Column="1" VerticalOptions="Center" Text="{Binding ReTypePassword}" FontSize="Small">
+                    <Label IsVisible="{Binding ShowPasswordField}" Text="Re-type Password" TextColor="Black" HorizontalOptions="Start" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry IsVisible="{Binding ShowPasswordField}" IsPassword="True" x:Name="ReTypePasswordEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="1" VerticalOptions="Center" Text="{Binding ReTypePassword}" FontSize="Small">
                         <Entry.Behaviors>
                             <validator:PasswordValidationBehavior />
                         </Entry.Behaviors>
                     </Entry>
+
+                    <!--mobile field will be hidden for passwordless option-->
+                    <Label IsVisible="{Binding MobileFieldVisible}" Text="Mobile" TextColor="Black" HorizontalOptions="Start" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
+                    <Entry IsVisible="{Binding MobileFieldVisible}" Placeholder="6012345678" Keyboard="Telephone" x:Name="MobileEntry" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="4" Grid.Column="1" VerticalOptions="Center" Text="{Binding Mobile}" FontSize="Small"/>
                 </Grid>
                 <Grid x:Name="LocationFieldsGrid">
                     <Grid.ColumnDefinitions>

@@ -80,6 +80,9 @@ namespace CallAladdin
                 case PageType.JOB_ACCEPTANCE_VIEW:
                     view = new JobAcceptanceViewPage(parameter);
                     break;
+                case PageType.FIREBASE_PHONE_AUTH:
+                    view = new FirebasePhoneAuthPage(parameter);
+                    break;
                 case PageType.DUMMY:
                     view = new DummyPage();
                     break;
@@ -212,6 +215,7 @@ namespace CallAladdin
         EDIT_JOB_VIEW = 12,
         PROFILE_VIEW = 13,
         JOB_ACCEPTANCE_VIEW = 14,
+        FIREBASE_PHONE_AUTH = 15,
         DUMMY = 99
     }
 

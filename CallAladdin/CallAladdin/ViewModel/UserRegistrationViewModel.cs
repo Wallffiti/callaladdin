@@ -42,6 +42,17 @@ namespace CallAladdin.ViewModel
         private IList<string> photoOptionSelections;
         private string selectedPhotoOption;
         private IList<string> categories;
+        private bool mobileFieldVisible;
+
+        public bool MobileFieldVisible
+        {
+            get { return mobileFieldVisible; }
+            set
+            {
+                mobileFieldVisible = value;
+                OnPropertyChanged("MobileFieldVisible");
+            }
+        }
 
         public IList<string> Categories
         {
@@ -288,6 +299,7 @@ namespace CallAladdin.ViewModel
             Mobile = Helper.Utilities.GetPhoneNumber();
             LoadImageUploaderOptions();
             LoadContractorOptions();
+            MobileFieldVisible = !Auth.UsePasswordless();
         }
 
         private void LoadImageUploaderOptions()
