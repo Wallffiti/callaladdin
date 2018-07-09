@@ -37,7 +37,7 @@ namespace CallAladdin
                 }
             }
 
-            GlobalConfig.Instance.SetValueByKey("use_passwordless", false);  //set passwordless option here
+            GlobalConfig.Instance.SetValueByKey(Constants.USE_PASSWORDLESS, false); //default passwordless setting
         }
 
         protected override void OnStart ()

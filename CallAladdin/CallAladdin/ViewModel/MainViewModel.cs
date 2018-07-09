@@ -21,8 +21,20 @@ namespace CallAladdin.ViewModel
         private IUserService userService;
         private UserProfile userProfile;
         private bool isBusy;
+        private bool usePasswordless;
         public ICommand GoToLoginCmd { get; set; }
         public ICommand GoToRegisterCmd { get; set; }
+
+        public bool UsePasswordless
+        {
+            get { return usePasswordless; }
+            set
+            {
+                usePasswordless = value;
+                GlobalConfig.Instance.SetValueByKey(Constants.USE_PASSWORDLESS, usePasswordless);
+                OnPropertyChanged("UsePasswordless");
+            }
+        }
 
         public bool IsBusy
         {
@@ -32,6 +44,7 @@ namespace CallAladdin.ViewModel
 
         public MainViewModel()
         {
+            UsePasswordless = false;
             userIdentityRepository = new UserIdentityRepository();
             userProfileRepository = new UserProfileRepository();
             userService = new UserService();

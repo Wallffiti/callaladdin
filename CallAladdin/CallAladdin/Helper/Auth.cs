@@ -12,7 +12,7 @@ namespace CallAladdin.Helper
 
             try
             {
-                usePasswordless = (bool)GlobalConfig.Instance.GetByKey("use_passwordless");
+                usePasswordless = (bool)GlobalConfig.Instance.GetByKey(Constants.USE_PASSWORDLESS);
             }
             catch (Exception)
             {

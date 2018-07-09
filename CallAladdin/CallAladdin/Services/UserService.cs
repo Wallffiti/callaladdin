@@ -273,7 +273,7 @@ namespace CallAladdin.Services
         {
             UserSignupResponse result = null;
             string fullUrl = "";
-            var isUsingPasswordless = (bool)GlobalConfig.Instance.GetByKey("use_passwordless");
+            var isUsingPasswordless = (bool)GlobalConfig.Instance.GetByKey(Constants.USE_PASSWORDLESS);
 
             if (isUsingPasswordless)
             {

@@ -54,7 +54,11 @@ namespace CallAladdin
         {
             if (this.dictionary != null)
             {
-                this.dictionary.GetOrAdd(key, value);
+                //this.dictionary.GetOrAdd(key, value);
+                this.dictionary.AddOrUpdate(key, value, (s,o) =>
+                {
+                    return value;
+                });
             }
         }
     }

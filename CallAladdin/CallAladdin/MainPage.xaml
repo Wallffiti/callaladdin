@@ -14,6 +14,10 @@
             <Image x:Name="LogoImage" HeightRequest="100" WidthRequest="100" />
             <Button x:Name="RegisterButton" Style="{StaticResource defaultButton}" Text="REGISTER" Margin="100,0" Command="{Binding GoToRegisterCmd}" CommandParameter="{Binding IsBusy}"/>
             <Button x:Name="LoginButton" Style="{StaticResource defaultButton}" Text="LOGIN"  Margin="100,0" Command="{Binding GoToLoginCmd}" CommandParameter="{Binding IsBusy}"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="Passwordless Registration" TextColor="DarkBlue" HorizontalOptions="Start" VerticalOptions="Center" FontSize="10" FontAttributes="Italic"/>
+                <Switch IsToggled="{Binding UsePasswordless}" VerticalOptions="Center" />
+            </StackLayout>
         </StackLayout>
         <StackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" CompressedLayout.IsHeadless="True">
             <Label Text="©2017 Call Aladdin Group" TextColor="Black" FontSize="Small" HorizontalOptions="Center"/>
