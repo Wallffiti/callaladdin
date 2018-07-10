@@ -124,12 +124,14 @@ namespace CallAladdin.Services
                     var workCategory = jobRequest.Category;
                     var preferredStartTime = jobRequest.StartDateTime;
                     var preferredEndTime = jobRequest.EndDateTime;
+                    var preferredStartTimeStr = preferredStartTime.ToString(Constants.DATE_FORMAT);
+                    var preferredEndTimeStr = preferredEndTime.ToString(Constants.DATE_FORMAT);
 
                     var client = new RestClient(fullUrl);
                     var request = new RestRequest(Method.POST);
                     request.AddHeader("cache-control", "no-cache");
                     request.AddHeader("authorization", "Basic " + apiKey);
-                    request.AddParameter("requestor_uuid", requestorUUID);
+                    request.AddParameter("requestor", requestorUUID);
                     request.AddParameter("title", title);
                     request.AddParameter("scope_of_work", scopeOfWork);
                     request.AddParameter("address", address);
@@ -138,8 +140,8 @@ namespace CallAladdin.Services
                     request.AddParameter("longitude", longitude);
                     request.AddParameter("latitude", latitude);
                     request.AddParameter("work_category", workCategory);
-                    request.AddParameter("preferred_start_datetime", preferredStartTime);
-                    request.AddParameter("preferred_end_datetime", preferredEndTime);
+                    request.AddParameter("preferred_start_datetime", /*preferredStartTime*/ preferredStartTimeStr);
+                    request.AddParameter("preferred_end_datetime", /*preferredEndTime*/ preferredEndTimeStr);
 
                     try
                     {
@@ -284,7 +286,7 @@ namespace CallAladdin.Services
 
             if (!string.IsNullOrEmpty(baseUrl))
             {
-                var fullUrl = baseUrl + "/requests" + "?requestor_uuid=" + requestorUUID;
+                var fullUrl = baseUrl + "/requests" + "?requestor=" + requestorUUID;
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -332,12 +334,14 @@ namespace CallAladdin.Services
                     var workCategory = jobRequest.Category;
                     var preferredStartTime = jobRequest.StartDateTime;
                     var preferredEndTime = jobRequest.EndDateTime;
+                    var preferredStartTimeStr = preferredStartTime.ToString(Constants.DATE_FORMAT);
+                    var preferredEndTimeStr = preferredEndTime.ToString(Constants.DATE_FORMAT);
 
                     var client = new RestClient(fullUrl);
                     var request = new RestRequest(Method.PATCH);
                     request.AddHeader("cache-control", "no-cache");
                     request.AddHeader("authorization", "Basic " + apiKey);
-                    //request.AddParameter("requestor_uuid", requestorUUID);
+                    //request.AddParameter("requestor", requestorUUID);
                     request.AddParameter("title", title);
                     request.AddParameter("scope_of_work", scopeOfWork);
                     request.AddParameter("address", address);
@@ -346,8 +350,8 @@ namespace CallAladdin.Services
                     request.AddParameter("longitude", longitude);
                     request.AddParameter("latitude", latitude);
                     request.AddParameter("work_category", workCategory);
-                    request.AddParameter("preferred_start_datetime", preferredStartTime);
-                    request.AddParameter("preferred_end_datetime", preferredEndTime);
+                    request.AddParameter("preferred_start_datetime", /*preferredStartTime*/ preferredStartTimeStr);
+                    request.AddParameter("preferred_end_datetime", /*preferredEndTime*/ preferredEndTimeStr);
 
                     try
                     {
@@ -412,7 +416,7 @@ namespace CallAladdin.Services
                                 var job = new Job
                                 {
                                     SystemUUID = item?.uuid,
-                                    RequestorSystemUUID = item?.requestor_uuid,
+                                    RequestorSystemUUID = item?.requestor,
                                     ImagePath = item?.image,
                                     Title = item?.title,
                                     ScopeOfWork = item?.scope_of_work,

@@ -43,6 +43,9 @@ namespace CallAladdin
         public const string JOB_COMPLETED = "JOB COMPLETED";
         public const string UNKNOWN_STATUS = "UNKNOWN STATUS";
 
+        //FORMATTING
+        public const string DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+
         //HOME ICONS
 
         //Row 1
