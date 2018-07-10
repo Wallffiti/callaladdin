@@ -122,8 +122,8 @@ namespace CallAladdin.Services
                     var longitude = jobRequest.Longitude;
                     var latitude = jobRequest.Latitude;
                     var workCategory = jobRequest.Category;
-                    var preferredStartTime = jobRequest.StartDateTime;
-                    var preferredEndTime = jobRequest.EndDateTime;
+                    var preferredStartTime = jobRequest.StartDateTime.ToUniversalTime();
+                    var preferredEndTime = jobRequest.EndDateTime.ToUniversalTime();
                     var preferredStartTimeStr = preferredStartTime.ToString(Constants.DATE_FORMAT);
                     var preferredEndTimeStr = preferredEndTime.ToString(Constants.DATE_FORMAT);
 
@@ -332,8 +332,8 @@ namespace CallAladdin.Services
                     var longitude = jobRequest.Longitude;
                     var latitude = jobRequest.Latitude;
                     var workCategory = jobRequest.Category;
-                    var preferredStartTime = jobRequest.StartDateTime;
-                    var preferredEndTime = jobRequest.EndDateTime;
+                    var preferredStartTime = jobRequest.StartDateTime.ToUniversalTime();
+                    var preferredEndTime = jobRequest.EndDateTime.ToUniversalTime();
                     var preferredStartTimeStr = preferredStartTime.ToString(Constants.DATE_FORMAT);
                     var preferredEndTimeStr = preferredEndTime.ToString(Constants.DATE_FORMAT);
 
@@ -434,6 +434,11 @@ namespace CallAladdin.Services
                                     ModifiedDateTime = item?.modified,
                                     CreatedDateTime = item?.created,
                                 };
+
+                                job.StartDateTime = job.StartDateTime.ToLocalTime();
+                                job.EndDateTime = job.EndDateTime.ToLocalTime();
+                                job.ModifiedDateTime = job.ModifiedDateTime.ToLocalTime();
+                                job.CreatedDateTime = job.CreatedDateTime.ToLocalTime();
 
                                 string longitude = item?.longitude;
                                 if (!string.IsNullOrEmpty(longitude))

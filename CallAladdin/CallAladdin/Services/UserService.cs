@@ -187,6 +187,8 @@ namespace CallAladdin.Services
                                 Category = item.work_categories,
                                 CreatedDate = item.created
                             };
+
+                            result.CreatedDate = result.CreatedDate.ToLocalTime();
                         }
                     }
                 }
