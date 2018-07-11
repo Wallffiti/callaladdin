@@ -126,7 +126,7 @@ namespace CallAladdin.Services
 
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
-                var fullUrl = baseUrl + "/user_profiles" + "?identifier_for_vendor=" + localId;
+                var fullUrl = baseUrl + "/user_profiles" + "?firebase_uuid=" + localId;
                 result = await GetUserProfile(result, fullUrl);
             }
 

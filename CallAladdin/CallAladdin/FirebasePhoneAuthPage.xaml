@@ -9,7 +9,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <fwv:FormsWebView x:Name="WebContent" ContentType="Internet" Source="https://webauth-b240d.firebaseapp.com" Grid.Row="0" />
+        <fwv:FormsWebView x:Name="WebContent" ContentType="Internet" Source="https://call-aladdin.firebaseapp.com" Grid.Row="0" />
 
         <!--footer-->
         <Grid Grid.Row="1" BackgroundColor="Transparent">
